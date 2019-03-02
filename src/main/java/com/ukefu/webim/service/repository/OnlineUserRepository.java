@@ -209,7 +209,7 @@ public abstract interface OnlineUserRepository extends JpaRepository<OnlineUser,
 			+"count(case when qualitypass = 0 THEN '5' end) as organnopasscount,"
 			+"count(case when qualityappeal = 0 THEN '6' end) as organappealcount,"
 			+"count(case when qualityarbitrate = 0 THEN '7' end) as organarbitratecount,"
-			+"AVG(date_format(timediff(qualitytime,createtime),'%s')+date_format(timediff(qualitytime,createtime),'%i')*60) as efficiency, "
+			+"AVG((qualitytime-createtime)/1000) as efficiency, "
 			+"count(case when qualitytype = 'callevent' THEN '8' end) as organcallcount,"
 			+"count(case when qualitytype = 'agentservice' THEN '9' end) as organagentcount,"
 			+"count(case when qualitytype = 'workorders' THEN '10' end) as organworkcount "

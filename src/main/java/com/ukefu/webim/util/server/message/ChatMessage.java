@@ -41,6 +41,8 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	
 	private boolean cooperation ;
 	
+	private boolean filterscript ;
+	
 	private String msgtype ;
 	private String creater; 
 	private String usession ;
@@ -511,6 +513,12 @@ public class ChatMessage implements java.io.Serializable ,UserEvent{
 	}
 	public void setClabelname(String clabelname) {
 		this.clabelname = clabelname;
+	}
+	public boolean isFilterscript() {
+		return filterscript;
+	}
+	public void setFilterscript(boolean filterscript) {
+		this.filterscript = filterscript;
 	}
 	@Transient
 	public List<OtherMessageItem> getSuggest(){

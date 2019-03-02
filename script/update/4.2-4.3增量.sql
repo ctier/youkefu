@@ -139,4 +139,41 @@ ALTER TABLE uk_consult_invite ADD lvtipmsg text DEFAULT NULL COMMENT '无坐席在线
 ALTER TABLE uk_crm_dataproduct ADD duplicate tinyint(4) DEFAULT 0 COMMENT '是否允许重复数据';
 ALTER TABLE uk_crm_dataproduct ADD design tinyint(4) DEFAULT 0 COMMENT '布局';
 
+DROP INDEX index_1 ON uk_callcenter_event;
+CREATE INDEX index_1 ON uk_callcenter_event  (`ORGI`,`DISCALLER`,`DISCALLED`,`MISSCALL`,`DURATION`,`RINGDURATION`,`calltype`,`servicestatus`,`direction`,`userid`,`organ`,`createtime`,`starttime`,`nameid`) USING BTREE;
 
+
+
+
+ALTER TABLE uk_consult_invite ADD filterscript tinyint(4) DEFAULT 0 COMMENT '禁止访客端发送HTML内容';
+ALTER TABLE uk_consult_invite ADD filteragentscript tinyint(4) DEFAULT 0 COMMENT '禁止坐席端发送HTML内容';
+
+ALTER TABLE uk_consult_invite ADD filteragentscript tinyint(4) DEFAULT 0 COMMENT '禁止坐席端发送HTML内容';
+
+ALTER TABLE uk_consult_invite ADD filteragentscript tinyint(4) DEFAULT 0 COMMENT '禁止坐席端发送HTML内容';
+
+ALTER TABLE uk_agentuser ADD filterscript int DEFAULT 0 COMMENT '访客段脚本过滤次数';
+ALTER TABLE uk_agentuser ADD filteragentscript int DEFAULT 0 COMMENT '座席端脚本过滤次数';
+
+ALTER TABLE uk_agentuser ADD sensitiveword int DEFAULT 0 COMMENT '访客端敏感词触发次数';
+ALTER TABLE uk_agentuser ADD sensitivewordagent int DEFAULT 0 COMMENT '坐席端敏感词触发次数';
+
+ALTER TABLE uk_agentuser ADD msgtimeout int DEFAULT 0 COMMENT '访客端消息超时次数';
+ALTER TABLE uk_agentuser ADD msgtimeoutagent int DEFAULT 0 COMMENT '坐席端消息敏感词触发次数';
+
+ALTER TABLE uk_agentuser ADD sessiontimeout int DEFAULT 0 COMMENT '会话超时次数';
+
+
+ALTER TABLE uk_agentservice ADD filterscript int DEFAULT 0 COMMENT '访客段脚本过滤次数';
+ALTER TABLE uk_agentservice ADD filteragentscript int DEFAULT 0 COMMENT '座席端脚本过滤次数';
+
+ALTER TABLE uk_agentservice ADD sensitiveword int DEFAULT 0 COMMENT '访客端敏感词触发次数';
+ALTER TABLE uk_agentservice ADD sensitivewordagent int DEFAULT 0 COMMENT '坐席端敏感词触发次数';
+
+ALTER TABLE uk_agentservice ADD msgtimeout int DEFAULT 0 COMMENT '访客端消息超时次数';
+ALTER TABLE uk_agentservice ADD msgtimeoutagent int DEFAULT 0 COMMENT '坐席端消息敏感词触发次数';
+
+ALTER TABLE uk_agentservice ADD sessiontimeout int DEFAULT 0 COMMENT '会话超时次数';
+
+
+ALTER TABLE uk_chat_message ADD filterscript tinyint(4) DEFAULT 0 COMMENT '触发了HTML代码过滤';

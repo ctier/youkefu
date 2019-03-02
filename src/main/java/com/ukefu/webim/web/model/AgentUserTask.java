@@ -42,6 +42,18 @@ public class AgentUserTask {
 	private int servicefrewords;//客户提起敏感词次数
 	private int firstreplytime ;//首次消息回复时间
 	
+	private int filterscript;			//访客段脚本过滤次数
+	private int filteragentscript;		//座席端脚本过滤次数
+	
+	private int sensitiveword;				//访客端敏感词触发次数
+	private int sensitivewordagent;			//坐席端敏感词触发次数
+	
+	private int msgtimeout;				//访客端消息超时次数
+	private int msgtimeoutagent;		//坐席端消息敏感词触发次数
+	
+	private int sessiontimeout;			//会话超时次数
+	
+	
 	private int agentreplys;
 	private int userasks;
 	
@@ -283,5 +295,61 @@ public class AgentUserTask {
 
 	public void setServicetime(Date servicetime) {
 		this.servicetime = servicetime;
+	}
+
+	public int getFilterscript() {
+		return filterscript;
+	}
+
+	public void setFilterscript(int filterscript) {
+		this.filterscript = filterscript;
+	}
+
+	public int getFilteragentscript() {
+		return filteragentscript;
+	}
+
+	public void setFilteragentscript(int filteragentscript) {
+		this.filteragentscript = filteragentscript;
+	}
+
+	public int getSensitiveword() {
+		return sensitiveword;
+	}
+
+	public void setSensitiveword(int sensitiveword) {
+		this.sensitiveword = sensitiveword;
+	}
+
+	public int getSensitivewordagent() {
+		return sensitivewordagent;
+	}
+
+	public void setSensitivewordagent(int sensitivewordagent) {
+		this.sensitivewordagent = sensitivewordagent;
+	}
+
+	public int getMsgtimeout() {
+		return msgtimeout;
+	}
+
+	public void setMsgtimeout(int msgtimeout) {
+		this.msgtimeout = msgtimeout;
+	}
+
+	public int getMsgtimeoutagent() {
+		return msgtimeoutagent;
+	}
+
+	public void setMsgtimeoutagent(int msgtimeoutagent) {
+		this.msgtimeoutagent = msgtimeoutagent;
+	}
+
+	public int getSessiontimeout() {
+		return sessiontimeout;
+	}
+
+	public void setSessiontimeout(int sessiontimeout) {
+		this.sessiontimeout = sessiontimeout;
 	}
 }

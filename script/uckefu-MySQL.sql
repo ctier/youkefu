@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2019-02-28 09:57:02
+Date: 2019-03-01 11:29:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -686,6 +686,13 @@ CREATE TABLE `uk_agentservice` (
   `qualityactid` varchar(50) DEFAULT NULL COMMENT '质检活动id',
   `qualityfilterid` varchar(50) DEFAULT NULL COMMENT '筛选表单id',
   `qualitypass` tinyint(4) DEFAULT '2' COMMENT '质检是否合格(默认2为未质检)',
+  `filterscript` int(11) DEFAULT '0' COMMENT '访客段脚本过滤次数',
+  `filteragentscript` int(11) DEFAULT '0' COMMENT '座席端脚本过滤次数',
+  `sensitiveword` int(11) DEFAULT '0' COMMENT '访客端敏感词触发次数',
+  `sensitivewordagent` int(11) DEFAULT '0' COMMENT '坐席端敏感词触发次数',
+  `msgtimeout` int(11) DEFAULT '0' COMMENT '访客端消息超时次数',
+  `msgtimeoutagent` int(11) DEFAULT '0' COMMENT '坐席端消息敏感词触发次数',
+  `sessiontimeout` int(11) DEFAULT '0' COMMENT '会话超时次数',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='在线客服服务记录表';
 
@@ -818,6 +825,13 @@ CREATE TABLE `uk_agentuser` (
   `agentusername` varchar(32) DEFAULT NULL COMMENT '坐席姓名',
   `alarm` int(10) DEFAULT '0' COMMENT '是否触发预警',
   `initiator` varchar(32) DEFAULT NULL COMMENT '会话发起方',
+  `filterscript` int(11) DEFAULT '0' COMMENT '访客段脚本过滤次数',
+  `filteragentscript` int(11) DEFAULT '0' COMMENT '座席端脚本过滤次数',
+  `sensitiveword` int(11) DEFAULT '0' COMMENT '访客端敏感词触发次数',
+  `sensitivewordagent` int(11) DEFAULT '0' COMMENT '坐席端敏感词触发次数',
+  `msgtimeout` int(11) DEFAULT '0' COMMENT '访客端消息超时次数',
+  `msgtimeoutagent` int(11) DEFAULT '0' COMMENT '坐席端消息敏感词触发次数',
+  `sessiontimeout` int(11) DEFAULT '0' COMMENT '会话超时次数',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `agentuser_userid` (`userid`) USING BTREE,
   KEY `agentuser_orgi` (`orgi`) USING BTREE
@@ -1142,8 +1156,8 @@ CREATE TABLE `uk_callcenter_event` (
   `workstatus` varchar(32) DEFAULT NULL COMMENT '名单业务状态',
   `sipaddr` varchar(50) DEFAULT NULL COMMENT '客户端IP',
   PRIMARY KEY (`ID`) USING BTREE,
-  KEY `index_1` (`ORGI`,`DISCALLER`,`DISCALLED`,`MISSCALL`,`DURATION`,`RINGDURATION`,`CALLTYPE`,`SERVICESTATUS`,`DIRECTION`,`userid`,`organ`,`CREATETIME`,`STARTTIME`) USING BTREE,
-  KEY `index_transtatus_transbegin` (`transtatus`,`transbegin`) USING BTREE
+  KEY `index_transtatus_transbegin` (`transtatus`,`transbegin`) USING BTREE,
+  KEY `index_1` (`ORGI`,`DISCALLER`,`DISCALLED`,`MISSCALL`,`DURATION`,`RINGDURATION`,`CALLTYPE`,`SERVICESTATUS`,`DIRECTION`,`userid`,`organ`,`CREATETIME`,`STARTTIME`,`nameid`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='通话记录表';
 
 -- ----------------------------
@@ -1811,6 +1825,7 @@ CREATE TABLE `uk_chat_message` (
   `ckindname` varchar(255) DEFAULT NULL COMMENT '分类名称',
   `clabel` varchar(100) DEFAULT NULL COMMENT '标签',
   `clabelname` varchar(255) DEFAULT NULL COMMENT '标签名称',
+  `filterscript` tinyint(4) DEFAULT '0' COMMENT '触发了HTML代码过滤',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `sessionid` (`usession`) USING BTREE,
   KEY `orgi` (`orgi`) USING BTREE,
@@ -1997,6 +2012,8 @@ CREATE TABLE `uk_consult_invite` (
   `agentshowcontacts` tinyint(4) DEFAULT '0' COMMENT '启用坐席端聊天显示联系人名称',
   `loadhismsg` tinyint(4) DEFAULT '1' COMMENT '启用加载历史消息',
   `lvtipmsg` text COMMENT '无坐席在线的提示消息',
+  `filterscript` tinyint(4) DEFAULT '0' COMMENT '禁止访客端发送HTML内容',
+  `filteragentscript` tinyint(4) DEFAULT '0' COMMENT '禁止坐席端发送HTML内容',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='访客网站配置表';
 
@@ -2793,12 +2810,12 @@ DROP TABLE IF EXISTS `uk_ekm_knowbase_config`;
 CREATE TABLE `uk_ekm_knowbase_config` (
   `id` varchar(32) NOT NULL,
   `knowbaseid` varchar(32) DEFAULT NULL COMMENT '知识库id',
-  `basehost` text COMMENT '站点根网址',
-  `webname` text COMMENT '网站名称',
+  `basehost` varchar(255) COMMENT '站点根网址',
+  `webname` varchar(255) COMMENT '网站名称',
   `powerby` text COMMENT '网站版权信息',
-  `keywords` text COMMENT '站点关键字',
-  `description` text COMMENT '站点描述',
-  `beian` text COMMENT '网站备案号',
+  `keywords` varchar(255) COMMENT '站点关键字',
+  `description` varchar(255) COMMENT '站点描述',
+  `beian` varchar(255) COMMENT '网站备案号',
   `footer` text COMMENT '页脚',
   `indexlog` text COMMENT '首页图标',
   `hotwords` text COMMENT '搜索热词',
@@ -10912,7 +10929,12 @@ CREATE TABLE `uk_user` (
 -- ----------------------------
 -- Records of uk_user
 -- ----------------------------
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2019-01-16 16:41:44', '402880ec67b9c9f40167ba07936f00cb', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2019-02-26 12:20:04', null, null, null, '0', '1', '1', '0', null, '1');
+INSERT INTO `uk_user` VALUES ('402880ec67b9c9f40167b9fa58040095', null, 'test222', 'd477887b0636e5d87f79cc25c99d7dc9', '5', '5622@q.com', null, null, null, null, null, null, null, null, '0', null, null, '402880ec67b9c9f40167b9fa7ffb0098', '402880ec67b9c9f40167b9fa7ffb0098', null, '2018-12-17 10:24:10', null, '2018-12-17 10:24:10', null, '19082838221', '2018-12-17 10:24:10', null, '0', 'test222', null, '0', null, null, null, '0', '0', '0', '2018-12-17 10:24:10', null, null, null, '0', '0', '0', '0', null, '0');
+INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null, '0');
+INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-11-20 09:05:49', '4028811b66d257820166d28cb868022b', '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '0', null, null, null, '0', '0', '0', '2018-11-20 09:06:03', null, null, null, '0', '0', '0', '0', null, '0');
+INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null, '0');
+INSERT INTO `uk_user` VALUES ('4028811b68976d700168986517ab01dd', null, 'qwe123', '130811dbd239c97bd9ce933de7349f20', '5', 'qwe123@q.q', null, null, null, null, null, null, null, null, '0', null, null, 'ukewo', 'ukewo', null, '2019-01-29 14:56:28', null, '2019-01-29 14:56:28', null, '13222222222', '2019-01-29 14:56:28', null, '0', 'qwe123', null, '1', null, null, null, '0', '0', '0', '2019-01-29 14:56:37', null, null, null, '0', '1', '0', '0', null, '0');
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2019-01-16 16:41:44', '402880ec67b9c9f40167ba07936f00cb', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2019-03-01 10:27:07', null, null, null, '0', '1', '1', '0', null, '1');
 
 -- ----------------------------
 -- Table structure for `uk_userevent`

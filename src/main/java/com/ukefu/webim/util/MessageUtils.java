@@ -207,6 +207,13 @@ public class MessageUtils {
 		    		agentUserTask.setWarningtime(null);
 		    		
 		    		/**
+		    		 * 脚本过滤
+		    		 */
+		    		if(data.isFilterscript()) {
+		    			agentUserTask.setFilterscript(agentUserTask.getFilterscript()+1);
+		    		}
+		    		
+		    		/**
 		    		 * 去掉坐席超时回复消息提醒
 		    		 */
 		    		agentUserTask.setReptime(null);

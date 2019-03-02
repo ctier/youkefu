@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ukefu.webim.util.server.message.ChatMessage;
@@ -32,4 +33,6 @@ public abstract interface ChatMessageRepository
   public abstract Page<ChatMessage> findByAiidIsNotNullAndOrgi(String orgi , Pageable page );
   
   public abstract List<ChatMessage> findByOrgiAndAgentserviceidAndChatype(String orgi ,String agentserviceid,String chatype);
+  
+  public List<ChatMessage> findAll(Specification<ChatMessage> spec);
 }

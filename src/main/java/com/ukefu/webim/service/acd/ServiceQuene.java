@@ -275,6 +275,9 @@ public class ServiceQuene {
 					service.setAgentreplytime(agentUserTask.getAgentreplytime());
 					service.setAvgreplyinterval(agentUserTask.getAvgreplyinterval());
 					service.setAvgreplytime(agentUserTask.getAvgreplytime());
+					
+					service.setFilteragentscript(agentUserTask.getFilteragentscript());
+					service.setFilterscript(agentUserTask.getFilterscript());
 
 					service.setUserasks(agentUserTask.getUserasks());
 					service.setAgentreplys(agentUserTask.getAgentreplys());

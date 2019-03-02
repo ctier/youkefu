@@ -374,7 +374,7 @@ function openAgentChatDialog(url){
 	return ukefu.openChatDialogWithURL(url) ;	
 }
 new Fingerprint2().get(function(data, components){
-    result = data ;
+    result = <#if userid??>"${userid}"<#else>data</#if> ;
     ukefu.ajax(ukefu.in+"&userid="+result+"&t="+new Date().getTime() , function(data){
 		if(data == "in"){}else{
 			ukefu.display();

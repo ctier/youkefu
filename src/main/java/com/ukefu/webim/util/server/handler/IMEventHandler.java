@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.corundumstudio.socketio.AckRequest;
@@ -168,6 +170,18 @@ public class IMEventHandler
 		 */
     	data.setMessage(UKTools.processEmoti(data.getMessage()));
 		
+    	/**
+    	 * 过滤访客消息中的 HTML，防XSS
+    	 */
+    	if(invite.isFilterscript()) {
+    		Document document = Jsoup.parse(data.getMessage()) ;
+    		if(document.select("script") != null) {
+    			//目前只检查了 Script ，其他还有IMG的情况（IMG需要排除表情） 
+    			data.setFilterscript(true);
+    		}
+    		data.setMessage(document.text());
+    	}
+    	
     	MessageUtils.createMessage(data , UKDataContext.MediaTypeEnum.TEXT.toString(), data.getUserid());
     } 
 }  

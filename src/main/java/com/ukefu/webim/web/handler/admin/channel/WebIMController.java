@@ -183,6 +183,9 @@ public class WebIMController extends Handler{
     			tempInviteData.setLvtipmsg(inviteData.getLvtipmsg());
     			tempInviteData.setSkill(inviteData.isSkill());
     			
+    			tempInviteData.setFilterscript(inviteData.isFilterscript());
+    			tempInviteData.setFilteragentscript(inviteData.isFilteragentscript());
+    			
     			tempInviteData.setConsult_skill_title(inviteData.getConsult_skill_title());
     			tempInviteData.setConsult_skill_msg(inviteData.getConsult_skill_msg());
     			tempInviteData.setConsult_skill_bottomtitle(inviteData.getConsult_skill_bottomtitle());

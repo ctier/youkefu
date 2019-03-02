@@ -120,6 +120,7 @@ ALTER TABLE uk_xiaoe_config ADD smartsuggestappsec varchar(100) COMMENT '推荐A
 ALTER TABLE uk_xiaoe_config ADD smartsuggestparam varchar(255) COMMENT '推荐AppSec';
 ALTER TABLE uk_xiaoe_config ADD smartsuggestmethod varchar(50) COMMENT '外部推荐请求方式';
 ALTER TABLE uk_xiaoe_config ADD smartsuggesttempletinput varchar(50) COMMENT '外部推荐输入格式化模板';
+ALTER TABLE uk_xiaoe_config ADD smartsuggesttempletoutput varchar(50) COMMENT '外部推荐输出格式化模板'; 
 ALTER TABLE uk_xiaoe_config ADD suggestnum int DEFAULT 0 COMMENT '显示外部推荐条数';
 
 

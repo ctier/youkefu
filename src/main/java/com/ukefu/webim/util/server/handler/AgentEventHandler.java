@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.corundumstudio.socketio.AckRequest;
@@ -22,7 +24,9 @@ import com.ukefu.webim.service.repository.AgentStatusRepository;
 import com.ukefu.webim.service.repository.AgentUserRepository;
 import com.ukefu.webim.service.repository.AgentUserTaskRepository;
 import com.ukefu.webim.service.repository.ChatMessageRepository;
+import com.ukefu.webim.service.repository.ConsultInviteRepository;
 import com.ukefu.webim.service.repository.WorkSessionRepository;
+import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.util.router.OutMessageRouter;
 import com.ukefu.webim.util.server.message.AgentServiceMessage;
 import com.ukefu.webim.util.server.message.AgentStatusMessage;
@@ -30,6 +34,7 @@ import com.ukefu.webim.util.server.message.ChatMessage;
 import com.ukefu.webim.web.model.AgentStatus;
 import com.ukefu.webim.web.model.AgentUser;
 import com.ukefu.webim.web.model.AgentUserTask;
+import com.ukefu.webim.web.model.CousultInvite;
 import com.ukefu.webim.web.model.MessageOutContent;
 import com.ukefu.webim.web.model.SessionConfig;
 import com.ukefu.webim.web.model.WorkSession;
@@ -129,6 +134,21 @@ public class AgentEventHandler
     	String user = client.getHandshakeData().getSingleUrlParam("userid") ;
     	AgentUser agentUser = (AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(data.getTouser(), data.getOrgi());
     	MessageOutContent outMessage = new MessageOutContent() ;
+    	
+    	CousultInvite invite = OnlineUserUtils.cousult(data.getAppid(),data.getOrgi(), UKDataContext.getContext().getBean(ConsultInviteRepository.class));
+    	
+    	/**
+    	 * 过滤访客消息中的 HTML，防XSS
+    	 */
+    	if(invite.isFilterscript()) {
+    		Document document = Jsoup.parse(data.getMessage()) ;
+    		if(document.select("script") != null) {
+    			//目前只检查了 Script ，其他还有IMG的情况（IMG需要排除表情） 
+    			data.setFilterscript(true);
+    		}
+    		data.setMessage(document.text());
+    	}
+    	
     	outMessage.setMessage(data.getMessage());
     	if(UKDataContext.MediaTypeEnum.COOPERATION.toString().equals(data.getMsgtype())){
     		outMessage.setMessageType(UKDataContext.MediaTypeEnum.COOPERATION.toString());
@@ -203,6 +223,10 @@ public class AgentEventHandler
     			}
     			
 	    		agentUserTask.setLastgetmessage(new Date());
+	    		
+	    		if(data.isFilterscript()) {
+	    			agentUserTask.setFilteragentscript(agentUserTask.getFilteragentscript()+1);
+	    		}
 	    		
 	    		if(agentUserTask.getFirstreplytime() == 0) {
 	    			if(agentUserTask.getLastgetmessage() != null && agentUserTask.getLastmessage()!=null){

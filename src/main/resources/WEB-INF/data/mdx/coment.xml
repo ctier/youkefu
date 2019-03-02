@@ -2,11 +2,19 @@
 <Schema name='ukefu'>
     <Cube name='满意度'>
 		<View alias="agentservice">
-			<SQL>
+			<SQL dialect="mysql">
 			<![CDATA[
 				select * from uk_agentservice where satisfaction = 1 <#if skill?? && skill!=""> AND agentskill = '${skill!''}'</#if> <#if agent?? && agent!=""> AND agentno = '${agent!''}'</#if> <#if orgi?? && orgi!=""> AND orgi = '${orgi!''}'</#if> <#if begin?? && begin!=""> AND satistime >= str_to_date('${begin!''}', '%Y-%m-%d %H:%i:%s')</#if> <#if end?? && end!=""> AND satistime <= str_to_date('${end!''} 23:59:59', '%Y-%m-%d %H:%i:%s')</#if>
 				<#if skill?? || skill !="" || agent?? || agent!="" || begin?? || begin!="" || end?? || end!="">
 				<#else>AND (satistime BETWEEN '${.now?string('yyyy-MM-dd')} 00:00:00' AND '${.now?string('yyyy-MM-dd HH:mm:ss')}')
+				</#if>
+				]]>
+			</SQL> 
+			<SQL dialect="oracle">
+			<![CDATA[
+				select * from uk_agentservice where satisfaction = 1 <#if skill?? && skill!=""> AND agentskill = '${skill!''}'</#if> <#if agent?? && agent!=""> AND agentno = '${agent!''}'</#if> <#if orgi?? && orgi!=""> AND orgi = '${orgi!''}'</#if> <#if begin?? && begin!=""> AND satistime >= to_date('${begin!''}', 'yyyy-mm-dd,hh24:mi:ss')</#if> <#if end?? && end!=""> AND satistime <= to_date('${end!''} 23:59:59', 'yyyy-mm-dd,hh24:mi:ss')</#if>
+				<#if skill?? || skill !="" || agent?? || agent!="" || begin?? || begin!="" || end?? || end!="">
+				<#else>AND (satistime BETWEEN to_date('${.now?string('yyyy-MM-dd')} 00:00:00', 'yyyy-mm-dd,hh24:mi:ss') AND to_date('${.now?string('yyyy-MM-dd HH:mm:ss')}', 'yyyy-mm-dd,hh24:mi:ss') )
 				</#if>
 				]]>
 			</SQL>
@@ -30,7 +38,7 @@
 					<KeyExpression>
 						<SQL dialect="generic">date_format(agentservice.createtime,'%Y-%m-%d')</SQL>
 						<SQL dialect="mysql">date_format(agentservice.createtime,'%Y-%m-%d')</SQL>
-						<SQL dialect="oracle">TO_DATE(agentservice.createtime,'YYYY-MM-DD')</SQL>
+						<SQL dialect="oracle">to_char(agentservice.createtime,'yyyy-MM-dd')</SQL>
 					</KeyExpression>
 				</Level>
 			</Hierarchy>

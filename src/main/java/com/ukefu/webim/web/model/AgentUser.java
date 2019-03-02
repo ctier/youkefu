@@ -48,6 +48,7 @@ public class AgentUser implements Serializable, Comparable<AgentUser> {
 	private long sessiontimes = 0L;
 	private int waittingtime;
 	private int tokenum;
+	
 	private Date createtime = new Date();
 	private Date updatetime;
 	private String status;
@@ -565,4 +566,6 @@ public class AgentUser implements Serializable, Comparable<AgentUser> {
 		}
 		return ret;
 	}
+	
+	
 }

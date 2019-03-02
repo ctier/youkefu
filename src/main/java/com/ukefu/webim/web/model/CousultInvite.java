@@ -120,6 +120,9 @@ public class CousultInvite implements java.io.Serializable{
 	private boolean lvmcontent = true;
 	private String lvtipmsg ;	//留言提示消息
 	
+	private boolean filterscript = false;//过滤访客端发送的消息中的 HTML代码
+	private boolean filteragentscript = false;//过滤坐席端发送的消息中的 HTML代码
+	
 	private boolean skill ;		//启用技能组功能
 	
 	private boolean onlyareaskill ;	//只显示地区技能组 ， 无地区技能组是 提示消息，不显示公共技能组
@@ -943,4 +946,17 @@ public class CousultInvite implements java.io.Serializable{
 	public void setLvtipmsg(String lvtipmsg) {
 		this.lvtipmsg = lvtipmsg;
 	}
+	public boolean isFilterscript() {
+		return filterscript;
+	}
+	public void setFilterscript(boolean filterscript) {
+		this.filterscript = filterscript;
+	}
+	public boolean isFilteragentscript() {
+		return filteragentscript;
+	}
+	public void setFilteragentscript(boolean filteragentscript) {
+		this.filteragentscript = filteragentscript;
+	}
+	
 }

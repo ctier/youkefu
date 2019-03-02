@@ -707,6 +707,35 @@
 												</div>
 											</div>
 										</div>
+										
+										<div class="ukefu-webim-prop">
+											<div class="ukefu-webim-tl" style="clear:both;">22、禁用访客端发送HTML内容</div>
+											<div class="box-item">
+												<div class="row">
+													<div class="col-lg-8">
+														<p>禁用后，访客端发送的所有内容都会经过HTML过滤，禁止发送的文本中包含任何HTML代码（防止XSS攻击）</p>
+													</div>
+													<div class="col-lg-4" style="text-align:right;">
+														<input type="checkbox" title="禁用" name="filterscript" id="filterscript" <#if inviteData?? && inviteData.filterscript == true>checked="checked"</#if>>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="ukefu-webim-prop">
+											<div class="ukefu-webim-tl" style="clear:both;">23、禁用座席端发送HTML内容</div>
+											<div class="box-item">
+												<div class="row">
+													<div class="col-lg-8">
+														<p>禁用后，座席端发送给访客的所有内容都会经过HTML过滤，禁止发送的文本中包含任何HTML代码（防止XSS攻击）</p>
+													</div>
+													<div class="col-lg-4" style="text-align:right;">
+														<input type="checkbox" title="禁用" name="filteragentscript" id="filteragentscript" <#if inviteData?? && inviteData.filteragentscript == true>checked="checked"</#if>>
+													</div>
+												</div>
+											</div>
+										</div>
+										
 									</div>
 									<div class="col-md-5">
 										<div class="ukefu-im-preview ukefu-im-preview-dialog" id="pv" style="width:380px;position: fixed;">
