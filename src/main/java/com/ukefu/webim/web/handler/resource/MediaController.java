@@ -49,7 +49,7 @@ public class MediaController extends Handler{
     @Menu(type = "resouce" , subtype = "image" , access = true)
     public void index(HttpServletResponse response, @Valid String id) throws IOException {
     	File file = new File(path ,id) ;
-    	if(!StringUtils.isBlank(id) && !(id.endsWith(".png") || id.endsWith(".jpg"))){
+    	if(!StringUtils.isBlank(id) && !(id.endsWith(".png") || id.endsWith(".jpg") || id.toLowerCase().endsWith(".ico"))){
 	    	if(id.endsWith("_original") && !file.exists()){
 	    		File orgFile = new File(path , id.substring(0 , id.indexOf("_original"))) ;
 	    		if(orgFile.exists()){
@@ -69,8 +69,16 @@ public class MediaController extends Handler{
 	    	}
     	}
     	if(file.exists() && file.isFile()){
-    		response.setHeader("Content-Type","image/png");
-    		response.setContentType("image/png");
+    		if(id.toLowerCase().endsWith(".ico")) {
+    			response.setHeader("Content-Type","image/x-icon");
+	    		response.setContentType("image/x-icon");
+    		}else if(id.toLowerCase().endsWith(".jpg") || id.toLowerCase().endsWith(".jpeg")) {
+	    		response.setHeader("Content-Type","image/jpeg");
+	    		response.setContentType("image/jpeg");
+    		}else {
+    			response.setHeader("Content-Type","image/png");
+	    		response.setContentType("image/png");
+    		}
     		response.getOutputStream().write(FileUtils.readFileToByteArray(new File(path ,id)));
     	}
     }

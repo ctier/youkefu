@@ -51,6 +51,9 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	
 	private String channelstatus ;	//通道状态
 	
+	@Transient
+	private boolean autoanswer ;	//是否需要自动接听
+	
 	private Date answertime ;//应答时间
 	private int ringduration ;//振铃时长
 	
@@ -62,6 +65,8 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	
 	private boolean init ;//
 	private String tracesip ;	//SIP消息记录
+	private String answersip ;	//SIP消息记录
+	private String hangupsip ;	//SIP消息记录
 	
 	private String caller ;//呼叫发起号码
 	
@@ -934,5 +939,23 @@ public class StatusEvent implements Serializable, Comparable<StatusEvent>,UserEv
 	public void setSipaddr(String sipaddr) {
 		this.sipaddr = sipaddr;
 	}
-	
+	@Transient
+	public boolean isAutoanswer() {
+		return autoanswer;
+	}
+	public void setAutoanswer(boolean autoanswer) {
+		this.autoanswer = autoanswer;
+	}
+	public String getAnswersip() {
+		return answersip;
+	}
+	public void setAnswersip(String answersip) {
+		this.answersip = answersip;
+	}
+	public String getHangupsip() {
+		return hangupsip;
+	}
+	public void setHangupsip(String hangupsip) {
+		this.hangupsip = hangupsip;
+	}
 }

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2019-03-01 11:29:19
+Date: 2019-03-07 17:44:21
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -693,6 +693,7 @@ CREATE TABLE `uk_agentservice` (
   `msgtimeout` int(11) DEFAULT '0' COMMENT '访客端消息超时次数',
   `msgtimeoutagent` int(11) DEFAULT '0' COMMENT '坐席端消息敏感词触发次数',
   `sessiontimeout` int(11) DEFAULT '0' COMMENT '会话超时次数',
+  `queuetime` datetime DEFAULT NULL COMMENT '进入队列时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='在线客服服务记录表';
 
@@ -832,6 +833,7 @@ CREATE TABLE `uk_agentuser` (
   `msgtimeout` int(11) DEFAULT '0' COMMENT '访客端消息超时次数',
   `msgtimeoutagent` int(11) DEFAULT '0' COMMENT '坐席端消息敏感词触发次数',
   `sessiontimeout` int(11) DEFAULT '0' COMMENT '会话超时次数',
+  `queuetime` datetime DEFAULT NULL COMMENT '进入队列时间',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `agentuser_userid` (`userid`) USING BTREE,
   KEY `agentuser_orgi` (`orgi`) USING BTREE
@@ -1010,6 +1012,143 @@ CREATE TABLE `uk_bpm_process` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `uk_call_monitor`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_call_monitor`;
+CREATE TABLE `uk_call_monitor` (
+  `ID` varchar(50) NOT NULL COMMENT 'ID',
+  `USERID` varchar(50) DEFAULT NULL COMMENT '登录人ID',
+  `AGENT` varchar(50) DEFAULT NULL COMMENT '坐席工号',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '坐席用户名（登录名）',
+  `AGENTNO` varchar(50) DEFAULT NULL COMMENT '分机号（坐席登录的分机号码）',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '坐席姓名',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '坐席状态code（对应字典表里的CODE）',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '坐席当前状态（坐席当前状态（坐席监控首页显示，判断根本依据，每次状态改变，数据记录会被更新））',
+  `ORGI` varchar(50) DEFAULT NULL COMMENT '租户ID',
+  `AGENTSERVICEID` varchar(50) DEFAULT NULL COMMENT '会话ID',
+  `SKILL` varchar(50) DEFAULT NULL COMMENT '接入的技能组ID',
+  `SKILLNAME` varchar(50) DEFAULT NULL COMMENT '接入的技能组名称',
+  `BUSY` varchar(50) DEFAULT NULL COMMENT '是否忙',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '记录创建时间（每个坐席的第一条记录为，点击登录之后，登录成功之后的时间，则会插入一条记录。以后每次状态改变，记录会被更新，时间都会跟着改变，变为状态改变后的时间。）',
+  `ANI` varchar(50) DEFAULT NULL COMMENT '主叫号码',
+  `CALLED` varchar(50) DEFAULT NULL COMMENT '被叫号码',
+  `DIRECTION` varchar(50) DEFAULT NULL COMMENT '呼叫方向',
+  `CALLSTARTTIME` datetime DEFAULT NULL COMMENT '通话开始时间',
+  `CALLENDTIME` datetime DEFAULT NULL COMMENT '通话结束时间',
+  `RINGDURATION` int(11) DEFAULT NULL COMMENT '振铃时长',
+  `DURATION` int(11) DEFAULT NULL COMMENT '通话时长',
+  `MISSCALL` tinyint(4) DEFAULT NULL COMMENT '是否漏话',
+  `RECORD` tinyint(4) DEFAULT NULL COMMENT '是否录音',
+  `RECORDTIME` int(11) DEFAULT NULL COMMENT '录音时长',
+  `STARTRECORD` datetime DEFAULT NULL COMMENT '开始录音时间',
+  `ENDRECORD` datetime DEFAULT NULL COMMENT '结束录音时间',
+  `RECORDFILENAME` varchar(100) DEFAULT NULL COMMENT '录音文件名（单纯录音文件名）',
+  `RECORDFILE` varchar(255) DEFAULT NULL COMMENT '录音文件全路径名（存放位置+文件名）',
+  `SOURCE` varchar(50) DEFAULT NULL COMMENT '来源',
+  `ANSWERTIME` datetime DEFAULT NULL COMMENT '应答时间',
+  `CURRENT` tinyint(4) DEFAULT NULL COMMENT '当前通话',
+  `INIT` tinyint(4) DEFAULT NULL COMMENT '初始通话',
+  `ACTION` varchar(50) DEFAULT NULL COMMENT '事件动作',
+  `HOST` varchar(50) DEFAULT NULL COMMENT '时间主机（FreeWitch主机帐户名）',
+  `IPADDR` varchar(50) DEFAULT NULL COMMENT '主机IP（FreeWitch主机IP）',
+  `SERVICESUMMARY` tinyint(4) DEFAULT NULL COMMENT '是否记录服务小结',
+  `SERVICEID` varchar(32) DEFAULT NULL COMMENT '服务记录ID',
+  `SERVICESTATUS` varchar(50) DEFAULT NULL COMMENT '当前呼叫状态',
+  `CHANNELSTATUS` varchar(50) DEFAULT NULL COMMENT '事件中的呼叫状态',
+  `COUNTRY` varchar(50) DEFAULT NULL COMMENT '来电国家',
+  `PROVINCE` varchar(50) DEFAULT NULL COMMENT '来电号码归属省份',
+  `CITY` varchar(50) DEFAULT NULL COMMENT '来电号码归属城市',
+  `ISP` varchar(50) DEFAULT NULL COMMENT '来电号码运营商',
+  `CONTACTSID` varchar(50) DEFAULT NULL COMMENT '联系人ID',
+  `EXTENTION` varchar(50) DEFAULT NULL COMMENT '分机ID',
+  `HOSTID` varchar(50) DEFAULT NULL COMMENT 'PBX服务器ID',
+  `CALLTYPE` varchar(50) DEFAULT NULL COMMENT '呼叫方向类型 | 计费类型',
+  `CALLDIR` varchar(50) DEFAULT NULL COMMENT '我方呼叫方向',
+  `OTHERDIR` varchar(50) DEFAULT NULL COMMENT '对方呼叫方向',
+  `BRIDGEID` varchar(50) DEFAULT NULL COMMENT '桥接ID',
+  `BRIDRE` tinyint(4) DEFAULT NULL COMMENT '是否有桥接',
+  `DISCALLER` varchar(50) DEFAULT NULL COMMENT '主叫分机号',
+  `DISCALLED` varchar(50) DEFAULT NULL COMMENT '被叫分机号',
+  `ORGAN` varchar(50) DEFAULT NULL COMMENT '所属组织机构ID',
+  `EVENTID` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='坐席监控表';
+
+-- ----------------------------
+-- Records of uk_call_monitor
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_call_performance`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_call_performance`;
+CREATE TABLE `uk_call_performance` (
+  `ID` varchar(50) NOT NULL COMMENT '坐席ID',
+  `USERID` varchar(50) DEFAULT NULL COMMENT '登录人ID',
+  `AGENT` varchar(50) DEFAULT NULL COMMENT '坐席工号',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '坐席用户名（登录名）',
+  `AGENTNO` varchar(50) DEFAULT NULL COMMENT '分机号（坐席登录的分机号码）',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '坐席姓名',
+  `STARTSTATUS` varchar(50) DEFAULT NULL COMMENT '上一个状态',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '坐席状态code（对应字典管理中的CODE）',
+  `STATUS` varchar(50) DEFAULT NULL COMMENT '坐席历史状态（插入该表时的状态（复制自坐席监控表的状态））',
+  `ORGI` varchar(50) DEFAULT NULL COMMENT '租户ID',
+  `AGENTSERVICEID` varchar(50) DEFAULT NULL COMMENT '会话ID',
+  `SKILL` varchar(50) DEFAULT NULL COMMENT '接入的技能组ID',
+  `SKILLNAME` varchar(50) DEFAULT NULL COMMENT '接入的技能组名称',
+  `BUSY` varchar(50) DEFAULT NULL COMMENT '是否忙',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '状态开始时间（取值（坐席监控表的记录创建时间））',
+  `ENDTIME` datetime DEFAULT NULL COMMENT '记录创建时间（取值（纪录插入表时的时间））',
+  `INTERVALTIME` varchar(50) DEFAULT NULL COMMENT '状态持续时间（秒）（endtime - createtime = intervaltime）',
+  `ANI` varchar(50) DEFAULT NULL COMMENT '主叫号码',
+  `CALLED` varchar(50) DEFAULT NULL COMMENT '被叫号码',
+  `DIRECTION` varchar(50) DEFAULT NULL COMMENT '呼叫方向',
+  `CALLSTARTTIME` datetime DEFAULT NULL COMMENT '通话开始时间',
+  `CALLENDTIME` datetime DEFAULT NULL COMMENT '通话结束时间',
+  `RINGDURATION` int(11) DEFAULT NULL COMMENT '振铃时长',
+  `DURATION` int(11) DEFAULT NULL COMMENT '通话时长',
+  `MISSCALL` tinyint(4) DEFAULT NULL COMMENT '是否漏话',
+  `RECORD` tinyint(4) DEFAULT NULL COMMENT '是否录音',
+  `RECORDTIME` int(11) DEFAULT NULL COMMENT '录音时长',
+  `STARTRECORD` datetime DEFAULT NULL COMMENT '开始录音时间',
+  `ENDRECORD` datetime DEFAULT NULL COMMENT '结束录音时间',
+  `RECORDFILENAME` varchar(100) DEFAULT NULL COMMENT '录音文件名（单纯录音文件名）',
+  `RECORDFILE` varchar(255) DEFAULT NULL COMMENT '录音文件全路径名（存放位置+文件名）',
+  `SOURCE` varchar(50) DEFAULT NULL COMMENT '来源',
+  `ANSWERTIME` datetime DEFAULT NULL COMMENT '应答时间',
+  `CURRENT` tinyint(4) DEFAULT NULL COMMENT '当前通话',
+  `INIT` tinyint(4) DEFAULT NULL COMMENT '初始通话',
+  `ACTION` varchar(50) DEFAULT NULL COMMENT '事件动作',
+  `HOST` varchar(50) DEFAULT NULL COMMENT '时间主机（FreeWitch主机帐户名）',
+  `IPADDR` varchar(50) DEFAULT NULL COMMENT '主机IP（FreeWitch主机IP）',
+  `SERVICESUMMARY` tinyint(4) DEFAULT NULL COMMENT '是否记录服务小结',
+  `SERVICEID` varchar(32) DEFAULT NULL COMMENT '服务记录ID',
+  `SERVICESTATUS` varchar(50) DEFAULT NULL COMMENT '当前呼叫状态',
+  `CHANNELSTATUS` varchar(50) DEFAULT NULL COMMENT '事件中的呼叫状态',
+  `COUNTRY` varchar(50) DEFAULT NULL COMMENT '来电国家',
+  `PROVINCE` varchar(50) DEFAULT NULL COMMENT '来电号码归属省份',
+  `CITY` varchar(50) DEFAULT NULL COMMENT '来电号码归属城市',
+  `ISP` varchar(50) DEFAULT NULL COMMENT '来电号码运营商',
+  `CONTACTSID` varchar(50) DEFAULT NULL COMMENT '联系人ID',
+  `EXTENTION` varchar(50) DEFAULT NULL COMMENT '分机ID',
+  `HOSTID` varchar(50) DEFAULT NULL COMMENT 'PBX服务器ID',
+  `CALLTYPE` varchar(50) DEFAULT NULL COMMENT '呼叫方向类型 | 计费类型',
+  `CALLDIR` varchar(50) DEFAULT NULL COMMENT '我方呼叫方向',
+  `OTHERDIR` varchar(50) DEFAULT NULL COMMENT '对方呼叫方向',
+  `BRIDGEID` varchar(50) DEFAULT NULL COMMENT '桥接ID',
+  `BRIDRE` tinyint(4) DEFAULT NULL COMMENT '是否有桥接',
+  `DISCALLER` varchar(50) DEFAULT NULL COMMENT '主叫分机号',
+  `DISCALLED` varchar(50) DEFAULT NULL COMMENT '被叫分机号',
+  `SATISF` tinyint(4) DEFAULT NULL COMMENT '是否进行满意度调查',
+  `SATISFACTION` varchar(50) DEFAULT NULL COMMENT '服务小结',
+  `SATISFDATE` datetime DEFAULT NULL COMMENT '满意度调查提交时间',
+  `ORGAN` varchar(50) DEFAULT NULL COMMENT '所属组织机构ID'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='坐席绩效表';
+
+-- ----------------------------
+-- Records of uk_call_performance
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `uk_callcenter_acl`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_callcenter_acl`;
@@ -1155,6 +1294,7 @@ CREATE TABLE `uk_callcenter_event` (
   `hangupinitiator` varchar(32) DEFAULT NULL COMMENT '挂断方',
   `workstatus` varchar(32) DEFAULT NULL COMMENT '名单业务状态',
   `sipaddr` varchar(50) DEFAULT NULL COMMENT '客户端IP',
+  `autoanswer` tinyint(4) DEFAULT '0' COMMENT '是否自动接听',
   PRIMARY KEY (`ID`) USING BTREE,
   KEY `index_transtatus_transbegin` (`transtatus`,`transbegin`) USING BTREE,
   KEY `index_1` (`ORGI`,`DISCALLER`,`DISCALLED`,`MISSCALL`,`DURATION`,`RINGDURATION`,`CALLTYPE`,`SERVICESTATUS`,`DIRECTION`,`userid`,`organ`,`CREATETIME`,`STARTTIME`,`nameid`) USING BTREE
@@ -1296,6 +1436,24 @@ CREATE TABLE `uk_callcenter_extention` (
   `aitype` varchar(32) DEFAULT NULL COMMENT '机器人类型（smartai/quesurvey）',
   `waittime` int(11) DEFAULT '3000' COMMENT '无对话提示等待时长',
   `waittiptimes` int(11) DEFAULT '3' COMMENT '无对话提示次数',
+  `greetlong` varchar(100) DEFAULT NULL COMMENT '欢迎提示语音',
+  `greetshort` varchar(100) DEFAULT NULL COMMENT '欢迎提示短语音',
+  `invalidsound` varchar(100) DEFAULT NULL COMMENT '无效输入提示语音',
+  `exitsound` varchar(100) DEFAULT NULL COMMENT '离开语音',
+  `confirmmacro` varchar(50) DEFAULT NULL COMMENT '确认宏指令',
+  `confirmkey` varchar(50) DEFAULT NULL COMMENT '确认按键',
+  `ttsengine` varchar(20) DEFAULT NULL COMMENT 'TTS引擎',
+  `ttsvoice` varchar(50) DEFAULT NULL COMMENT 'TTS语音',
+  `confirmattempts` varchar(50) DEFAULT NULL COMMENT '确认提示消息',
+  `timeout` int(11) DEFAULT '0' COMMENT '超时时间',
+  `interdigittimeout` int(11) DEFAULT '0' COMMENT '呼叫等待超时',
+  `maxfailures` int(11) DEFAULT '0' COMMENT '最大失败次数',
+  `maxtimeouts` int(11) DEFAULT '0' COMMENT '最大超时次数',
+  `digitlen` int(11) DEFAULT '0' COMMENT '数字按键长度',
+  `action` varchar(50) DEFAULT NULL COMMENT '指令',
+  `digits` varchar(50) DEFAULT NULL COMMENT '拨号键',
+  `param` varchar(255) DEFAULT NULL COMMENT '参数',
+  `autoanswer` varchar(20) DEFAULT NULL COMMENT '来电自动接听',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='分机信息表';
 
@@ -1344,6 +1502,7 @@ CREATE TABLE `uk_callcenter_ivr` (
   `tipmessage` text COMMENT '机器人提示客户说话',
   `asrrecordpath` varchar(255) DEFAULT NULL COMMENT 'ASR结果路径',
   `ttsrecordpath` varchar(255) DEFAULT NULL COMMENT 'ASR结果路径',
+  `playsound` varchar(100) DEFAULT NULL COMMENT '播放语音',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='IVR菜单表';
 
@@ -1614,143 +1773,6 @@ CREATE TABLE `uk_callcenter_skillext` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `uk_call_monitor`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_call_monitor`;
-CREATE TABLE `uk_call_monitor` (
-  `ID` varchar(50) NOT NULL COMMENT 'ID',
-  `USERID` varchar(50) DEFAULT NULL COMMENT '登录人ID',
-  `AGENT` varchar(50) DEFAULT NULL COMMENT '坐席工号',
-  `USERNAME` varchar(50) DEFAULT NULL COMMENT '坐席用户名（登录名）',
-  `AGENTNO` varchar(50) DEFAULT NULL COMMENT '分机号（坐席登录的分机号码）',
-  `NAME` varchar(50) DEFAULT NULL COMMENT '坐席姓名',
-  `CODE` varchar(50) DEFAULT NULL COMMENT '坐席状态code（对应字典表里的CODE）',
-  `STATUS` varchar(50) DEFAULT NULL COMMENT '坐席当前状态（坐席当前状态（坐席监控首页显示，判断根本依据，每次状态改变，数据记录会被更新））',
-  `ORGI` varchar(50) DEFAULT NULL COMMENT '租户ID',
-  `AGENTSERVICEID` varchar(50) DEFAULT NULL COMMENT '会话ID',
-  `SKILL` varchar(50) DEFAULT NULL COMMENT '接入的技能组ID',
-  `SKILLNAME` varchar(50) DEFAULT NULL COMMENT '接入的技能组名称',
-  `BUSY` varchar(50) DEFAULT NULL COMMENT '是否忙',
-  `CREATETIME` datetime DEFAULT NULL COMMENT '记录创建时间（每个坐席的第一条记录为，点击登录之后，登录成功之后的时间，则会插入一条记录。以后每次状态改变，记录会被更新，时间都会跟着改变，变为状态改变后的时间。）',
-  `ANI` varchar(50) DEFAULT NULL COMMENT '主叫号码',
-  `CALLED` varchar(50) DEFAULT NULL COMMENT '被叫号码',
-  `DIRECTION` varchar(50) DEFAULT NULL COMMENT '呼叫方向',
-  `CALLSTARTTIME` datetime DEFAULT NULL COMMENT '通话开始时间',
-  `CALLENDTIME` datetime DEFAULT NULL COMMENT '通话结束时间',
-  `RINGDURATION` int(11) DEFAULT NULL COMMENT '振铃时长',
-  `DURATION` int(11) DEFAULT NULL COMMENT '通话时长',
-  `MISSCALL` tinyint(4) DEFAULT NULL COMMENT '是否漏话',
-  `RECORD` tinyint(4) DEFAULT NULL COMMENT '是否录音',
-  `RECORDTIME` int(11) DEFAULT NULL COMMENT '录音时长',
-  `STARTRECORD` datetime DEFAULT NULL COMMENT '开始录音时间',
-  `ENDRECORD` datetime DEFAULT NULL COMMENT '结束录音时间',
-  `RECORDFILENAME` varchar(100) DEFAULT NULL COMMENT '录音文件名（单纯录音文件名）',
-  `RECORDFILE` varchar(255) DEFAULT NULL COMMENT '录音文件全路径名（存放位置+文件名）',
-  `SOURCE` varchar(50) DEFAULT NULL COMMENT '来源',
-  `ANSWERTIME` datetime DEFAULT NULL COMMENT '应答时间',
-  `CURRENT` tinyint(4) DEFAULT NULL COMMENT '当前通话',
-  `INIT` tinyint(4) DEFAULT NULL COMMENT '初始通话',
-  `ACTION` varchar(50) DEFAULT NULL COMMENT '事件动作',
-  `HOST` varchar(50) DEFAULT NULL COMMENT '时间主机（FreeWitch主机帐户名）',
-  `IPADDR` varchar(50) DEFAULT NULL COMMENT '主机IP（FreeWitch主机IP）',
-  `SERVICESUMMARY` tinyint(4) DEFAULT NULL COMMENT '是否记录服务小结',
-  `SERVICEID` varchar(32) DEFAULT NULL COMMENT '服务记录ID',
-  `SERVICESTATUS` varchar(50) DEFAULT NULL COMMENT '当前呼叫状态',
-  `CHANNELSTATUS` varchar(50) DEFAULT NULL COMMENT '事件中的呼叫状态',
-  `COUNTRY` varchar(50) DEFAULT NULL COMMENT '来电国家',
-  `PROVINCE` varchar(50) DEFAULT NULL COMMENT '来电号码归属省份',
-  `CITY` varchar(50) DEFAULT NULL COMMENT '来电号码归属城市',
-  `ISP` varchar(50) DEFAULT NULL COMMENT '来电号码运营商',
-  `CONTACTSID` varchar(50) DEFAULT NULL COMMENT '联系人ID',
-  `EXTENTION` varchar(50) DEFAULT NULL COMMENT '分机ID',
-  `HOSTID` varchar(50) DEFAULT NULL COMMENT 'PBX服务器ID',
-  `CALLTYPE` varchar(50) DEFAULT NULL COMMENT '呼叫方向类型 | 计费类型',
-  `CALLDIR` varchar(50) DEFAULT NULL COMMENT '我方呼叫方向',
-  `OTHERDIR` varchar(50) DEFAULT NULL COMMENT '对方呼叫方向',
-  `BRIDGEID` varchar(50) DEFAULT NULL COMMENT '桥接ID',
-  `BRIDRE` tinyint(4) DEFAULT NULL COMMENT '是否有桥接',
-  `DISCALLER` varchar(50) DEFAULT NULL COMMENT '主叫分机号',
-  `DISCALLED` varchar(50) DEFAULT NULL COMMENT '被叫分机号',
-  `ORGAN` varchar(50) DEFAULT NULL COMMENT '所属组织机构ID',
-  `EVENTID` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='坐席监控表';
-
--- ----------------------------
--- Records of uk_call_monitor
--- ----------------------------
-
--- ----------------------------
--- Table structure for `uk_call_performance`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_call_performance`;
-CREATE TABLE `uk_call_performance` (
-  `ID` varchar(50) NOT NULL COMMENT '坐席ID',
-  `USERID` varchar(50) DEFAULT NULL COMMENT '登录人ID',
-  `AGENT` varchar(50) DEFAULT NULL COMMENT '坐席工号',
-  `USERNAME` varchar(50) DEFAULT NULL COMMENT '坐席用户名（登录名）',
-  `AGENTNO` varchar(50) DEFAULT NULL COMMENT '分机号（坐席登录的分机号码）',
-  `NAME` varchar(50) DEFAULT NULL COMMENT '坐席姓名',
-  `STARTSTATUS` varchar(50) DEFAULT NULL COMMENT '上一个状态',
-  `CODE` varchar(50) DEFAULT NULL COMMENT '坐席状态code（对应字典管理中的CODE）',
-  `STATUS` varchar(50) DEFAULT NULL COMMENT '坐席历史状态（插入该表时的状态（复制自坐席监控表的状态））',
-  `ORGI` varchar(50) DEFAULT NULL COMMENT '租户ID',
-  `AGENTSERVICEID` varchar(50) DEFAULT NULL COMMENT '会话ID',
-  `SKILL` varchar(50) DEFAULT NULL COMMENT '接入的技能组ID',
-  `SKILLNAME` varchar(50) DEFAULT NULL COMMENT '接入的技能组名称',
-  `BUSY` varchar(50) DEFAULT NULL COMMENT '是否忙',
-  `CREATETIME` datetime DEFAULT NULL COMMENT '状态开始时间（取值（坐席监控表的记录创建时间））',
-  `ENDTIME` datetime DEFAULT NULL COMMENT '记录创建时间（取值（纪录插入表时的时间））',
-  `INTERVALTIME` varchar(50) DEFAULT NULL COMMENT '状态持续时间（秒）（endtime - createtime = intervaltime）',
-  `ANI` varchar(50) DEFAULT NULL COMMENT '主叫号码',
-  `CALLED` varchar(50) DEFAULT NULL COMMENT '被叫号码',
-  `DIRECTION` varchar(50) DEFAULT NULL COMMENT '呼叫方向',
-  `CALLSTARTTIME` datetime DEFAULT NULL COMMENT '通话开始时间',
-  `CALLENDTIME` datetime DEFAULT NULL COMMENT '通话结束时间',
-  `RINGDURATION` int(11) DEFAULT NULL COMMENT '振铃时长',
-  `DURATION` int(11) DEFAULT NULL COMMENT '通话时长',
-  `MISSCALL` tinyint(4) DEFAULT NULL COMMENT '是否漏话',
-  `RECORD` tinyint(4) DEFAULT NULL COMMENT '是否录音',
-  `RECORDTIME` int(11) DEFAULT NULL COMMENT '录音时长',
-  `STARTRECORD` datetime DEFAULT NULL COMMENT '开始录音时间',
-  `ENDRECORD` datetime DEFAULT NULL COMMENT '结束录音时间',
-  `RECORDFILENAME` varchar(100) DEFAULT NULL COMMENT '录音文件名（单纯录音文件名）',
-  `RECORDFILE` varchar(255) DEFAULT NULL COMMENT '录音文件全路径名（存放位置+文件名）',
-  `SOURCE` varchar(50) DEFAULT NULL COMMENT '来源',
-  `ANSWERTIME` datetime DEFAULT NULL COMMENT '应答时间',
-  `CURRENT` tinyint(4) DEFAULT NULL COMMENT '当前通话',
-  `INIT` tinyint(4) DEFAULT NULL COMMENT '初始通话',
-  `ACTION` varchar(50) DEFAULT NULL COMMENT '事件动作',
-  `HOST` varchar(50) DEFAULT NULL COMMENT '时间主机（FreeWitch主机帐户名）',
-  `IPADDR` varchar(50) DEFAULT NULL COMMENT '主机IP（FreeWitch主机IP）',
-  `SERVICESUMMARY` tinyint(4) DEFAULT NULL COMMENT '是否记录服务小结',
-  `SERVICEID` varchar(32) DEFAULT NULL COMMENT '服务记录ID',
-  `SERVICESTATUS` varchar(50) DEFAULT NULL COMMENT '当前呼叫状态',
-  `CHANNELSTATUS` varchar(50) DEFAULT NULL COMMENT '事件中的呼叫状态',
-  `COUNTRY` varchar(50) DEFAULT NULL COMMENT '来电国家',
-  `PROVINCE` varchar(50) DEFAULT NULL COMMENT '来电号码归属省份',
-  `CITY` varchar(50) DEFAULT NULL COMMENT '来电号码归属城市',
-  `ISP` varchar(50) DEFAULT NULL COMMENT '来电号码运营商',
-  `CONTACTSID` varchar(50) DEFAULT NULL COMMENT '联系人ID',
-  `EXTENTION` varchar(50) DEFAULT NULL COMMENT '分机ID',
-  `HOSTID` varchar(50) DEFAULT NULL COMMENT 'PBX服务器ID',
-  `CALLTYPE` varchar(50) DEFAULT NULL COMMENT '呼叫方向类型 | 计费类型',
-  `CALLDIR` varchar(50) DEFAULT NULL COMMENT '我方呼叫方向',
-  `OTHERDIR` varchar(50) DEFAULT NULL COMMENT '对方呼叫方向',
-  `BRIDGEID` varchar(50) DEFAULT NULL COMMENT '桥接ID',
-  `BRIDRE` tinyint(4) DEFAULT NULL COMMENT '是否有桥接',
-  `DISCALLER` varchar(50) DEFAULT NULL COMMENT '主叫分机号',
-  `DISCALLED` varchar(50) DEFAULT NULL COMMENT '被叫分机号',
-  `SATISF` tinyint(4) DEFAULT NULL COMMENT '是否进行满意度调查',
-  `SATISFACTION` varchar(50) DEFAULT NULL COMMENT '服务小结',
-  `SATISFDATE` datetime DEFAULT NULL COMMENT '满意度调查提交时间',
-  `ORGAN` varchar(50) DEFAULT NULL COMMENT '所属组织机构ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='坐席绩效表';
-
--- ----------------------------
--- Records of uk_call_performance
--- ----------------------------
-
--- ----------------------------
 -- Table structure for `uk_chat_message`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_chat_message`;
@@ -2014,6 +2036,40 @@ CREATE TABLE `uk_consult_invite` (
   `lvtipmsg` text COMMENT '无坐席在线的提示消息',
   `filterscript` tinyint(4) DEFAULT '0' COMMENT '禁止访客端发送HTML内容',
   `filteragentscript` tinyint(4) DEFAULT '0' COMMENT '禁止坐席端发送HTML内容',
+  `enablecallback` int(11) DEFAULT '0' COMMENT '显示回呼组件',
+  `callbacknum` varchar(50) DEFAULT NULL COMMENT '回呼号码',
+  `callbacktxt` varchar(50) DEFAULT NULL COMMENT '回呼提示文字',
+  `callbackquicktip` text COMMENT '回呼提示HTML',
+  `callbackicon` varchar(50) DEFAULT NULL COMMENT '回呼图标',
+  `callbackcolor` varchar(50) DEFAULT NULL COMMENT '回呼背景颜色',
+  `enabledemo` int(11) DEFAULT '0' COMMENT '显示预约演示组件',
+  `demourl` varchar(255) DEFAULT NULL COMMENT '预约演示URL',
+  `demotxt` varchar(50) DEFAULT NULL COMMENT '预约演示文字',
+  `demoquicktip` text COMMENT '预约演示提示HTML',
+  `demoicon` varchar(50) DEFAULT NULL COMMENT '预约演示图标',
+  `democolor` varchar(50) DEFAULT NULL COMMENT '预约演示背景颜色',
+  `enablesns` int(11) DEFAULT '0' COMMENT '显示微信公众号组件',
+  `snsurl` varchar(255) DEFAULT NULL COMMENT '公众号跳转URL',
+  `snstxt` varchar(50) DEFAULT NULL COMMENT '公众号提示文字',
+  `snstip` text COMMENT '公众号提示HTML',
+  `snsicon` varchar(50) DEFAULT NULL COMMENT '公众号图标',
+  `snsqrcode` varchar(50) DEFAULT NULL COMMENT '公众号二维码',
+  `snscolor` varchar(50) DEFAULT NULL COMMENT '公众号背景颜色',
+  `enableothermodel` int(11) DEFAULT '0' COMMENT '显示其他组件',
+  `othermodelurl` varchar(255) DEFAULT NULL COMMENT '其他组件URL',
+  `othermodeltxt` varchar(50) DEFAULT NULL COMMENT '其他组件文本',
+  `othermodeltip` text COMMENT '其他组件提示HTML',
+  `othermodelicon` varchar(50) DEFAULT NULL COMMENT '其他组件图标',
+  `othermodelcolor` varchar(50) DEFAULT NULL COMMENT '其他组件背景颜色',
+  `callbackurl` varchar(255) DEFAULT NULL COMMENT '回呼点击后跳转',
+  `callbackquicktiptitle` varchar(50) DEFAULT NULL COMMENT '回呼提示标题',
+  `demoquicktiptitle` varchar(50) DEFAULT NULL COMMENT '预约演示提示标题',
+  `snstiptitle` varchar(50) DEFAULT NULL COMMENT '公众号提示标题',
+  `othermodeltiptitle` varchar(50) DEFAULT NULL COMMENT '其他组件提示标题',
+  `enableinvite` int(11) DEFAULT '0' COMMENT '显示默认咨询快捷提示',
+  `invitetip` text COMMENT '邀请咨询提示HTML',
+  `invitetipdelay` int(11) DEFAULT '0' COMMENT '延时显示',
+  `invitetiptitle` varchar(50) DEFAULT NULL COMMENT '邀请咨询组件提示标题',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='访客网站配置表';
 
@@ -2197,6 +2253,8 @@ CREATE TABLE `uk_crm_datamodel` (
   `searchhis` tinyint(4) DEFAULT NULL COMMENT '是否记录搜索历史',
   `CODE` varchar(100) DEFAULT NULL COMMENT '代码',
   `duplicate` tinyint(4) DEFAULT NULL COMMENT '是否允许重复数据',
+  `targetid` varchar(32) DEFAULT NULL COMMENT '目标id',
+  `parentid` varchar(32) DEFAULT NULL COMMENT '父级id',
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2243,11 +2301,41 @@ CREATE TABLE `uk_crm_dataproduct` (
   `QUICKMENU` tinyint(4) DEFAULT '0' COMMENT '是否显示在快捷菜单',
   `duplicate` tinyint(4) DEFAULT '0' COMMENT '是否允许重复数据',
   `design` tinyint(4) DEFAULT '0' COMMENT '布局',
+  `TBID` varchar(32) DEFAULT NULL COMMENT '元数据ID',
+  `menuid` varchar(32) DEFAULT NULL COMMENT '菜单ID',
+  `scheme` varchar(255) DEFAULT NULL COMMENT '方案',
+  `datamodelid` varchar(32) DEFAULT NULL COMMENT '默认页面布局id',
+  `skiptype` varchar(32) DEFAULT NULL COMMENT '跳转方式',
+  `skipurl` varchar(32) DEFAULT NULL COMMENT '跳转url',
+  `defaulshow` tinyint(4) DEFAULT '0' COMMENT '是否默认显示',
+  `iconcolor` varchar(100) DEFAULT NULL COMMENT '图标颜色',
+  `allowfilter` tinyint(4) DEFAULT '0' COMMENT '是否允许筛选列',
+  `allowprint` tinyint(4) DEFAULT '0' COMMENT '是否允许打印',
+  `allowexports` tinyint(4) DEFAULT '0' COMMENT '是否允许导出',
   UNIQUE KEY `SQL121227155530400` (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of uk_crm_dataproduct
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_crm_scheme`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_crm_scheme`;
+CREATE TABLE `uk_crm_scheme` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `code` varchar(255) DEFAULT NULL COMMENT '代码',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` date DEFAULT NULL COMMENT '创建时间',
+  `updatetime` date DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='crm-方案表';
+
+-- ----------------------------
+-- Records of uk_crm_scheme
 -- ----------------------------
 
 -- ----------------------------
@@ -2279,6 +2367,27 @@ CREATE TABLE `uk_cube` (
 
 -- ----------------------------
 -- Records of uk_cube
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_cube_type`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_cube_type`;
+CREATE TABLE `uk_cube_type` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(255) DEFAULT NULL COMMENT '维度名称',
+  `createtime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户id',
+  `parentid` varchar(32) DEFAULT NULL COMMENT '模型分类上级ID',
+  `inx` int(11) DEFAULT NULL COMMENT '分类排序序号',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `description` varchar(255) DEFAULT NULL COMMENT '分类描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='立方体分类表';
+
+-- ----------------------------
+-- Records of uk_cube_type
 -- ----------------------------
 
 -- ----------------------------
@@ -2372,27 +2481,6 @@ CREATE TABLE `uk_cubemetadata` (
 
 -- ----------------------------
 -- Records of uk_cubemetadata
--- ----------------------------
-
--- ----------------------------
--- Table structure for `uk_cube_type`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_cube_type`;
-CREATE TABLE `uk_cube_type` (
-  `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `name` varchar(255) DEFAULT NULL COMMENT '维度名称',
-  `createtime` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
-  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `orgi` varchar(32) DEFAULT NULL COMMENT '租户id',
-  `parentid` varchar(32) DEFAULT NULL COMMENT '模型分类上级ID',
-  `inx` int(11) DEFAULT NULL COMMENT '分类排序序号',
-  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `description` varchar(255) DEFAULT NULL COMMENT '分类描述',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='立方体分类表';
-
--- ----------------------------
--- Records of uk_cube_type
 -- ----------------------------
 
 -- ----------------------------
@@ -2810,12 +2898,12 @@ DROP TABLE IF EXISTS `uk_ekm_knowbase_config`;
 CREATE TABLE `uk_ekm_knowbase_config` (
   `id` varchar(32) NOT NULL,
   `knowbaseid` varchar(32) DEFAULT NULL COMMENT '知识库id',
-  `basehost` varchar(255) COMMENT '站点根网址',
-  `webname` varchar(255) COMMENT '网站名称',
+  `basehost` varchar(255) DEFAULT NULL COMMENT '站点根网址',
+  `webname` varchar(255) DEFAULT NULL COMMENT '网站名称',
   `powerby` text COMMENT '网站版权信息',
-  `keywords` varchar(255) COMMENT '站点关键字',
-  `description` varchar(255) COMMENT '站点描述',
-  `beian` varchar(255) COMMENT '网站备案号',
+  `keywords` varchar(255) DEFAULT NULL COMMENT '站点关键字',
+  `description` varchar(255) DEFAULT NULL COMMENT '站点描述',
+  `beian` varchar(255) DEFAULT NULL COMMENT '网站备案号',
   `footer` text COMMENT '页脚',
   `indexlog` text COMMENT '首页图标',
   `hotwords` text COMMENT '搜索热词',
@@ -4849,6 +4937,7 @@ CREATE TABLE `uk_que_result` (
   `level` varchar(32) DEFAULT NULL COMMENT '客户评级（a,b,c,d）',
   `discalled` varchar(32) DEFAULT NULL COMMENT '被叫号码',
   `distype` varchar(32) DEFAULT NULL COMMENT '号码隐藏方式',
+  `answerlevel` varchar(50) DEFAULT NULL COMMENT '评级 a b c d',
   PRIMARY KEY (`ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='问卷结果主表';
 
@@ -5075,26 +5164,6 @@ CREATE TABLE `uk_que_survey_question` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `uk_quickreply`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_quickreply`;
-CREATE TABLE `uk_quickreply` (
-  `id` varchar(32) NOT NULL DEFAULT '' COMMENT '主键ID',
-  `title` varchar(255) DEFAULT NULL COMMENT '标题',
-  `content` text COMMENT '内容',
-  `type` varchar(10) DEFAULT NULL COMMENT '类型',
-  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
-  `cate` varchar(32) DEFAULT NULL COMMENT '分类',
-  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='快捷回复表';
-
--- ----------------------------
--- Records of uk_quickreply
--- ----------------------------
-
--- ----------------------------
 -- Table structure for `uk_quick_type`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_quick_type`;
@@ -5119,6 +5188,26 @@ CREATE TABLE `uk_quick_type` (
 
 -- ----------------------------
 -- Records of uk_quick_type
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_quickreply`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_quickreply`;
+CREATE TABLE `uk_quickreply` (
+  `id` varchar(32) NOT NULL DEFAULT '' COMMENT '主键ID',
+  `title` varchar(255) DEFAULT NULL COMMENT '标题',
+  `content` text COMMENT '内容',
+  `type` varchar(10) DEFAULT NULL COMMENT '类型',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `cate` varchar(32) DEFAULT NULL COMMENT '分类',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='快捷回复表';
+
+-- ----------------------------
+-- Records of uk_quickreply
 -- ----------------------------
 
 -- ----------------------------
@@ -5389,6 +5478,29 @@ CREATE TABLE `uk_role_auth` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `uk_sale_count`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_sale_count`;
+CREATE TABLE `uk_sale_count` (
+  `id` varchar(32) NOT NULL,
+  `dataid` varchar(32) DEFAULT NULL COMMENT '坐席/部门/机器人ID',
+  `type` varchar(32) DEFAULT NULL COMMENT '类型（坐席user/部门organ/机器人ai）',
+  `namenum` int(11) DEFAULT '0' COMMENT '分配总数',
+  `notcall` int(11) DEFAULT '0' COMMENT '未拨打',
+  `callsuccess` int(11) DEFAULT '0' COMMENT '拨打成功',
+  `callfaild` int(11) DEFAULT '0' COMMENT '拨打失败',
+  `aptrue` int(11) DEFAULT '0' COMMENT '已预约',
+  `apfalse` int(11) DEFAULT '0' COMMENT '未预约',
+  `createtime` datetime DEFAULT NULL,
+  `orgi` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='电销 - 坐席名单计数表';
+
+-- ----------------------------
+-- Records of uk_sale_count
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `uk_sales_product`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_sales_product`;
@@ -5497,29 +5609,6 @@ CREATE TABLE `uk_sales_status_type` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `uk_sale_count`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_sale_count`;
-CREATE TABLE `uk_sale_count` (
-  `id` varchar(32) NOT NULL,
-  `dataid` varchar(32) DEFAULT NULL COMMENT '坐席/部门/机器人ID',
-  `type` varchar(32) DEFAULT NULL COMMENT '类型（坐席user/部门organ/机器人ai）',
-  `namenum` int(11) DEFAULT '0' COMMENT '分配总数',
-  `notcall` int(11) DEFAULT '0' COMMENT '未拨打',
-  `callsuccess` int(11) DEFAULT '0' COMMENT '拨打成功',
-  `callfaild` int(11) DEFAULT '0' COMMENT '拨打失败',
-  `aptrue` int(11) DEFAULT '0' COMMENT '已预约',
-  `apfalse` int(11) DEFAULT '0' COMMENT '未预约',
-  `createtime` datetime DEFAULT NULL,
-  `orgi` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='电销 - 坐席名单计数表';
-
--- ----------------------------
--- Records of uk_sale_count
--- ----------------------------
-
--- ----------------------------
 -- Table structure for `uk_secret`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_secret`;
@@ -5579,6 +5668,30 @@ CREATE TABLE `uk_servicesummary` (
 
 -- ----------------------------
 -- Records of uk_servicesummary
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_session_type`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_session_type`;
+CREATE TABLE `uk_session_type` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(100) DEFAULT NULL COMMENT '字典名称',
+  `CODE` varchar(100) DEFAULT NULL COMMENT '代码',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `CTYPE` varchar(32) DEFAULT NULL COMMENT '类型',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '父级ID',
+  `DICID` varchar(32) DEFAULT NULL COMMENT '目录ID',
+  `DESCRIPTION` varchar(255) DEFAULT NULL COMMENT '描述',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of uk_session_type
 -- ----------------------------
 
 -- ----------------------------
@@ -5651,30 +5764,6 @@ CREATE TABLE `uk_sessionconfig` (
 
 -- ----------------------------
 -- Records of uk_sessionconfig
--- ----------------------------
-
--- ----------------------------
--- Table structure for `uk_session_type`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_session_type`;
-CREATE TABLE `uk_session_type` (
-  `ID` varchar(32) NOT NULL COMMENT '主键ID',
-  `NAME` varchar(100) DEFAULT NULL COMMENT '字典名称',
-  `CODE` varchar(100) DEFAULT NULL COMMENT '代码',
-  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
-  `CTYPE` varchar(32) DEFAULT NULL COMMENT '类型',
-  `PARENTID` varchar(32) DEFAULT NULL COMMENT '父级ID',
-  `DICID` varchar(32) DEFAULT NULL COMMENT '目录ID',
-  `DESCRIPTION` varchar(255) DEFAULT NULL COMMENT '描述',
-  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
-  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
-  PRIMARY KEY (`ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Records of uk_session_type
 -- ----------------------------
 
 -- ----------------------------
@@ -9592,8 +9681,11 @@ INSERT INTO `uk_sysdic` VALUES ('297efe59672a2af001673655955502f1', '短信模�
 INSERT INTO `uk_sysdic` VALUES ('297efe59672a2af0016736561ed002f6', '短信发送记录', 'pub', 'A08_A06', null, 'auth', '402881ef612b1f5b01612cc5d9710545', null, null, '&#x756e646566696e6564;', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-12-13 10:23:59', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', 'javascript:;', 'webim', '2', null, 'left');
 INSERT INTO `uk_sysdic` VALUES ('402813816878483a01687851b79b0024', '公告邮件', 'pub', 'noticemail', 'ukewo', 'layui-icon', '297e63f05d1da6be015d1dae6de20002', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2019-01-23 09:27:27', null, '1', '0', '297e63f05d1da6be015d1dae6de20002', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('402813816878838d01687889041a0028', '公告短信', 'pub', 'noticesms', 'ukewo', 'layui-icon', '297e63f05d1da6be015d1dae6de20002', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2019-01-23 10:27:51', null, '1', '0', '297e63f05d1da6be015d1dae6de20002', '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('40281381692dde0901692de2f45b000b', '按钮', 'pub', 'com.dic.button', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2019-02-27 15:37:22', null, '1', '0', null, '0', '0', null, null, null, null, null);
+INSERT INTO `uk_sysdic` VALUES ('40281381692dde0901692de349610012', '链接', 'pub', 'com.dic.href', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2019-02-27 15:37:44', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028800268eae8330168eafb9185001c', '客户', 'pub', 'C01', 'ukewo', 'kfont', '402888815d2fe37f015d2fe75cc80002', '', null, '&#xe650;', '', 'crm', '4028cac3614cd2f901614cf8be1f0324', '2019-02-14 15:49:41', null, '1', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/customer/index.html', null, null, null, 'crm');
 INSERT INTO `uk_sysdic` VALUES ('4028800268eb08a20168eb09d221000d', '联系人', 'pub', 'C02', 'ukewo', 'layui-icon', '402888815d2fe37f015d2fe75cc80002', '', null, '&#xe612;', '', 'crm', '4028cac3614cd2f901614cf8be1f0324', '2019-02-14 16:05:15', null, '1', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', '/apps/contacts/index.html', null, null, null, 'ekm');
+INSERT INTO `uk_sysdic` VALUES ('402880026956036e0169563552aa0052', '呼叫中心坐席状态', 'pub', 'com.dic.callcenter.status', null, 'data', '0', '', null, null, null, null, '4028cac3614cd2f901614cf8be1f0324', '2019-03-07 11:32:08', null, '1', '0', null, '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028801c68280a460168282c75860057', '10分', 'pub', '10', 'ukewo', 'layui-icon', '8a7f82825e241666015e241d2b3b0002', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2019-01-07 19:57:08', null, '1', '0', '8a7f82825e241666015e241d2b3b0002', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028801c68280a460168282d91030063', '10分', 'pub', '10', 'ukewo', 'layui-icon', '402880e76707618301670762f768038a', '', null, '', '', null, '4028cac3614cd2f901614cf8be1f0324', '2019-01-07 19:58:21', null, '1', '0', '402880e76707618301670762f768038a', '0', '0', null, null, null, null, null);
 INSERT INTO `uk_sysdic` VALUES ('4028801e67df2f6e0167df807fd904bd', '拨打异常名单', 'pub', 'A16_A04_A05', null, 'auth', '4028811c6763b3a2016763dfa8fe0173', null, null, ' ', null, null, '4028cac3614cd2f901614cf8be1f0324', '2018-12-24 17:16:39', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', ' 拨打异常名单', 'webim', '3', null, 'left');
@@ -10486,6 +10578,54 @@ INSERT INTO `uk_sysdic` VALUES ('ff808081613ba48901613bb32ac404e6', '工单总�
 INSERT INTO `uk_sysdic` VALUES ('ff808081613ba48901613bb42bbf04e7', '未关闭工单总数', 'pub', 'A04_A01_B03', null, 'auth', '402881ef612b1f5b01612cca88e2054e', null, null, '<i class=\"kfont ukewo-btn ukefu-measure-btn ukefu-bg-color-yellow\">&#xe606;</i>', null, null, '297e8c7b455798280145579c73e501c1', '2018-01-28 15:38:38', null, '0', '0', '402888815d2fe37f015d2fe75cc80002', '0', '0', 'javascript:void(0)', 'webim', '3', null, 'top');
 
 -- ----------------------------
+-- Table structure for `uk_system_message`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_system_message`;
+CREATE TABLE `uk_system_message` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `MSGTYPE` varchar(20) DEFAULT NULL COMMENT '消息类型',
+  `SMTPSERVER` varchar(255) DEFAULT NULL COMMENT 'SMTP服务器',
+  `SMTPUSER` varchar(255) DEFAULT NULL COMMENT 'SMTP账号',
+  `SMTPPASSWORD` varchar(255) DEFAULT NULL COMMENT 'SMTP密码',
+  `MAILFROM` varchar(255) DEFAULT NULL COMMENT '发件人',
+  `SECLEV` varchar(50) DEFAULT NULL COMMENT '启用SSL',
+  `SSLPORT` varchar(50) DEFAULT NULL COMMENT 'SSL端口',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `URL` varchar(255) DEFAULT NULL COMMENT 'URL',
+  `smstype` varchar(32) DEFAULT NULL COMMENT '短信类型',
+  `APPKEY` varchar(200) DEFAULT NULL COMMENT 'APPKEY',
+  `APPSEC` varchar(200) DEFAULT NULL COMMENT 'APPSEC',
+  `SIGN` varchar(50) DEFAULT NULL COMMENT '签名',
+  `TPCODE` varchar(50) DEFAULT NULL COMMENT 'TP代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '邮件或短信网关名称',
+  `moreparam` text COMMENT '更多参数',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='公告信息表';
+
+-- ----------------------------
+-- Records of uk_system_message
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_system_updatecon`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_system_updatecon`;
+CREATE TABLE `uk_system_updatecon` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `schedule` tinyint(4) DEFAULT '0' COMMENT '启用后，系统会根据设定的时间和通知方式，在即将重启升级前，进行提前通知(0关闭/1开启)',
+  `upgradetime` datetime DEFAULT NULL COMMENT '升级时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `scheduletimes` int(11) DEFAULT '0' COMMENT '升级前通知的时间间隔',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统升级设置表';
+
+-- ----------------------------
+-- Records of uk_system_updatecon
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for `uk_systemconfig`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_systemconfig`;
@@ -10567,54 +10707,6 @@ CREATE TABLE `uk_systemconfig` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `uk_system_message`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_system_message`;
-CREATE TABLE `uk_system_message` (
-  `ID` varchar(32) NOT NULL COMMENT '主键ID',
-  `MSGTYPE` varchar(20) DEFAULT NULL COMMENT '消息类型',
-  `SMTPSERVER` varchar(255) DEFAULT NULL COMMENT 'SMTP服务器',
-  `SMTPUSER` varchar(255) DEFAULT NULL COMMENT 'SMTP账号',
-  `SMTPPASSWORD` varchar(255) DEFAULT NULL COMMENT 'SMTP密码',
-  `MAILFROM` varchar(255) DEFAULT NULL COMMENT '发件人',
-  `SECLEV` varchar(50) DEFAULT NULL COMMENT '启用SSL',
-  `SSLPORT` varchar(50) DEFAULT NULL COMMENT 'SSL端口',
-  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
-  `URL` varchar(255) DEFAULT NULL COMMENT 'URL',
-  `smstype` varchar(32) DEFAULT NULL COMMENT '短信类型',
-  `APPKEY` varchar(200) DEFAULT NULL COMMENT 'APPKEY',
-  `APPSEC` varchar(200) DEFAULT NULL COMMENT 'APPSEC',
-  `SIGN` varchar(50) DEFAULT NULL COMMENT '签名',
-  `TPCODE` varchar(50) DEFAULT NULL COMMENT 'TP代码',
-  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `NAME` varchar(50) DEFAULT NULL COMMENT '邮件或短信网关名称',
-  `moreparam` text COMMENT '更多参数',
-  PRIMARY KEY (`ID`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='公告信息表';
-
--- ----------------------------
--- Records of uk_system_message
--- ----------------------------
-
--- ----------------------------
--- Table structure for `uk_system_updatecon`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_system_updatecon`;
-CREATE TABLE `uk_system_updatecon` (
-  `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `schedule` tinyint(4) DEFAULT '0' COMMENT '启用后，系统会根据设定的时间和通知方式，在即将重启升级前，进行提前通知(0关闭/1开启)',
-  `upgradetime` datetime DEFAULT NULL COMMENT '升级时间',
-  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
-  `scheduletimes` int(11) DEFAULT '0' COMMENT '升级前通知的时间间隔',
-  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统升级设置表';
-
--- ----------------------------
--- Records of uk_system_updatecon
--- ----------------------------
-
--- ----------------------------
 -- Table structure for `uk_tableproperties`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_tableproperties`;
@@ -10675,6 +10767,7 @@ CREATE TABLE `uk_tableproperties` (
   `styletype` varchar(32) DEFAULT NULL COMMENT '样式',
   `sysfield` tinyint(4) DEFAULT '0' COMMENT '系统字段',
   `privatefield` tinyint(4) DEFAULT '0' COMMENT '本地私有字段',
+  `freesearch` tinyint(4) DEFAULT '0' COMMENT '搜索方式（0:不支持，1：快速搜索，2：高级搜索）',
   PRIMARY KEY (`ID`) USING BTREE,
   UNIQUE KEY `SQL130112140848940` (`ID`) USING BTREE,
   KEY `FKF8D74787854BC62` (`DBTABLEID`) USING BTREE,
@@ -10929,12 +11022,7 @@ CREATE TABLE `uk_user` (
 -- ----------------------------
 -- Records of uk_user
 -- ----------------------------
-INSERT INTO `uk_user` VALUES ('402880ec67b9c9f40167b9fa58040095', null, 'test222', 'd477887b0636e5d87f79cc25c99d7dc9', '5', '5622@q.com', null, null, null, null, null, null, null, null, '0', null, null, '402880ec67b9c9f40167b9fa7ffb0098', '402880ec67b9c9f40167b9fa7ffb0098', null, '2018-12-17 10:24:10', null, '2018-12-17 10:24:10', null, '19082838221', '2018-12-17 10:24:10', null, '0', 'test222', null, '0', null, null, null, '0', '0', '0', '2018-12-17 10:24:10', null, null, null, '0', '0', '0', '0', null, '0');
-INSERT INTO `uk_user` VALUES ('4028811b61834723016183ec57760392', null, 'chenfarong', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'chen@ukewo.cn', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-02-11 16:12:39', null, '2018-06-29 17:40:30', null, '18510129455', '2018-02-11 16:12:39', null, '0', '陈法蓉', null, '0', null, null, null, '0', '0', '0', '2018-06-29 17:40:37', null, null, null, '0', '0', '0', '0', null, '0');
-INSERT INTO `uk_user` VALUES ('4028811b642f5f8c01642f60ed440683', null, 'test1', '130811dbd239c97bd9ce933de7349f20', '5', 'ad@te.com', null, null, null, null, null, null, null, null, null, null, null, 'ukewo', 'ukewo', null, '2018-06-24 09:20:38', null, '2018-11-20 09:05:49', '4028811b66d257820166d28cb868022b', '18510129433', '2018-06-24 09:20:38', null, '0', 'test1', null, '0', null, null, null, '0', '0', '0', '2018-11-20 09:06:03', null, null, null, '0', '0', '0', '0', null, '0');
-INSERT INTO `uk_user` VALUES ('4028811b645dc08f01645e0512ce0935', null, 'yiliao', 'd477887b0636e5d87f79cc25c99d7dc9', '5', 'asd@ac.com', null, null, null, null, null, null, null, null, null, null, null, '4028811b645dc08f01645e005f3d08dd', 'ukewo', null, '2018-07-03 10:42:28', null, '2018-07-03 10:43:31', null, '18512212955', '2018-07-03 10:42:28', null, '0', '医疗', null, '0', null, null, null, '0', '0', '0', '2018-07-03 10:43:39', null, null, null, '0', '0', '0', '0', null, '0');
-INSERT INTO `uk_user` VALUES ('4028811b68976d700168986517ab01dd', null, 'qwe123', '130811dbd239c97bd9ce933de7349f20', '5', 'qwe123@q.q', null, null, null, null, null, null, null, null, '0', null, null, 'ukewo', 'ukewo', null, '2019-01-29 14:56:28', null, '2019-01-29 14:56:28', null, '13222222222', '2019-01-29 14:56:28', null, '0', 'qwe123', null, '1', null, null, null, '0', '0', '0', '2019-01-29 14:56:37', null, null, null, '0', '1', '0', '0', null, '0');
-INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2019-01-16 16:41:44', '402880ec67b9c9f40167ba07936f00cb', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2019-03-01 10:27:07', null, null, null, '0', '1', '1', '0', null, '1');
+INSERT INTO `uk_user` VALUES ('4028cac3614cd2f901614cf8be1f0324', null, 'admin', '14e1b600b1fd579f47433b88e8d85291', '5', 'admin@ukewo.com', null, null, null, null, null, '0', null, null, '0', null, null, 'ukewo', 'ukewo', null, '2017-03-16 13:56:34', '北京', '2019-01-16 16:41:44', '402880ec67b9c9f40167ba07936f00cb', '18510129577', null, null, '0', '系统管理员', '0', '1', null, '北京', '北京', '2', '1', '0', '2019-03-07 16:14:52', null, null, null, '0', '1', '1', '0', null, '1');
 
 -- ----------------------------
 -- Table structure for `uk_userevent`
@@ -11078,164 +11166,6 @@ CREATE TABLE `uk_weixinuser` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `uk_workorders`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_workorders`;
-CREATE TABLE `uk_workorders` (
-  `ID` varchar(32) NOT NULL COMMENT 'ID',
-  `NAME` varchar(50) DEFAULT NULL COMMENT '名称',
-  `CODE` varchar(50) DEFAULT NULL COMMENT '代码',
-  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
-  `ORGI` varchar(32) DEFAULT NULL COMMENT 'ORGI',
-  `USERNAME` varchar(50) DEFAULT NULL COMMENT '创建人用户名',
-  `PARENT` varchar(32) DEFAULT NULL COMMENT 'PARENT',
-  `ORDERNO` int(11) DEFAULT NULL COMMENT '工单编号',
-  `sessionid` varchar(50) DEFAULT NULL,
-  `TITLE` varchar(255) DEFAULT NULL COMMENT '标题',
-  `CONTENT` text COMMENT '内容',
-  `PRICE` int(11) DEFAULT NULL COMMENT 'PRICE',
-  `KEYWORD` varchar(255) DEFAULT NULL COMMENT '关键词',
-  `SUMMARY` varchar(255) DEFAULT NULL COMMENT '摘要',
-  `ANONYMOUS` tinyint(4) DEFAULT NULL COMMENT '允许匿名访问',
-  `TOP` tinyint(4) DEFAULT NULL COMMENT '置顶',
-  `ESSENCE` tinyint(4) DEFAULT NULL COMMENT '精华',
-  `ACCEPT` tinyint(4) DEFAULT NULL COMMENT '已采纳答案',
-  `FINISH` tinyint(4) DEFAULT NULL COMMENT '已结束',
-  `ANSWERS` int(11) DEFAULT NULL COMMENT '回复数量',
-  `sviews` int(11) DEFAULT NULL COMMENT '查看次数',
-  `FOLLOWERS` int(11) DEFAULT NULL COMMENT '关注数',
-  `COLLECTIONS` int(11) DEFAULT NULL COMMENT '收藏数',
-  `COMMENTS` int(11) DEFAULT NULL COMMENT '评论数',
-  `MOBILE` tinyint(4) DEFAULT NULL COMMENT '移动端',
-  `STATUS` varchar(32) DEFAULT NULL COMMENT '状态',
-  `WOTYPE` varchar(32) DEFAULT NULL COMMENT '工单类型',
-  `DATASTATUS` tinyint(4) DEFAULT NULL COMMENT '数据状态',
-  `CATE` varchar(32) DEFAULT NULL COMMENT '类型',
-  `PRIORITY` varchar(32) DEFAULT NULL COMMENT '优先级',
-  `CONTACTS` varchar(32) DEFAULT NULL COMMENT '联系人',
-  `CUSID` varchar(32) DEFAULT NULL COMMENT '联系人ID',
-  `INITIATOR` text COMMENT '发起人',
-  `BPMID` varchar(32) DEFAULT NULL COMMENT '流程ID',
-  `TAGS` varchar(255) DEFAULT NULL COMMENT '标签',
-  `ACCDEPT` varchar(32) DEFAULT NULL COMMENT '受理部门',
-  `ACCUSER` varchar(32) DEFAULT NULL COMMENT '受理人',
-  `ASSIGNED` tinyint(4) DEFAULT NULL COMMENT '已受理',
-  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
-  `AGENT` varchar(32) DEFAULT NULL COMMENT '坐席',
-  `SHARES` text COMMENT '共享',
-  `SKILL` varchar(32) DEFAULT NULL COMMENT '技能组',
-  `ROWCOUNT` int(11) DEFAULT NULL COMMENT '行数',
-  `KEY` varchar(32) DEFAULT NULL COMMENT '关键词',
-  `MEMO` varchar(100) DEFAULT NULL COMMENT '备注',
-  `frommobile` tinyint(4) DEFAULT '0',
-  `dataid` varchar(50) DEFAULT NULL COMMENT '业务数据ID',
-  `eventid` varchar(50) DEFAULT NULL COMMENT '通话ID',
-  `ani` varchar(50) DEFAULT NULL COMMENT '主叫号码',
-  `qualitystatus` varchar(20) DEFAULT NULL COMMENT '质检状态',
-  `qualitydisorgan` varchar(32) DEFAULT NULL COMMENT '分配的质检部门',
-  `qualitydisuser` varchar(32) DEFAULT NULL COMMENT '分配的质检用户',
-  `qualityorgan` varchar(32) DEFAULT NULL COMMENT '实际质检部门',
-  `qualityuser` varchar(32) DEFAULT NULL COMMENT '实际质检人',
-  `qualityscore` int(11) DEFAULT '0' COMMENT '质检得分',
-  `qualitytime` datetime DEFAULT NULL COMMENT '质检时间',
-  `qualitytype` varchar(20) DEFAULT NULL COMMENT '质检类型',
-  `assuser` varchar(50) DEFAULT NULL COMMENT '分配执行人',
-  `templateid` varchar(50) DEFAULT NULL COMMENT '质检模板id',
-  `qualitydistime` datetime DEFAULT NULL COMMENT '质检分配的时间',
-  `qualitydistype` varchar(32) DEFAULT NULL COMMENT '分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent',
-  `qualityactid` varchar(50) DEFAULT NULL COMMENT '质检活动id',
-  `qualityfilterid` varchar(50) DEFAULT NULL COMMENT '筛选表单id',
-  `qualitypass` tinyint(4) DEFAULT '2' COMMENT '质检是否合格(默认2为未质检)',
-  PRIMARY KEY (`ID`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='工单表';
-
--- ----------------------------
--- Records of uk_workorders
--- ----------------------------
-
--- ----------------------------
--- Table structure for `uk_workorder_type`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_workorder_type`;
-CREATE TABLE `uk_workorder_type` (
-  `ID` varchar(32) NOT NULL COMMENT '主键ID',
-  `NAME` varchar(50) DEFAULT NULL COMMENT '名称',
-  `CODE` varchar(50) DEFAULT NULL COMMENT '代码',
-  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
-  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
-  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
-  `USERNAME` varchar(50) DEFAULT NULL COMMENT '用户名',
-  `BPM` tinyint(4) DEFAULT NULL COMMENT '启用流程',
-  `PROCESSID` varchar(32) DEFAULT NULL COMMENT '流程ID',
-  `SLA` tinyint(4) DEFAULT NULL COMMENT '请SLA',
-  `SLAID` varchar(32) DEFAULT NULL COMMENT 'SLA指标ID',
-  `PARENTID` varchar(32) DEFAULT NULL COMMENT '上级分类ID',
-  PRIMARY KEY (`ID`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='工单类型表';
-
--- ----------------------------
--- Records of uk_workorder_type
--- ----------------------------
-
--- ----------------------------
--- Table structure for `uk_workservice_time`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_workservice_time`;
-CREATE TABLE `uk_workservice_time` (
-  `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `timetype` varchar(32) DEFAULT NULL COMMENT '日期类型',
-  `scope` varchar(32) DEFAULT NULL COMMENT '日期范围类型（单天 one/范围 more/星期week）',
-  `apply` varchar(32) DEFAULT NULL COMMENT '适用于（文字客服 word / 排班 sche）',
-  `begin` varchar(32) DEFAULT NULL COMMENT '日期开始',
-  `end` varchar(32) DEFAULT NULL COMMENT '日期开始',
-  `week` text COMMENT '星期',
-  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
-  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
--- ----------------------------
--- Records of uk_workservice_time
--- ----------------------------
-
--- ----------------------------
--- Table structure for `uk_worktime`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_worktime`;
-CREATE TABLE `uk_worktime` (
-  `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
-  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `name` varchar(100) DEFAULT NULL COMMENT '名称',
-  `orgi` varchar(100) DEFAULT NULL COMMENT '租户ID',
-  `hostid` varchar(32) DEFAULT NULL COMMENT 'PBX主机ID',
-  `type` varchar(32) DEFAULT NULL COMMENT '类型',
-  `day` varchar(0) DEFAULT NULL COMMENT '日期',
-  `begintime` varchar(20) DEFAULT NULL COMMENT '开始时间',
-  `endtime` varchar(20) DEFAULT NULL COMMENT '结束时间',
-  `timetype` varchar(10) DEFAULT NULL COMMENT '时间类型',
-  `wfrom` int(11) DEFAULT NULL COMMENT '周开始',
-  `wto` int(11) DEFAULT NULL COMMENT '周结束',
-  `dfrom` int(11) DEFAULT NULL COMMENT '日期开始',
-  `dto` int(11) DEFAULT NULL COMMENT '日期结束',
-  `wbegintime` varchar(20) DEFAULT NULL COMMENT '周开始时间',
-  `wendtime` varchar(20) DEFAULT NULL COMMENT '周结束时间',
-  `dbegintime` varchar(20) DEFAULT NULL COMMENT '日期开始时间',
-  `dendtime` varchar(20) DEFAULT NULL COMMENT '日期结束时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='工作时间';
-
--- ----------------------------
--- Records of uk_worktime
--- ----------------------------
-
--- ----------------------------
 -- Table structure for `uk_work_monitor`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_work_monitor`;
@@ -11330,6 +11260,164 @@ CREATE TABLE `uk_work_session` (
 
 -- ----------------------------
 -- Records of uk_work_session
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_workorder_type`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_workorder_type`;
+CREATE TABLE `uk_workorder_type` (
+  `ID` varchar(32) NOT NULL COMMENT '主键ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '用户名',
+  `BPM` tinyint(4) DEFAULT NULL COMMENT '启用流程',
+  `PROCESSID` varchar(32) DEFAULT NULL COMMENT '流程ID',
+  `SLA` tinyint(4) DEFAULT NULL COMMENT '请SLA',
+  `SLAID` varchar(32) DEFAULT NULL COMMENT 'SLA指标ID',
+  `PARENTID` varchar(32) DEFAULT NULL COMMENT '上级分类ID',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='工单类型表';
+
+-- ----------------------------
+-- Records of uk_workorder_type
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_workorders`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_workorders`;
+CREATE TABLE `uk_workorders` (
+  `ID` varchar(32) NOT NULL COMMENT 'ID',
+  `NAME` varchar(50) DEFAULT NULL COMMENT '名称',
+  `CODE` varchar(50) DEFAULT NULL COMMENT '代码',
+  `CREATETIME` datetime DEFAULT NULL COMMENT '创建时间',
+  `CREATER` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `UPDATETIME` datetime DEFAULT NULL COMMENT '更新时间',
+  `ORGI` varchar(32) DEFAULT NULL COMMENT 'ORGI',
+  `USERNAME` varchar(50) DEFAULT NULL COMMENT '创建人用户名',
+  `PARENT` varchar(32) DEFAULT NULL COMMENT 'PARENT',
+  `ORDERNO` int(11) DEFAULT NULL COMMENT '工单编号',
+  `sessionid` varchar(50) DEFAULT NULL,
+  `TITLE` varchar(255) DEFAULT NULL COMMENT '标题',
+  `CONTENT` text COMMENT '内容',
+  `PRICE` int(11) DEFAULT NULL COMMENT 'PRICE',
+  `KEYWORD` varchar(255) DEFAULT NULL COMMENT '关键词',
+  `SUMMARY` varchar(255) DEFAULT NULL COMMENT '摘要',
+  `ANONYMOUS` tinyint(4) DEFAULT NULL COMMENT '允许匿名访问',
+  `TOP` tinyint(4) DEFAULT NULL COMMENT '置顶',
+  `ESSENCE` tinyint(4) DEFAULT NULL COMMENT '精华',
+  `ACCEPT` tinyint(4) DEFAULT NULL COMMENT '已采纳答案',
+  `FINISH` tinyint(4) DEFAULT NULL COMMENT '已结束',
+  `ANSWERS` int(11) DEFAULT NULL COMMENT '回复数量',
+  `sviews` int(11) DEFAULT NULL COMMENT '查看次数',
+  `FOLLOWERS` int(11) DEFAULT NULL COMMENT '关注数',
+  `COLLECTIONS` int(11) DEFAULT NULL COMMENT '收藏数',
+  `COMMENTS` int(11) DEFAULT NULL COMMENT '评论数',
+  `MOBILE` tinyint(4) DEFAULT NULL COMMENT '移动端',
+  `STATUS` varchar(32) DEFAULT NULL COMMENT '状态',
+  `WOTYPE` varchar(32) DEFAULT NULL COMMENT '工单类型',
+  `DATASTATUS` tinyint(4) DEFAULT NULL COMMENT '数据状态',
+  `CATE` varchar(32) DEFAULT NULL COMMENT '类型',
+  `PRIORITY` varchar(32) DEFAULT NULL COMMENT '优先级',
+  `CONTACTS` varchar(32) DEFAULT NULL COMMENT '联系人',
+  `CUSID` varchar(32) DEFAULT NULL COMMENT '联系人ID',
+  `INITIATOR` text COMMENT '发起人',
+  `BPMID` varchar(32) DEFAULT NULL COMMENT '流程ID',
+  `TAGS` varchar(255) DEFAULT NULL COMMENT '标签',
+  `ACCDEPT` varchar(32) DEFAULT NULL COMMENT '受理部门',
+  `ACCUSER` varchar(32) DEFAULT NULL COMMENT '受理人',
+  `ASSIGNED` tinyint(4) DEFAULT NULL COMMENT '已受理',
+  `ORGAN` varchar(32) DEFAULT NULL COMMENT '部门',
+  `AGENT` varchar(32) DEFAULT NULL COMMENT '坐席',
+  `SHARES` text COMMENT '共享',
+  `SKILL` varchar(32) DEFAULT NULL COMMENT '技能组',
+  `ROWCOUNT` int(11) DEFAULT NULL COMMENT '行数',
+  `KEY` varchar(32) DEFAULT NULL COMMENT '关键词',
+  `MEMO` varchar(100) DEFAULT NULL COMMENT '备注',
+  `frommobile` tinyint(4) DEFAULT '0',
+  `dataid` varchar(50) DEFAULT NULL COMMENT '业务数据ID',
+  `eventid` varchar(50) DEFAULT NULL COMMENT '通话ID',
+  `ani` varchar(50) DEFAULT NULL COMMENT '主叫号码',
+  `qualitystatus` varchar(20) DEFAULT NULL COMMENT '质检状态',
+  `qualitydisorgan` varchar(32) DEFAULT NULL COMMENT '分配的质检部门',
+  `qualitydisuser` varchar(32) DEFAULT NULL COMMENT '分配的质检用户',
+  `qualityorgan` varchar(32) DEFAULT NULL COMMENT '实际质检部门',
+  `qualityuser` varchar(32) DEFAULT NULL COMMENT '实际质检人',
+  `qualityscore` int(11) DEFAULT '0' COMMENT '质检得分',
+  `qualitytime` datetime DEFAULT NULL COMMENT '质检时间',
+  `qualitytype` varchar(20) DEFAULT NULL COMMENT '质检类型',
+  `assuser` varchar(50) DEFAULT NULL COMMENT '分配执行人',
+  `templateid` varchar(50) DEFAULT NULL COMMENT '质检模板id',
+  `qualitydistime` datetime DEFAULT NULL COMMENT '质检分配的时间',
+  `qualitydistype` varchar(32) DEFAULT NULL COMMENT '分配状态  ，未分配not/分配到部门disorgan/分配到坐席disagent',
+  `qualityactid` varchar(50) DEFAULT NULL COMMENT '质检活动id',
+  `qualityfilterid` varchar(50) DEFAULT NULL COMMENT '筛选表单id',
+  `qualitypass` tinyint(4) DEFAULT '2' COMMENT '质检是否合格(默认2为未质检)',
+  PRIMARY KEY (`ID`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='工单表';
+
+-- ----------------------------
+-- Records of uk_workorders
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_workservice_time`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_workservice_time`;
+CREATE TABLE `uk_workservice_time` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `timetype` varchar(32) DEFAULT NULL COMMENT '日期类型',
+  `scope` varchar(32) DEFAULT NULL COMMENT '日期范围类型（单天 one/范围 more/星期week）',
+  `apply` varchar(32) DEFAULT NULL COMMENT '适用于（文字客服 word / 排班 sche）',
+  `begin` varchar(32) DEFAULT NULL COMMENT '日期开始',
+  `end` varchar(32) DEFAULT NULL COMMENT '日期开始',
+  `week` text COMMENT '星期',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+-- ----------------------------
+-- Records of uk_workservice_time
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_worktime`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_worktime`;
+CREATE TABLE `uk_worktime` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `name` varchar(100) DEFAULT NULL COMMENT '名称',
+  `orgi` varchar(100) DEFAULT NULL COMMENT '租户ID',
+  `hostid` varchar(32) DEFAULT NULL COMMENT 'PBX主机ID',
+  `type` varchar(32) DEFAULT NULL COMMENT '类型',
+  `day` varchar(0) DEFAULT NULL COMMENT '日期',
+  `begintime` varchar(20) DEFAULT NULL COMMENT '开始时间',
+  `endtime` varchar(20) DEFAULT NULL COMMENT '结束时间',
+  `timetype` varchar(10) DEFAULT NULL COMMENT '时间类型',
+  `wfrom` int(11) DEFAULT NULL COMMENT '周开始',
+  `wto` int(11) DEFAULT NULL COMMENT '周结束',
+  `dfrom` int(11) DEFAULT NULL COMMENT '日期开始',
+  `dto` int(11) DEFAULT NULL COMMENT '日期结束',
+  `wbegintime` varchar(20) DEFAULT NULL COMMENT '周开始时间',
+  `wendtime` varchar(20) DEFAULT NULL COMMENT '周结束时间',
+  `dbegintime` varchar(20) DEFAULT NULL COMMENT '日期开始时间',
+  `dendtime` varchar(20) DEFAULT NULL COMMENT '日期结束时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='工作时间';
+
+-- ----------------------------
+-- Records of uk_worktime
 -- ----------------------------
 
 -- ----------------------------
@@ -11511,29 +11599,6 @@ CREATE TABLE `uk_xiaoe_scene` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `uk_xiaoe_sceneitem`
--- ----------------------------
-DROP TABLE IF EXISTS `uk_xiaoe_sceneitem`;
-CREATE TABLE `uk_xiaoe_sceneitem` (
-  `id` varchar(32) NOT NULL COMMENT '主键ID',
-  `content` varchar(255) DEFAULT NULL COMMENT '回复内容',
-  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
-  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
-  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
-  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
-  `sceneid` varchar(32) DEFAULT NULL COMMENT '场景ID',
-  `inx` int(11) DEFAULT NULL COMMENT '序号',
-  `itemtype` varchar(32) DEFAULT NULL COMMENT '类型',
-  `replaytype` varchar(32) DEFAULT NULL COMMENT '回复类型',
-  `allowask` tinyint(4) DEFAULT NULL COMMENT '允许主动提问',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='机器人场景子项';
-
--- ----------------------------
--- Records of uk_xiaoe_sceneitem
--- ----------------------------
-
--- ----------------------------
 -- Table structure for `uk_xiaoe_scene_type`
 -- ----------------------------
 DROP TABLE IF EXISTS `uk_xiaoe_scene_type`;
@@ -11554,6 +11619,29 @@ CREATE TABLE `uk_xiaoe_scene_type` (
 
 -- ----------------------------
 -- Records of uk_xiaoe_scene_type
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `uk_xiaoe_sceneitem`
+-- ----------------------------
+DROP TABLE IF EXISTS `uk_xiaoe_sceneitem`;
+CREATE TABLE `uk_xiaoe_sceneitem` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `content` varchar(255) DEFAULT NULL COMMENT '回复内容',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` datetime DEFAULT NULL COMMENT '创建时间',
+  `updatetime` datetime DEFAULT NULL COMMENT '更新时间',
+  `sceneid` varchar(32) DEFAULT NULL COMMENT '场景ID',
+  `inx` int(11) DEFAULT NULL COMMENT '序号',
+  `itemtype` varchar(32) DEFAULT NULL COMMENT '类型',
+  `replaytype` varchar(32) DEFAULT NULL COMMENT '回复类型',
+  `allowask` tinyint(4) DEFAULT NULL COMMENT '允许主动提问',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='机器人场景子项';
+
+-- ----------------------------
+-- Records of uk_xiaoe_sceneitem
 -- ----------------------------
 
 -- ----------------------------

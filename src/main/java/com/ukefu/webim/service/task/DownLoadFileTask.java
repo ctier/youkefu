@@ -8,22 +8,53 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.ukefu.core.UKDataContext;
+import com.ukefu.webim.service.repository.SystemUpdateconRepository;
+import com.ukefu.webim.web.model.NoticeMsg;
+import com.ukefu.webim.web.model.SystemUpdatecon;
+
 public class DownLoadFileTask implements Runnable{
 	
 	private String urlStr ;
 	private String fileName ;
 	private String savePath ;
+	private String systemUpdateconId;
+	private String type;
+	private  SystemUpdateconRepository systemUpdateconRes ;
 	
-	public DownLoadFileTask( String urlStr , String fileName , String savePath) {
+	public DownLoadFileTask(String systemUpdateconId,String urlStr , String fileName , String savePath,String type) {
 		this.urlStr = urlStr;
 		this.fileName = fileName;
 		this.savePath = savePath;
+		this.systemUpdateconId = systemUpdateconId;
+		this.type = type;
+		this.systemUpdateconRes = UKDataContext.getContext().getBean(SystemUpdateconRepository.class);
 	}
 
+	
+	
 	@Override
 	public void run() {
 		try {
 			downLoadFromUrl(urlStr, fileName, savePath);
+			if(StringUtils.isNotBlank(this.systemUpdateconId)) {
+				SystemUpdatecon systemUpdatecon = this.systemUpdateconRes.findByIdAndOrgi(this.systemUpdateconId,UKDataContext.SYSTEM_ORGI.toString());
+				if(StringUtils.isNotBlank(type)) {
+					if("sql".equals(type)) {
+						systemUpdatecon.setSqlurldownload("2");
+						this.systemUpdateconRes.save(systemUpdatecon);
+					}else if("jar".equals(type)) {
+						systemUpdatecon.setJarurldownload("2");
+						this.systemUpdateconRes.save(systemUpdatecon);
+					}else if("rollbacksql".equals(type)) {
+						systemUpdatecon.setRollbacksqlurldownload("2");
+						this.systemUpdateconRes.save(systemUpdatecon);
+					}
+				}
+			}
+			 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -57,7 +88,7 @@ public class DownLoadFileTask implements Runnable{
 		URL url = new URL(urlStr);  
 		URLConnection conn = url.openConnection();  
                 //设置超时间为6秒
-		conn.setConnectTimeout(6*1000);
+		conn.setConnectTimeout(15*1000);
 		//防止屏蔽程序抓取而返回403错误
 		conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
  

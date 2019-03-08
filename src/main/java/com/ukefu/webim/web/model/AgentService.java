@@ -62,7 +62,7 @@ public class AgentService implements Serializable {
 	private int waittingtime;
 	private int tokenum;
 	private Date createtime = new Date();
-	
+	private Date queuetime ;								//进入队列的时间
 	private String agent ;
 	private String skill ;
 	
@@ -1024,5 +1024,13 @@ public class AgentService implements Serializable {
 
 	public void setSessiontimeout(int sessiontimeout) {
 		this.sessiontimeout = sessiontimeout;
+	}
+
+	public Date getQueuetime() {
+		return queuetime;
+	}
+
+	public void setQueuetime(Date queuetime) {
+		this.queuetime = queuetime;
 	}
 }

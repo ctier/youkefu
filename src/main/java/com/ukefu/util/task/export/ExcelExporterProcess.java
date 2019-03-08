@@ -124,10 +124,10 @@ public class ExcelExporterProcess {
 				for(TableProperties tp : table.getTableproperty()){
 					Cell cell2 = row2.createCell(cols++); 
 					cell2.setCellStyle(cellStyle); 
-					if(value.get(tp.getFieldname())!=null){
+					if(value.get(tp.getFieldname().toLowerCase())!=null){
 						if(tp.isModits()) {
 							@SuppressWarnings("unchecked")
-							List<String> list = (List<String>)value.get(tp.getFieldname());
+							List<String> list = (List<String>)value.get(tp.getFieldname().toLowerCase());
 							if(list.size()>0) {
 								cell2.setCellValue(new HSSFRichTextString(list.remove(0)));
 							}
@@ -139,7 +139,7 @@ public class ExcelExporterProcess {
 								}
 							}
 						}else if(tp.isSeldata()){
-							SysDic sysDic = UKeFuDic.getInstance().getDicItem(String.valueOf(value.get(tp.getFieldname()))) ;
+							SysDic sysDic = UKeFuDic.getInstance().getDicItem(String.valueOf(value.get(tp.getFieldname().toLowerCase()))) ;
 							if(sysDic!=null) {
 								cell2.setCellValue(new HSSFRichTextString(sysDic.getName()));
 							}else {
@@ -147,11 +147,11 @@ public class ExcelExporterProcess {
 								if(dicItemList!=null && dicItemList.size() > 0) {
 									for(SysDic dicItem : dicItemList) {
 										String s = "";
-										Object obj = value.get(tp.getFieldname());
+										Object obj = value.get(tp.getFieldname().toLowerCase());
 										if(obj instanceof Boolean) {
 											s = (Boolean)obj?"1":"0";
 										}else {
-											s= String.valueOf(value.get(tp.getFieldname()));
+											s= String.valueOf(value.get(tp.getFieldname().toLowerCase()));
 										}
 										if(dicItem.getCode().equals(s)) {
 											cell2.setCellValue(new HSSFRichTextString(dicItem.getName())); break ;
@@ -160,7 +160,7 @@ public class ExcelExporterProcess {
 								}
 							}
 						}else if(tp.isReffk() && !StringUtils.isBlank(tp.getReftbid())){
-							String key = (String) value.get(tp.getFieldname()) ;
+							String key = (String) value.get(tp.getFieldname().toLowerCase()) ;
 							String orgi = (String) value.get("orgi") ;
 							if(!StringUtils.isBlank(key) && !StringUtils.isBlank(orgi)) {
 			            		DataExchangeInterface exchange = (DataExchangeInterface) UKDataContext.getContext().getBean(tp.getReftbid()) ;
@@ -173,21 +173,21 @@ public class ExcelExporterProcess {
 							boolean writed = false ;
 							if(!StringUtils.isBlank(String.valueOf(value.get("distype")))){
 								if(value.get("disphonenum")!=null && value.get("disphonenum").equals(value.get(tp.getFieldname()))){
-									cell2.setCellValue(new HSSFRichTextString(UKTools.processSecField(String.valueOf(value.get(tp.getFieldname())),String.valueOf(value.get("distype")))));
+									cell2.setCellValue(new HSSFRichTextString(UKTools.processSecField(String.valueOf(value.get(tp.getFieldname().toLowerCase())),String.valueOf(value.get("distype")))));
 									writed = true ;
 								}
 							}
 							if(writed == false){
 								if(!StringUtils.isBlank(tp.getPlugin())) {
-									if(tp.getPlugin().equals("sectime") && String.valueOf(value.get(tp.getFieldname())).matches("[\\d]{1,}")) {
-										int sectime = (int)Long.parseLong(String.valueOf(value.get(tp.getFieldname()))) ;
+									if(tp.getPlugin().equals("sectime") && String.valueOf(value.get(tp.getFieldname().toLowerCase())).matches("[\\d]{1,}")) {
+										int sectime = (int)Long.parseLong(String.valueOf(value.get(tp.getFieldname().toLowerCase()))) ;
 										cell2.setCellValue(new HSSFRichTextString(new UCKeFuTime(0,0,sectime).toString())) ;
-									}else if(tp.getPlugin().equals("mintime") && String.valueOf(value.get(tp.getFieldname())).matches("[\\d]{1,}")) {
-										int mintime = (int)Long.parseLong(String.valueOf(value.get(tp.getFieldname())))/1000 ;
+									}else if(tp.getPlugin().equals("mintime") && String.valueOf(value.get(tp.getFieldname().toLowerCase())).matches("[\\d]{1,}")) {
+										int mintime = (int)Long.parseLong(String.valueOf(value.get(tp.getFieldname().toLowerCase())))/1000 ;
 										cell2.setCellValue(new HSSFRichTextString(new UCKeFuTime(0,0,(int)mintime).toString())) ;
 									}
 								}else {
-									cell2.setCellValue(new HSSFRichTextString(String.valueOf(value.get(tp.getFieldname()))));
+									cell2.setCellValue(new HSSFRichTextString(String.valueOf(value.get(tp.getFieldname().toLowerCase()))));
 								}
 							}
 						}

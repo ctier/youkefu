@@ -21,6 +21,7 @@ import com.ukefu.webim.service.repository.CallCenterSkillRepository;
 import com.ukefu.webim.service.repository.ExtentionRepository;
 import com.ukefu.webim.service.repository.MediaRepository;
 import com.ukefu.webim.service.repository.PbxHostRepository;
+import com.ukefu.webim.service.repository.RouteItemRepository;
 import com.ukefu.webim.service.repository.RouterRulesRepository;
 import com.ukefu.webim.service.repository.SipTrunkRepository;
 import com.ukefu.webim.service.repository.SkillExtentionRepository;
@@ -45,6 +46,9 @@ public class CallCenterController extends Handler{
 	
 	@Autowired
 	private RouterRulesRepository routerRulesRes ;
+	
+	@Autowired
+	private RouteItemRepository routerItemRes ;
 	
 	@Autowired
 	private AclRepository aclRes ;
@@ -187,6 +191,9 @@ public class CallCenterController extends Handler{
 			skillExtentionRes.delete(skillExtentionRes.findByHostidAndOrgi(pbxHost.getId(), super.getOrgi(request)));
 			//删除路由规则
 			routerRulesRes.delete(routerRulesRes.findByHostidAndOrgi(pbxHost.getId(), super.getOrgi(request)));
+			
+			routerItemRes.deleteByHostidAndOrgi(pbxHost.getId(), super.getOrgi(request));;
+			
 			//删除acl
 			aclRes.delete(aclRes.findByHostidAndOrgi(pbxHost.getId(), super.getOrgi(request)));
 			//删除sip网关

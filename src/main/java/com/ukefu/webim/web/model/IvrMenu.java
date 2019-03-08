@@ -48,6 +48,8 @@ public class IvrMenu implements java.io.Serializable{
 	private String digits;
 	private String param;
 	private String parentid ;
+	
+	private String playsound ;
 
 	@Id
 	@Column(length = 32)
@@ -221,4 +223,11 @@ public class IvrMenu implements java.io.Serializable{
 	public void setExtentionid(String extentionid) {
 		this.extentionid = extentionid;
 	}
+	public String getPlaysound() {
+		return playsound;
+	}
+	public void setPlaysound(String playsound) {
+		this.playsound = playsound;
+	}
+	
 }

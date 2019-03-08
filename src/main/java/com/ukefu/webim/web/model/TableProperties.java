@@ -41,10 +41,10 @@ public class TableProperties implements java.io.Serializable,Cloneable{
 	
 	public TableProperties(String title , String fieldname , String datatypename , int datatypecode , String tablename , String orgi , String tableid , boolean fieldstatus){
 		if(fieldname!=null){
-			fieldname = fieldname.toLowerCase() ;
+			fieldname = fieldname ;
 		}
 		if(tablename!=null){
-			tablename = tablename.toLowerCase() ;
+			tablename = tablename ;
 		}
 		this.fieldname = fieldname ;
 		this.name = title ;
@@ -170,7 +170,7 @@ public class TableProperties implements java.io.Serializable,Cloneable{
 	 * @return the fieldname
 	 */
 	public String getFieldname() {
-		return fieldname!=null ? fieldname.toLowerCase() : null;
+		return fieldname!=null ? fieldname : null;
 	}
 	/**
 	 * @param fieldname the fieldname to set

@@ -57,6 +57,7 @@ import com.ukefu.webim.util.OnlineUserUtils;
 import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.AgentReport;
 import com.ukefu.webim.web.model.AgentServiceSatis;
+import com.ukefu.webim.web.model.AgentUser;
 import com.ukefu.webim.web.model.AgentUserContacts;
 import com.ukefu.webim.web.model.AiConfig;
 import com.ukefu.webim.web.model.AttachmentFile;
@@ -160,7 +161,6 @@ public class IMController extends Handler{
 			view.addObject("pid", pid) ;
 			view.addObject("purl", purl) ;
 			
-			
 			CousultInvite invite = OnlineUserUtils.cousult(appid,orgi, inviteRepository);
 	    	if(invite!=null){
 	    		orgi = invite.getOrgi() ;
@@ -251,10 +251,21 @@ public class IMController extends Handler{
     public void inlist(HttpServletRequest request , HttpServletResponse response, @PathVariable String id , @Valid String userid) throws IOException {
     	response.setHeader("Content-Type", "text/html;charset=utf-8"); 
     	if(!StringUtils.isBlank(userid)){
+    		StringBuffer strb = new StringBuffer();
 	    	BlackEntity black = (BlackEntity) CacheHelper.getSystemCacheBean().getCacheObject(userid, UKDataContext.SYSTEM_ORGI) ;
 	    	if((black != null && (black.getEndtime()==null || black.getEndtime().after(new Date()))) ){
-	    		response.getWriter().write("in");;
+	    		strb.append("in");
 	    	}
+	    	AgentUser agentUser = (AgentUser) CacheHelper.getAgentUserCacheBean().getCacheObject(userid, UKDataContext.SYSTEM_ORGI) ;
+			if(agentUser!=null) {
+				if(strb.length() > 0) {
+					strb.append(",") ;
+				}
+				strb.append("service");
+			}
+			if(strb.length() > 0) {
+				response.getWriter().write(strb.toString());
+			}
     	}
     }
     /**

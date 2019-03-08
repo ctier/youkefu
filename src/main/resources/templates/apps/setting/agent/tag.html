@@ -40,7 +40,7 @@
 								<#list tagList.content as tag>
 								<tr>
 								  <td>
-										<a href="javascript:void(0)">${tag.tag!''}</a>
+										<a>${tag.tag!''}</a>
 								  </td>
 								  <td>${tag.createtime?string('yyyy-MM-dd HH:mm:ss')}</td>
 								  <td>${tag.times!'0'}</td>

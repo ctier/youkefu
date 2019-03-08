@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.corundumstudio.socketio.SocketIOServer;
+import com.hazelcast.core.HazelcastInstance;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.Menu;
 import com.ukefu.util.UKTools;
@@ -53,6 +54,9 @@ public class SystemConfigController extends Handler{
 	private SocketIOServer server ;
 	
 	@Autowired
+	public HazelcastInstance hazelcastInstance;	
+	
+	@Autowired
 	private SystemConfigRepository systemConfigRes ;
 	
 	
@@ -69,6 +73,9 @@ public class SystemConfigController extends Handler{
     @Menu(type = "admin" , subtype = "config" , admin = true)
     public ModelAndView index(ModelMap map , HttpServletRequest request , @Valid String execute) throws SQLException {
     	map.addAttribute("server", server) ;
+    	
+    	map.addAttribute("cluster", hazelcastInstance.getCluster().getMembers().toString()) ;
+    	
     	if(UKDataContext.model.get("im")!=null){
     		map.addAttribute("entim", UKDataContext.model.get("im")) ;
     	}
@@ -128,20 +135,6 @@ public class SystemConfigController extends Handler{
         return request(super.createRequestPageTempletResponse("redirect:/admin/config/index.html?execute="+execute));
     }
     
-    @RequestMapping("/startentim")
-    @Menu(type = "admin" , subtype = "startentim" , access = false , admin = true)
-    public ModelAndView startentim(ModelMap map , HttpServletRequest request) throws SQLException {
-    	UKDataContext.model.put("im", true) ;
-        return request(super.createRequestPageTempletResponse("redirect:/admin/config/index.html"));
-    }
-    
-    @RequestMapping("/stopentim")
-    @Menu(type = "admin" , subtype = "stopentim" , access = false , admin = true)
-    public ModelAndView stopentim(ModelMap map , HttpServletRequest request) throws SQLException {
-    	UKDataContext.model.remove("im") ;
-        return request(super.createRequestPageTempletResponse("redirect:/admin/config/index.html"));
-    }
-    
     /**
      * 危险操作，请谨慎调用 ， WebLogic/WebSphere/Oracle等中间件服务器禁止调用
      * @param map
@@ -191,11 +184,13 @@ public class SystemConfigController extends Handler{
 	    	if(keyfile!=null && keyfile.getBytes()!=null && keyfile.getBytes().length > 0 && keyfile.getOriginalFilename()!=null && keyfile.getOriginalFilename().length() > 0){
 		    	FileUtils.writeByteArrayToFile(new File(path , "ssl/"+keyfile.getOriginalFilename()), keyfile.getBytes());
 		    	systemConfig.setJksfile(keyfile.getOriginalFilename());
-		    	File sslFilePath = new File(path , "ssl/https.properties") ;
+	    	}
+	    	if(!StringUtils.isBlank(systemConfig.getJkspassword())) {
+	    		File sslFilePath = new File(path , "ssl/https.properties") ;
 		    	if(!sslFilePath.getParentFile().exists()) {
 		    		sslFilePath.getParentFile().mkdirs() ;
 		    	}
-		    	Properties prop = new Properties();     
+	    		Properties prop = new Properties();     
 		    	FileOutputStream oFile = new FileOutputStream(sslFilePath);//true表示追加打开
 		    	if(systemConfig.getJkspassword()!=null) {
 		    		prop.setProperty("key-store-password", jkspassword) ;

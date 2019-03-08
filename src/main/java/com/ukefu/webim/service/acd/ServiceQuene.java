@@ -231,6 +231,7 @@ public class ServiceQuene {
 			AgentUser agentUseDataBean = agentUserRepository.findByIdAndOrgi(agentUser.getId() , agentUser.getOrgi()) ;
 			SessionConfig sessionConfig = ServiceQuene.initSessionConfig(orgi) ;
 			if(agentUseDataBean!=null){
+				agentUseDataBean.setEndby(endby);
 				agentUseDataBean.setStatus(UKDataContext.AgentUserStatusEnum.END.toString()) ;
 				if(agentUser.getServicetime()!=null){
 					agentUseDataBean.setSessiontimes(System.currentTimeMillis() - agentUser.getServicetime().getTime()) ;
@@ -620,6 +621,7 @@ public class ServiceQuene {
 			agentService.setAgentno(agentStatus.getUserid());
 			agentService.setAgentusername(agentStatus.getUsername());	//agent
 		}else{
+			Date current = new Date();
 			if(finished == true) {
 				agentUser.setStatus(UKDataContext.AgentUserStatusEnum.END.toString());
 				agentService.setStatus(UKDataContext.AgentUserStatusEnum.END.toString());
@@ -628,12 +630,15 @@ public class ServiceQuene {
 					agentService.setLeavemsg(true); //是留言
 					agentService.setLeavemsgstatus(UKDataContext.LeaveMsgStatus.NOTPROCESS.toString()); //未处理的留言
 				}
+				agentService.setEndtime(current);
 			}else {
 				agentUser.setStatus(UKDataContext.AgentUserStatusEnum.INQUENE.toString());
 				agentService.setStatus(UKDataContext.AgentUserStatusEnum.INQUENE.toString());
 				
 				agentService.setSessiontype(UKDataContext.AgentUserStatusEnum.INQUENE.toString());
+				agentService.setQueuetime(current);
 			}
+			agentUser.setQueuetime(current);
 		}
 		if(finished || agentStatus!=null) {
 			//			agentService.setId(null);

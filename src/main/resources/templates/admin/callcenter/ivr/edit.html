@@ -1,32 +1,196 @@
 <div class="uk-layui-form">
-    <form class="layui-form uk-form" action="/admin/callcenter/ivr/update.html" data-toggle="ajax-form" data-inner="#callCenterContent">
-    	<input type="hidden" name="hostid" value="${pbxHost.id!''}">
-    	<input type="hidden" name="id" value="${extention.id!''}">
-        <div class="layui-form-item">
-            <label class="layui-form-label">分机号：</label>
-            <div class="layui-input-inline">
-                <input type="text" name="extention" required lay-verify="required|number" value="${extention.extention!''}" placeholder="请输入分机号码" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-       
-        <div class="layui-form-item">
-            <label class="layui-form-label">描述信息：</label>
-            <div class="layui-input-inline">
-                <textarea id="description" name="description" placeholder="请输入描述信息" autocomplete="off" class="layui-input" style="height:100px;">${extention.description!''}</textarea>
-            </div>
-        </div>
-        
-        <div class="layui-form-button">
-            <div class="layui-button-block">
-                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
-            </div>
-        </div>
-    </form>
+	<form class="layui-form uk-form" action="/admin/callcenter/ivr/update.html" data-toggle="ajax-form" data-inner="#callCenterContent">
+		<input type="hidden" name="hostid" value="${pbxHost.id!''}"> 
+		<input type="hidden" name="id" value="${extention.id!''}">
+		<div class="layui-collapse">
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">基本信息<font color="red">（带*表示必填项）</font></h2>
+				<div class="layui-colla-content layui-show">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">分机号：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="extention" disabled="disabled" required lay-verify="required|number" value="${extention.extention!''}" placeholder="请输入分机号码" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">其他信息</h2>
+				<div class="layui-colla-content layui-show">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">欢迎提示语音<font color="red">*</font>：
+							</label>
+							<div class="layui-input-inline">
+								<select name="greetlong" >
+									<option value="" >请选择</option>
+									<#if mediaList?? && mediaList?size gt 0>
+									<#list mediaList as media>
+									<option value="${media.id!''}" <#if extention.greetlong==media.id>selected</#if>>${media.name!''}</option>
+									</#list>
+									</#if>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">欢迎提示短语音<font color="red">*</font>：</label>
+							<div class="layui-input-inline">
+								<select name="greetshort">
+									<option value="" >请选择</option>
+									<#if mediaList?? && mediaList?size gt 0>
+									<#list mediaList as media>
+									<option value="${media.id!''}" <#if extention.greetshort==media.id>selected</#if>>${media.name!''}</option>
+									</#list>
+									</#if>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">无效输入提示语音<font color="red">*</font>：
+							</label>
+							<div class="layui-input-inline">
+								<select name="invalidsound" >
+									<option value="" >请选择</option>
+									<#if mediaList?? && mediaList?size gt 0>
+									<#list mediaList as media>
+									<option value="${media.id!''}" <#if extention.invalidsound==media.id>selected</#if>>${media.name!''}</option>
+									</#list>
+									</#if>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">离开语音<font color="red">*</font>：</label>
+							<div class="layui-input-inline" >
+								<select name="exitsound" >
+									<option value="" >请选择</option>
+									<#if mediaList?? && mediaList?size gt 0>
+									<#list mediaList as media>
+									<option value="${media.id!''}" <#if extention.exitsound==media.id>selected</#if>>${media.name!''}</option>
+									</#list>
+									</#if>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">确认宏指令：
+							</label>
+							<div class="layui-input-inline">
+								<input type="text" name="confirmmacro" value="${extention.confirmmacro!''}" placeholder="请输入确认宏指令" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">确认按键：</label>
+							<div class="layui-input-inline">
+								<select name="confirmkey">
+									<#list 0..9 as sortindex>
+									<option value="${sortindex}" <#if extention.confirmkey==sortindex>selected</#if>>${sortindex}</option>
+									</#list>
+									<option value="#" <#if extention.confirmkey=='#'>selected</#if>>#</option>
+									<option value="*" <#if extention.confirmkey=='*'>selected</#if>>*</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">超时时间(秒)：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="timeout" value="${extention.timeout!'10'}" lay-verify="number"  placeholder="请输入超时时间" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">呼叫等待超时(秒)：
+							</label>
+							<div class="layui-input-inline">
+								<input type="text" name="interdigittimeout" value="${extention.interdigittimeout!''}" lay-verify="number" value="2" placeholder="请输入呼叫等待超时" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">最大失败次数：</label>
+							<div class="layui-input-inline">
+								<select name="maxfailures">
+									<#list 0..30 as sortindex>
+									<option value="${sortindex}" <#if extention.maxfailures==sortindex>selected</#if>>${sortindex}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">最大超时次数：
+							</label>
+							<div class="layui-input-inline">
+								<select name="maxtimeouts">
+									<#list 0..30 as sortindex>
+									<option value="${sortindex}" <#if extention.maxtimeouts==sortindex>selected</#if>>${sortindex}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">数字按键长度：</label>
+							<div class="layui-input-inline">
+								<select name="digitlen">
+									<#list 1..20 as sortindex>
+									<option value="${sortindex}" <#if extention.digitlen==sortindex>selected</#if>>${sortindex}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">指令：
+							</label>
+							<div class="layui-input-inline">
+								<input type="text" name="action" value="${extention.action!''}"  placeholder="请输入指令" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-form-button">
+			<div class="layui-button-block">
+				<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
 </div>
 <script>
 	layui.use('form', function(){
 	  var form = layui.form;
 	  form.render();
+	  form.on('select(type)', function(data){
+		  console.log(data.value); //得到被选中的值
+		  if(data.value=='menuexecapp'){
+			  $("#typeparam").attr("lay-verify","required");
+			  $("#typeparam").show();
+			  $("#menuplaysoundfile").hide();
+			  form.render();
+		  }else if(data.value=='menuplaysound'){
+			  $("#typeparam").removeAttr("lay-verify");
+			  $("#typeparam").val("");
+			  $("#typeparam").hide();
+			  $("#menuplaysoundfile").show();
+			  form.render('select');
+		  }else{
+			  $("#typeparam").removeAttr("lay-verify");
+			  $("#typeparam").val("");
+			  $("#typeparam").hide();
+			  $("#menuplaysoundfile").hide();
+			  form.render();
+		  }
+		});  
 	});
 </script>

@@ -177,3 +177,157 @@ ALTER TABLE uk_agentservice ADD sessiontimeout int DEFAULT 0 COMMENT '会话超时次
 
 
 ALTER TABLE uk_chat_message ADD filterscript tinyint(4) DEFAULT 0 COMMENT '触发了HTML代码过滤';
+
+
+ALTER TABLE uk_callcenter_extention ADD greetlong VARCHAR(100) DEFAULT NULL COMMENT '欢迎提示语音';
+ALTER TABLE uk_callcenter_extention ADD greetshort VARCHAR(100) DEFAULT NULL COMMENT '欢迎提示短语音';
+ALTER TABLE uk_callcenter_extention ADD invalidsound VARCHAR(100) DEFAULT NULL COMMENT '无效输入提示语音';
+ALTER TABLE uk_callcenter_extention ADD exitsound VARCHAR(100) DEFAULT NULL COMMENT '离开语音';
+ALTER TABLE uk_callcenter_extention ADD confirmmacro VARCHAR(50) DEFAULT NULL COMMENT '确认宏指令';
+ALTER TABLE uk_callcenter_extention ADD confirmkey VARCHAR(50) DEFAULT NULL COMMENT '确认按键';
+ALTER TABLE uk_callcenter_extention ADD ttsengine VARCHAR(20) DEFAULT NULL COMMENT 'TTS引擎';
+ALTER TABLE uk_callcenter_extention ADD ttsvoice VARCHAR(50) DEFAULT NULL COMMENT 'TTS语音';
+ALTER TABLE uk_callcenter_extention ADD confirmattempts VARCHAR(50) DEFAULT NULL COMMENT '确认提示消息';
+ALTER TABLE uk_callcenter_extention ADD timeout int DEFAULT 0 COMMENT '超时时间';
+
+ALTER TABLE uk_callcenter_extention ADD interdigittimeout int DEFAULT 0 COMMENT '呼叫等待超时';
+ALTER TABLE uk_callcenter_extention ADD maxfailures int DEFAULT 0 COMMENT '最大失败次数';
+
+ALTER TABLE uk_callcenter_extention ADD maxtimeouts int DEFAULT 0 COMMENT '最大超时次数';
+
+ALTER TABLE uk_callcenter_extention ADD digitlen int DEFAULT 0 COMMENT '数字按键长度';
+ALTER TABLE uk_callcenter_extention ADD action VARCHAR(50) DEFAULT NULL COMMENT '指令';
+ALTER TABLE uk_callcenter_extention ADD digits VARCHAR(50) DEFAULT NULL COMMENT '拨号键';
+ALTER TABLE uk_callcenter_extention ADD param VARCHAR(255) DEFAULT NULL COMMENT '参数';
+
+
+ALTER TABLE uk_consult_invite ADD enableinvite int DEFAULT 0 COMMENT '显示默认咨询快捷提示';
+ALTER TABLE uk_consult_invite ADD invitetiptitle varchar(50) DEFAULT NULL COMMENT '邀请咨询组件提示标题' ;
+ALTER TABLE uk_consult_invite ADD invitetip text DEFAULT NULL COMMENT '邀请咨询提示HTML' ;
+ALTER TABLE uk_consult_invite ADD invitetipdelay int DEFAULT 0 COMMENT '延时显示' ;
+
+ALTER TABLE uk_consult_invite ADD enablecallback int DEFAULT 0 COMMENT '显示回呼组件';
+ALTER TABLE uk_consult_invite ADD callbacknum  VARCHAR(50) DEFAULT NULL COMMENT '回呼号码' ;	
+ALTER TABLE uk_consult_invite ADD callbacktxt  VARCHAR(50) DEFAULT NULL COMMENT '回呼提示文字' ;	
+ALTER TABLE uk_consult_invite ADD callbackquicktiptitle varchar(50) DEFAULT NULL COMMENT '回呼提示标题' ;
+ALTER TABLE uk_consult_invite ADD callbackquicktip text DEFAULT NULL COMMENT '回呼提示HTML' ;
+ALTER TABLE uk_consult_invite ADD callbackurl  VARCHAR(255) DEFAULT NULL COMMENT '回呼点击后跳转' ;
+ALTER TABLE uk_consult_invite ADD callbackicon  VARCHAR(50) DEFAULT NULL COMMENT '回呼图标' ;	
+ALTER TABLE uk_consult_invite ADD callbackcolor  VARCHAR(50) DEFAULT NULL COMMENT '回呼背景颜色' ;	
+
+ALTER TABLE uk_consult_invite ADD enabledemo int DEFAULT 0 COMMENT '显示预约演示组件';
+ALTER TABLE uk_consult_invite ADD demourl  VARCHAR(255) DEFAULT NULL COMMENT '预约演示URL' ;	
+ALTER TABLE uk_consult_invite ADD demotxt  VARCHAR(50) DEFAULT NULL COMMENT '预约演示文字' ;	
+ALTER TABLE uk_consult_invite ADD demoquicktiptitle varchar(50) DEFAULT NULL COMMENT '预约演示提示标题' ; 	
+ALTER TABLE uk_consult_invite ADD demoquicktip text DEFAULT NULL COMMENT '预约演示提示HTML' ; 	
+ALTER TABLE uk_consult_invite ADD demoicon  VARCHAR(50) DEFAULT NULL COMMENT '预约演示图标' ;	
+ALTER TABLE uk_consult_invite ADD democolor  VARCHAR(50) DEFAULT NULL COMMENT '预约演示背景颜色' ;	
+
+
+ALTER TABLE uk_consult_invite ADD enablesns int DEFAULT 0 COMMENT '显示微信公众号组件';
+ALTER TABLE uk_consult_invite ADD snsurl  VARCHAR(255) DEFAULT NULL COMMENT '公众号跳转URL' ;		
+ALTER TABLE uk_consult_invite ADD snstxt  VARCHAR(50) DEFAULT NULL COMMENT '公众号提示文字' ;		
+ALTER TABLE uk_consult_invite ADD snstiptitle varchar(50) DEFAULT NULL COMMENT '公众号提示标题' ; 	
+ALTER TABLE uk_consult_invite ADD snstip text DEFAULT NULL COMMENT '公众号提示HTML' ; 	
+ALTER TABLE uk_consult_invite ADD snsicon  VARCHAR(50) DEFAULT NULL COMMENT '公众号图标' ;	
+ALTER TABLE uk_consult_invite ADD snsqrcode  VARCHAR(50) DEFAULT NULL COMMENT '公众号二维码' ;	
+ALTER TABLE uk_consult_invite ADD snscolor  VARCHAR(50) DEFAULT NULL COMMENT '公众号背景颜色' ;	
+
+
+ALTER TABLE uk_consult_invite ADD enableothermodel int DEFAULT 0 COMMENT '显示其他组件';
+ALTER TABLE uk_consult_invite ADD othermodelurl  VARCHAR(255) DEFAULT NULL COMMENT '其他组件URL' ;	
+ALTER TABLE uk_consult_invite ADD othermodeltxt  VARCHAR(50) DEFAULT NULL COMMENT '其他组件文本' ;	
+ALTER TABLE uk_consult_invite ADD othermodeltiptitle varchar(50) DEFAULT NULL COMMENT '其他组件提示标题' ;	
+ALTER TABLE uk_consult_invite ADD othermodeltip text DEFAULT NULL COMMENT '其他组件提示HTML' ;	
+ALTER TABLE uk_consult_invite ADD othermodelicon  VARCHAR(50) DEFAULT NULL COMMENT '其他组件图标' ;	
+ALTER TABLE uk_consult_invite ADD othermodelcolor  VARCHAR(50) DEFAULT NULL COMMENT '其他组件背景颜色' ;
+
+ALTER TABLE uk_crm_datamodel ADD targetid varchar(32) DEFAULT NULL COMMENT '目标id';
+ALTER TABLE uk_crm_dataproduct ADD TBID varchar(32) DEFAULT NULL COMMENT '元数据ID';
+ALTER TABLE uk_crm_dataproduct ADD menuid varchar(32) DEFAULT NULL COMMENT '菜单ID';
+ALTER TABLE uk_crm_dataproduct ADD scheme varchar(255) DEFAULT NULL COMMENT '方案';
+
+INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('40281381692dde0901692de349610012', '链接', 'pub', 'com.dic.href', NULL, 'data', '0', '', NULL, NULL, NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2019-2-27 15:37:44', NULL, 1, 0, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `uk_sysdic` (`ID`, `NAME`, `TITLE`, `CODE`, `ORGI`, `CTYPE`, `PARENTID`, `DESCRIPTION`, `MEMO`, `ICONSTR`, `ICONSKIN`, `CATETYPE`, `CREATER`, `CREATETIME`, `UPDATETIME`, `HASCHILD`, `SORTINDEX`, `DICID`, `DEFAULTVALUE`, `DISCODE`, `URL`, `MODULE`, `MLEVEL`, `RULES`, `MENUTYPE`) VALUES ('40281381692dde0901692de2f45b000b', '按钮', 'pub', 'com.dic.button', NULL, 'data', '0', '', NULL, NULL, NULL, NULL, '4028cac3614cd2f901614cf8be1f0324', '2019-2-27 15:37:22', NULL, 1, 0, NULL, 0, 0, NULL, NULL, NULL, NULL, NULL);
+
+ALTER TABLE uk_tableproperties ADD freesearch tinyint(4) DEFAULT 0 COMMENT '搜索方式（0:不支持，1：快速搜索，2：高级搜索）';
+
+ALTER TABLE uk_crm_datamodel ADD targetid varchar(32) DEFAULT NULL COMMENT '目标id';
+ALTER TABLE uk_crm_dataproduct ADD TBID varchar(32) DEFAULT NULL COMMENT '元数据ID';
+ALTER TABLE uk_crm_dataproduct ADD menuid varchar(32) DEFAULT NULL COMMENT '菜单ID';
+ALTER TABLE uk_crm_dataproduct ADD scheme varchar(255) DEFAULT NULL COMMENT '方案';
+
+CREATE TABLE `uk_crm_scheme` (
+  `id` varchar(32) NOT NULL COMMENT '主键ID',
+  `name` varchar(255) DEFAULT NULL COMMENT '名称',
+  `code` varchar(255) DEFAULT NULL COMMENT '代码',
+  `creater` varchar(32) DEFAULT NULL COMMENT '创建人',
+  `createtime` date DEFAULT NULL COMMENT '创建时间',
+  `updatetime` date DEFAULT NULL COMMENT '更新时间',
+  `orgi` varchar(32) DEFAULT NULL COMMENT '租户ID',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='crm-方案表';
+
+ALTER TABLE uk_crm_dataproduct ADD datamodelid varchar(32) DEFAULT NULL COMMENT '默认页面布局id';
+ALTER TABLE uk_crm_dataproduct ADD skiptype varchar(32) DEFAULT NULL COMMENT '跳转方式';
+ALTER TABLE uk_crm_dataproduct ADD skipurl varchar(32) DEFAULT NULL COMMENT '跳转url';
+ALTER TABLE uk_crm_dataproduct ADD defaulshow tinyint(4) DEFAULT '0' COMMENT '是否默认显示';
+ALTER TABLE uk_crm_dataproduct ADD iconcolor varchar(100) DEFAULT NULL COMMENT '图标颜色';
+
+ALTER TABLE uk_crm_dataproduct ADD allowfilter tinyint(4) DEFAULT '0' COMMENT '是否允许筛选列';
+ALTER TABLE uk_crm_dataproduct ADD allowprint tinyint(4) DEFAULT '0' COMMENT '是否允许打印';
+ALTER TABLE uk_crm_dataproduct ADD allowexports tinyint(4) DEFAULT '0' COMMENT '是否允许导出';
+
+ALTER TABLE uk_callcenter_ivr ADD playsound VARCHAR(100) DEFAULT NULL COMMENT '播放语音';
+
+ALTER TABLE uk_agentservice ADD queuetime datetime DEFAULT NULL COMMENT '进入队列时间';
+ALTER TABLE uk_agentuser ADD queuetime datetime DEFAULT NULL COMMENT '进入队列时间';
+
+
+ALTER TABLE uk_callcenter_extention ADD autoanswer varchar(20) DEFAULT NULL COMMENT '来电自动接听';
+ALTER TABLE uk_agentuser ADD queuetime datetime DEFAULT NULL COMMENT '进入队列时间';
+ALTER TABLE uk_agentuser ADD queuetime datetime DEFAULT NULL COMMENT '进入队列时间';
+
+ALTER TABLE uk_que_result ADD answerlevel VARCHAR(50) DEFAULT NULL COMMENT '评级 a b c d';
+
+ALTER TABLE uk_crm_datamodel ADD parentid varchar(32) DEFAULT NULL COMMENT '父级id';
+
+
+ALTER TABLE uk_callcenter_event ADD autoanswer tinyint DEFAULT 0 COMMENT '是否自动接听';
+
+ALTER TABLE uk_agentuser ADD endby varchar(20) DEFAULT NULL COMMENT '挂断方';
+ALTER TABLE uk_callcenter_event ADD autoanswer tinyint DEFAULT 0 COMMENT '是否自动接听';
+
+
+ALTER TABLE uk_noticemsg ADD sqlurl varchar(255) DEFAULT NULL COMMENT '下载sql地址';
+ALTER TABLE uk_noticemsg ADD version varchar(255) DEFAULT NULL COMMENT '版本号';
+ALTER TABLE uk_systemconfig ADD version varchar(255) DEFAULT NULL COMMENT '版本号';
+
+ALTER TABLE uk_noticemsg ADD jarurldownload TINYINT(4) DEFAULT 0 COMMENT 'jar包是否下载成功';
+ALTER TABLE uk_noticemsg ADD sqlurldownload TINYINT(4) DEFAULT 0 COMMENT 'sql是否下载成功';
+ALTER TABLE uk_noticemsg ADD udpatestatus TINYINT(4) DEFAULT 0 COMMENT '更新状态 0未更新 1已执行更新';
+
+ALTER TABLE uk_noticemsg ADD rollbacksqlurl varchar(255) DEFAULT NULL COMMENT '下载回滚sql地址';
+
+ALTER TABLE uk_noticemsg ADD rollbacksqlurldownload TINYINT(4) DEFAULT 0 COMMENT '回滚sql是否下载成功';
+
+ALTER TABLE uk_system_updatecon ADD confirm TINYINT(4) DEFAULT NULL COMMENT '是否确认更新';
+ALTER TABLE uk_system_updatecon ADD jarurl varchar(255) DEFAULT NULL COMMENT '下载sql地址';
+ALTER TABLE uk_system_updatecon ADD sqlurl varchar(255) DEFAULT NULL COMMENT '下载sql地址';
+ALTER TABLE uk_system_updatecon ADD oldversion varchar(255) DEFAULT NULL COMMENT '版本号';
+ALTER TABLE uk_system_updatecon ADD version varchar(255) DEFAULT NULL COMMENT '版本号';
+ALTER TABLE uk_system_updatecon ADD versiondesc varchar(500) DEFAULT NULL COMMENT '版本更新说明';
+ALTER TABLE uk_system_updatecon ADD jarurldownload TINYINT(4) DEFAULT 0 COMMENT 'jar包是否下载成功';
+ALTER TABLE uk_system_updatecon ADD sqlurldownload TINYINT(4) DEFAULT 0 COMMENT 'sql是否下载成功';
+ALTER TABLE uk_system_updatecon ADD udpatestatus TINYINT(4) DEFAULT 0 COMMENT '更新状态 0未更新 1已执行更新';
+
+ALTER TABLE uk_system_updatecon ADD rollbacksqlurl varchar(255) DEFAULT NULL COMMENT '下载回滚sql地址';
+
+ALTER TABLE uk_system_updatecon ADD rollbacksqlurldownload TINYINT(4) DEFAULT 0 COMMENT '回滚sql是否下载成功';
+
+ALTER TABLE uk_systemconfig ADD appid varchar(255) DEFAULT NULL COMMENT '客户端id';
+
+
+
+ALTER TABLE uk_callcenter_event ADD answersip text DEFAULT NULL COMMENT '应答事件SIP';
+ALTER TABLE uk_callcenter_event ADD hangupsip text DEFAULT NULL COMMENT '挂断事件SIP';

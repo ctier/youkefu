@@ -281,6 +281,7 @@ $(document).ready(function(){
 	$(document).on('submit.form.data-api','[data-toggle="ajax-form"]', function ( e ) {
 		var formValue = $(e.target) ;
 		var target = $(this).data("target");
+		var disabled =  $(e.target).data("submit") ;
 		var inner = $(this).data("inner");
 		var callback = $(this).data("callback");
 		var close = $(this).data("close");
@@ -289,37 +290,42 @@ $(document).ready(function(){
 		if(close == null){
 			index = top.layer.load(0, {shade: false});
 		}
-		$(this).ajaxSubmit({	  
-			url:formValue.attr("action"),
-			success: function(data){
-				if(target){
-					$(target).empty().append(data) ;
-				}else if(callback){
-					var targetIFrame = eval(iframe);
-					targetIFrame.Proxy.callback(callback, data) ;
-				}else if(inner){
-					var targetIFrame = eval(iframe);
-					targetIFrame.Proxy.updateData(inner , data) ;
-				}
-				if(close == null || close == true){
-					if(close == null){
-						top.layer.close(index);
-					}else{
-						layer.close(layer.index);
+		if(disabled !=null && disabled == "true"){
+			return false ;
+		}else{
+			$(e.target).data("submit","true");
+			$(this).ajaxSubmit({	  
+				url:formValue.attr("action"),
+				success: function(data){
+					if(target){
+						$(target).empty().append(data) ;
+					}else if(callback){
+						var targetIFrame = eval(iframe);
+						targetIFrame.Proxy.callback(callback, data) ;
+					}else if(inner){
+						var targetIFrame = eval(iframe);
+						targetIFrame.Proxy.updateData(inner , data) ;
 					}
-					if(message == false){
-						
-					}else if(message){
-						top.layer.alert(message, {icon: 1});
-					}else{
-						top.layer.alert('保存成功', {icon: 1});
+					if(close == null || close == true){
+						if(close == null){
+							top.layer.close(index);
+						}else{
+							layer.close(layer.index);
+						}
+						if(message == false){
+							
+						}else if(message){
+							top.layer.alert(message, {icon: 1});
+						}else{
+							top.layer.alert('保存成功', {icon: 1});
+						}
 					}
+				},
+				error:function(xhr, type, s){  				
+					//notification("",false);	//结束
 				}
-			},
-			error:function(xhr, type, s){  				
-				//notification("",false);	//结束
-			}
-		}); 
+			}); 
+		}
 		return false;
 	});
 	
@@ -412,6 +418,7 @@ var Proxy = {
 			$('#agentuser-curstatus').remove();
 			$("#chat_msg_list").append(template($('#end_tpl').html(), {data: data}));
 		}
+		$(".chat-writing-message").remove();
 	},
 	tipMsgForm : function(href){
 		top.layer.prompt({formType: 2,title: '请输入拉黑原因',area: ['300px', '50px']} , function(value, index, elem){
@@ -446,15 +453,8 @@ var Proxy = {
 		top.$('#msgnum').text(msgNum);
 	},
 	cleanTopMsgTip : function(num){
-		var msgNum = top.$('#ukefu-last-msg').data("num");
-		msgNum = msgNum - num ;
-		if(msgNum > 0){
-			top.$('#ukefu-last-msg').data("num" , msgNum).show();
-			top.$('#msgnum').text(msgNum);
-		}else{
-			top.$('#ukefu-last-msg').data("num" , 0).hide();
-			top.$('#msgnum').text(0);
-		}
+		top.$('#ukefu-last-msg').data("num" , 0).hide();
+		top.$('#msgnum').text(0);
 	}
 }
 var active = {

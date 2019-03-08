@@ -49,7 +49,7 @@ public class AgentUserTask {
 	private int sensitivewordagent;			//坐席端敏感词触发次数
 	
 	private int msgtimeout;				//访客端消息超时次数
-	private int msgtimeoutagent;		//坐席端消息敏感词触发次数
+	private int msgtimeoutagent;		//坐席端消息超时次数
 	
 	private int sessiontimeout;			//会话超时次数
 	

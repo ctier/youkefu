@@ -137,7 +137,7 @@ public class ReportCubeService{
 			tableMap.put(cm.getTb().getId(), "a"+index);
 			if("0".equals(cm.getMtype())) {
 				mainMetaData = cm ;
-				mainTable.append(cm.getTb().getTablename()).append(" as ").append(tableMap.get(cm.getTb().getId())).append(" ");
+				mainTable.append(cm.getTb().getTablename()).append("  ").append(tableMap.get(cm.getTb().getId())).append(" ");
 				mainTableStr = cm.getTb().getId();
 			}
 			for(TableProperties tableproperty:cm.getTb().getTableproperty()) {
@@ -256,6 +256,8 @@ public class ReportCubeService{
 		if(wherecon.length()>0){
 			strb.append(" where ").append(wherecon);
 		}
+		StringBuffer buffer = new StringBuffer(strb.toString().toUpperCase());
+		strb = buffer;
 		return strb.length()>0 ? strb.toString() : null ;
 	}
 	public boolean checkSemap(String fieldename,CubeMetadata mainMetaData){

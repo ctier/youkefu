@@ -122,7 +122,6 @@
 										});
 						            </#if>
 						            <#if sessionConfig?? && sessionConfig.enablequick>
-						            	/**
 							            var _self = this;
 							            loadURL("/res/quickreply.html" , null , function(data){
 							            	$(_self).suggest('@', {
@@ -137,7 +136,6 @@
 												}
 											});
 							            });
-							            **/
 						            </#if>
 						        }
 							});

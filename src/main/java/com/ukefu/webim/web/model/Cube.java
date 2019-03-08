@@ -13,6 +13,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.ukefu.util.Base62;
 import com.ukefu.util.UKTools;
 @Entity
 @Table(name = "uk_cube")
@@ -207,6 +208,6 @@ public class Cube implements java.io.Serializable{
 	}
 	@Transient
 	public String getTable(){
-		return "c_d_"+UKTools.md5(this.getId());
+		return "c_d_"+Base62.encode(this.getId()) ;
 	}
 }

@@ -168,7 +168,7 @@ public class AiIMEventHandler
 	    	/**
 	    	 * 过滤访客消息中的 HTML，防XSS
 	    	 */
-	    	if(invite.isFilterscript()) {
+	    	if(invite!=null && invite.isFilterscript()) {
 	    		Document document = Jsoup.parse(data.getMessage()) ;
 	    		if(document.select("script") != null) {
 	    			//目前只检查了 Script ，其他还有IMG的情况（IMG需要排除表情） 

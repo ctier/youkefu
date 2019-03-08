@@ -82,6 +82,15 @@
         </div>
         
         <div class="layui-form-item">
+            <label class="layui-form-label">自动接听来电：</label>
+            <div class="layui-input-inline" style="width:300px;">
+            	<input type="radio" name="autoanswer" value="none" title="禁用" checked>
+                <input type="radio" name="autoanswer" value="all" title="全部来电">
+				<input type="radio" name="autoanswer" value="queue" title="队列">
+            </div>
+        </div>
+        
+        <div class="layui-form-item">
             <label class="layui-form-label">启用WebRTC：</label>
             <div class="layui-input-inline">
                 <input type="checkbox" name="enablewebrtc" lay-skin="switch" lay-text="开启|关闭">

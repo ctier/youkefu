@@ -55,7 +55,7 @@ public class NoticeSystemController extends Handler{
 				List<Predicate> list = new ArrayList<Predicate>();  
 
 				list.add(cb.equal(root.get("orgi").as(String.class), orgi));
-				list.add(cb.equal(root.get("type").as(String.class), UKDataContext.NoticeType.SYSTEMUPGRADE.toString()));
+				list.add(cb.equal(root.get("type").as(String.class), UKDataContext.NoticeType.SYSTEM.toString()));
 
 				Predicate[] p = new Predicate[list.size()];  
 				return cb.and(list.toArray(p));   
@@ -65,7 +65,7 @@ public class NoticeSystemController extends Handler{
 		map.addAttribute("noticeList",noticeList) ;
 		map.addAttribute("msg",msg) ;
 		map.addAttribute("userList",userRes.findByOrgi(orgi)) ;
-		map.addAttribute("type",UKDataContext.NoticeType.SYSTEMUPGRADE.toString());
+		map.addAttribute("type",UKDataContext.NoticeType.SYSTEM.toString());
 		return request(super.createAppsTempletResponse("/apps/notice/index")) ;
 	}
 	

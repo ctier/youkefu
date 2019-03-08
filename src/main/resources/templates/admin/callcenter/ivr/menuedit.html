@@ -1,0 +1,252 @@
+<div class="uk-layui-form">
+	<form class="layui-form uk-form" action="/admin/callcenter/ivr/menu/update.html" data-toggle="ajax-form" data-inner="#callCenterContent">
+		<input type="hidden" name="id" value="${ivrMenu.id!''}"> 
+		<input type="hidden" name="hostid" value="${pbxHost.id!''}"> 
+		<input type="hidden" name="extentionid" value="<#if extention??>${extention.id!''}<#elseif ivrMenu??>${ivrMenu.extentionid!''}</#if>"> 
+		<div class="layui-collapse">
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">基本信息<font color="red">（带*表示必填项）</font></h2>
+				<div class="layui-colla-content layui-show">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">名称：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="name" required lay-verify="required" value="${ivrMenu.name!''}" placeholder="请输入名称" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">拨号键<font color="red">*</font>：</label>
+							<div class="layui-input-inline">
+								<select name="digits">
+									<#list 0..9 as sortindex>
+									<option value="${sortindex}"  <#if ivrMenu.digits==sortindex>selected</#if>>${sortindex}</option>
+									</#list>
+									<option value="#" <#if ivrMenu.digits=='#'>selected</#if>>#</option>
+									<option value="*" <#if ivrMenu.digits=='*'>selected</#if>>*</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">类型<font color="red">*</font>：
+							</label>
+							<div class="layui-input-inline">
+								<select name="type"  lay-filter="type">
+									<option value="toinline" <#if ivrMenu.type=='toinline'>selected</#if>>转内线</option>
+									<option value="tooutline" <#if ivrMenu.type=='tooutline'>selected</#if>>转外线</option>
+									<option value="menuexecapp" <#if ivrMenu.type=='menuexecapp'>selected</#if>>执行应用操作</option>
+									<option value="menuexit" <#if ivrMenu.type=='menuexit'>selected</#if>>挂断</option>
+									<option value="menusub" <#if ivrMenu.type=='menusub'>selected</#if>>转子菜单</option>
+									<option value="menuback" <#if ivrMenu.type=='menuback'>selected</#if>>转上级</option>
+									<option value="menutop" <#if ivrMenu.type=='menutop'>selected</#if>>转根目录</option>
+									<option value="menuplaysound" <#if ivrMenu.type=='menuplaysound'>selected</#if>>播放语音文件</option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline" id="typeparam" <#if ivrMenu.type!='menuexecapp' && ivrMenu.type!='toinline' && ivrMenu.type!='tooutline'>style="display: none;"</#if>>
+							<label class="layui-form-label"><span id="typeparamspan">号码</span><font color="red">*</font>：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="param" value="${ivrMenu.param!''}" placeholder="请输入" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline" <#if ivrMenu.type!='menuplaysound'>style="display: none;"</#if> id="menuplaysoundfile">
+							<label class="layui-form-label">播放语音文件<font color="red">*</font>：
+							</label>
+							<div class="layui-input-inline">
+								<select name="playsound" >
+									<option value="" >请选择</option>
+									<#if mediaList?? && mediaList?size gt 0>
+									<#list mediaList as media>
+									<option value="${media.id!''}" <#if ivrMenu.playsound==media.id>selected</#if>>${media.name!''}</option>
+									</#list>
+									</#if>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-colla-item">
+				<h2 class="layui-colla-title">其他信息</h2>
+				<div class="layui-colla-content layui-show">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">欢迎提示语音<font color="red">*</font>：
+							</label>
+							<div class="layui-input-inline">
+								<select name="greetlong" >
+									<option value="" >请选择</option>
+									<#if mediaList?? && mediaList?size gt 0>
+									<#list mediaList as media>
+									<option value="${media.id!''}" <#if ivrMenu.greetlong==media.id>selected</#if>>${media.name!''}</option>
+									</#list>
+									</#if>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">欢迎提示短语音<font color="red">*</font>：</label>
+							<div class="layui-input-inline">
+								<select name="greetshort">
+									<option value="" >请选择</option>
+									<#if mediaList?? && mediaList?size gt 0>
+									<#list mediaList as media>
+									<option value="${media.id!''}" <#if ivrMenu.greetshort==media.id>selected</#if>>${media.name!''}</option>
+									</#list>
+									</#if>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">无效输入提示语音<font color="red">*</font>：
+							</label>
+							<div class="layui-input-inline">
+								<select name="invalidsound" >
+									<option value="" >请选择</option>
+									<#if mediaList?? && mediaList?size gt 0>
+									<#list mediaList as media>
+									<option value="${media.id!''}" <#if ivrMenu.invalidsound==media.id>selected</#if>>${media.name!''}</option>
+									</#list>
+									</#if>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">离开语音<font color="red">*</font>：</label>
+							<div class="layui-input-inline" >
+								<select name="exitsound" >
+									<option value="" >请选择</option>
+									<#if mediaList?? && mediaList?size gt 0>
+									<#list mediaList as media>
+									<option value="${media.id!''}" <#if ivrMenu.exitsound==media.id>selected</#if>>${media.name!''}</option>
+									</#list>
+									</#if>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">确认宏指令：
+							</label>
+							<div class="layui-input-inline">
+								<input type="text" name="confirmmacro" value="${ivrMenu.confirmmacro!''}" placeholder="请输入确认宏指令" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">确认按键：</label>
+							<div class="layui-input-inline">
+								<select name="confirmkey">
+									<#list 0..9 as sortindex>
+									<option value="${sortindex}" <#if ivrMenu.confirmkey==sortindex>selected</#if>>${sortindex}</option>
+									</#list>
+									<option value="#" <#if ivrMenu.confirmkey=='#'>selected</#if>>#</option>
+									<option value="*" <#if ivrMenu.confirmkey=='*'>selected</#if>>*</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">超时时间(秒)：</label>
+							<div class="layui-input-inline">
+								<input type="text" name="timeout" value="${ivrMenu.timeout!'10'}" lay-verify="number"  placeholder="请输入超时时间" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">呼叫等待超时(秒)：
+							</label>
+							<div class="layui-input-inline">
+								<input type="text" name="interdigittimeout" value="${ivrMenu.interdigittimeout!''}" lay-verify="number" value="2" placeholder="请输入呼叫等待超时" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">最大失败次数：</label>
+							<div class="layui-input-inline">
+								<select name="maxfailures">
+									<#list 0..30 as sortindex>
+									<option value="${sortindex}" <#if ivrMenu.maxfailures==sortindex>selected</#if>>${sortindex}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">最大超时次数：
+							</label>
+							<div class="layui-input-inline">
+								<select name="maxtimeouts">
+									<#list 0..30 as sortindex>
+									<option value="${sortindex}" <#if ivrMenu.maxtimeouts==sortindex>selected</#if>>${sortindex}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">数字按键长度：</label>
+							<div class="layui-input-inline">
+								<select name="digitlen">
+									<#list 1..20 as sortindex>
+									<option value="${sortindex}" <#if ivrMenu.digitlen==sortindex>selected</#if>>${sortindex}</option>
+									</#list>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">指令：
+							</label>
+							<div class="layui-input-inline">
+								<input type="text" name="action" value="${ivrMenu.action!''}"  placeholder="请输入指令" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="layui-form-button">
+			<div class="layui-button-block">
+				<button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+				<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+</div>
+<script>
+	layui.use('form', function(){
+	  var form = layui.form;
+	  form.render();
+	  form.on('select(type)', function(data){
+		  console.log(data.value); //得到被选中的值
+		  if(data.value=='menuexecapp'){
+			  $("#typeparamspan").html("应用代码");
+			  $("#typeparam").show();
+			  $("#menuplaysoundfile").hide();
+			  form.render();
+		  }else if(data.value=='toinline' || data.value=='tooutline'){
+			  $("#typeparamspan").html("号码");
+			  $("#typeparam").show();
+			  $("#menuplaysoundfile").hide();
+			  form.render();
+		  }else if(data.value=='menuplaysound'){
+			  $("#typeparam").removeAttr("lay-verify");
+			  $("#typeparam").val("");
+			  $("#typeparam").hide();
+			  $("#menuplaysoundfile").show();
+			  form.render();
+		  }else{
+			  $("#typeparam").removeAttr("lay-verify");
+			  $("#typeparam").val("");
+			  $("#typeparam").hide();
+			  $("#menuplaysoundfile").hide();
+			  form.render();
+		  }
+		});  
+	});
+</script>

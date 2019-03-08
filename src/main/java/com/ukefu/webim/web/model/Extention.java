@@ -64,6 +64,27 @@ public class Extention implements java.io.Serializable{
 	private String creater ;
 	private Date createtime = new Date();
 	private Date updatetime = new Date();
+	
+	
+	private String greetlong;
+	private String greetshort;
+	private String invalidsound;
+	private String exitsound;
+	private String confirmmacro;
+	private String confirmkey;
+	private String ttsengine;
+	private String ttsvoice;
+	private String confirmattempts;
+	private int timeout;
+	private int interdigittimeout;
+	private int maxfailures;
+	private int maxtimeouts;
+	private int digitlen;
+	private String action;
+	private String digits;
+	private String param;
+	private String autoanswer ;	//开启自动接听功能
+	
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -255,5 +276,113 @@ public class Extention implements java.io.Serializable{
 	}
 	public void setWaittiptimes(int waittiptimes) {
 		this.waittiptimes = waittiptimes;
+	}
+	public String getGreetlong() {
+		return greetlong;
+	}
+	public void setGreetlong(String greetlong) {
+		this.greetlong = greetlong;
+	}
+	public String getGreetshort() {
+		return greetshort;
+	}
+	public void setGreetshort(String greetshort) {
+		this.greetshort = greetshort;
+	}
+	public String getInvalidsound() {
+		return invalidsound;
+	}
+	public void setInvalidsound(String invalidsound) {
+		this.invalidsound = invalidsound;
+	}
+	public String getExitsound() {
+		return exitsound;
+	}
+	public void setExitsound(String exitsound) {
+		this.exitsound = exitsound;
+	}
+	public String getConfirmmacro() {
+		return confirmmacro;
+	}
+	public void setConfirmmacro(String confirmmacro) {
+		this.confirmmacro = confirmmacro;
+	}
+	public String getConfirmkey() {
+		return confirmkey;
+	}
+	public void setConfirmkey(String confirmkey) {
+		this.confirmkey = confirmkey;
+	}
+	public String getTtsengine() {
+		return ttsengine;
+	}
+	public void setTtsengine(String ttsengine) {
+		this.ttsengine = ttsengine;
+	}
+	public String getTtsvoice() {
+		return ttsvoice;
+	}
+	public void setTtsvoice(String ttsvoice) {
+		this.ttsvoice = ttsvoice;
+	}
+	public String getConfirmattempts() {
+		return confirmattempts;
+	}
+	public void setConfirmattempts(String confirmattempts) {
+		this.confirmattempts = confirmattempts;
+	}
+	public int getTimeout() {
+		return timeout;
+	}
+	public void setTimeout(int timeout) {
+		this.timeout = timeout;
+	}
+	public int getInterdigittimeout() {
+		return interdigittimeout;
+	}
+	public void setInterdigittimeout(int interdigittimeout) {
+		this.interdigittimeout = interdigittimeout;
+	}
+	public int getMaxfailures() {
+		return maxfailures;
+	}
+	public void setMaxfailures(int maxfailures) {
+		this.maxfailures = maxfailures;
+	}
+	public int getMaxtimeouts() {
+		return maxtimeouts;
+	}
+	public void setMaxtimeouts(int maxtimeouts) {
+		this.maxtimeouts = maxtimeouts;
+	}
+	public int getDigitlen() {
+		return digitlen;
+	}
+	public void setDigitlen(int digitlen) {
+		this.digitlen = digitlen;
+	}
+	public String getAction() {
+		return action;
+	}
+	public void setAction(String action) {
+		this.action = action;
+	}
+	public String getDigits() {
+		return digits;
+	}
+	public void setDigits(String digits) {
+		this.digits = digits;
+	}
+	public String getParam() {
+		return param;
+	}
+	public void setParam(String param) {
+		this.param = param;
+	}
+	public String getAutoanswer() {
+		return autoanswer;
+	}
+	public void setAutoanswer(String autoanswer) {
+		this.autoanswer = autoanswer;
 	}
 }

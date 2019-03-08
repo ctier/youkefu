@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Proxy;
 
@@ -28,6 +29,8 @@ public class AgentUser implements Serializable, Comparable<AgentUser> {
 	private Date logindate;
 	private String source;
 	private Date endtime;
+	
+	private String endby ;	//挂断方
 	
 	private String title ;
 	private String url;
@@ -54,6 +57,7 @@ public class AgentUser implements Serializable, Comparable<AgentUser> {
 	private String status;
 	private String appid;
 	private String sessiontype;
+	private Date queuetime ;								//进入队列的时间
 	private String contextid = UKTools.getUUID();
 	private String agentserviceid;
 	private String orgi;
@@ -511,7 +515,7 @@ public class AgentUser implements Serializable, Comparable<AgentUser> {
 	}
 	
 	public String getTitle() {
-		return title;
+		return !StringUtils.isBlank(title) && title.length()>255 ? title.substring( 0 , 255) : title;
 	}
 
 	public void setTitle(String title) {
@@ -540,6 +544,22 @@ public class AgentUser implements Serializable, Comparable<AgentUser> {
 	public void setOwner(String owner) {
 		this.owner = owner;
 	}
+	
+	public Date getQueuetime() {
+		return queuetime;
+	}
+
+	public void setQueuetime(Date queuetime) {
+		this.queuetime = queuetime;
+	}
+	
+	public String getEndby() {
+		return endby;
+	}
+
+	public void setEndby(String endby) {
+		this.endby = endby;
+	}
 
 	@Transient
 	public String getSkillname() {
@@ -566,6 +586,4 @@ public class AgentUser implements Serializable, Comparable<AgentUser> {
 		}
 		return ret;
 	}
-	
-	
 }

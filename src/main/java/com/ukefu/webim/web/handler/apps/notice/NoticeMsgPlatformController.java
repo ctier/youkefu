@@ -25,9 +25,13 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.Menu;
+import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.repository.NoticeMsgRepository;
+import com.ukefu.webim.service.repository.SystemUpdateconRepository;
 import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.NoticeMsg;
+import com.ukefu.webim.web.model.SystemConfig;
+import com.ukefu.webim.web.model.SystemUpdatecon;
 import com.ukefu.webim.web.model.User;
 
 /**
@@ -40,6 +44,9 @@ public class NoticeMsgPlatformController  extends Handler{
 
 	@Autowired
 	private NoticeMsgRepository noticeMsgRes ;
+	
+	@Autowired
+	private SystemUpdateconRepository systemUpdateconRes ;
 	
 	@RequestMapping("/index")
 	@Menu(type = "notice", subtype = "noticemsgplf")
@@ -80,6 +87,17 @@ public class NoticeMsgPlatformController  extends Handler{
 				noticemsg.setStatus(true);
 				noticeMsgRes.save(noticemsg);
 				map.addAttribute("notice",noticemsg) ;
+				SystemConfig systemConfig = (SystemConfig) CacheHelper.getSystemCacheBean().getCacheObject("systemConfig", UKDataContext.SYSTEM_ORGI) ;
+				map.addAttribute("systemConfig",systemConfig) ;
+				List<SystemUpdatecon> systemUpdateconList = systemUpdateconRes.findByOrgi(super.getOrgi(request)) ;
+				SystemUpdatecon systemUpdatecon = null ;
+				if (systemUpdateconList == null || systemUpdateconList.size()==0) {
+					systemUpdatecon = new SystemUpdatecon();
+					systemUpdatecon.setOrgi(super.getOrgi(request));
+				}else {
+					systemUpdatecon = systemUpdateconList.get(0) ;
+				}
+				map.addAttribute("systemUpdatecon",systemUpdatecon) ;
 			}
 		}
 		map.addAttribute("msg",msg) ;

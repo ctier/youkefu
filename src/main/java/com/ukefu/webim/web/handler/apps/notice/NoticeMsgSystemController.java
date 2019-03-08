@@ -53,7 +53,7 @@ public class NoticeMsgSystemController  extends Handler{
 
 				list.add(cb.equal(root.get("orgi").as(String.class), orgi));
 				list.add(cb.equal(root.get("target").as(String.class), user.getId()));
-				list.add(cb.equal(root.get("type").as(String.class), UKDataContext.NoticeType.SYSTEMUPGRADE.toString()));
+				list.add(cb.equal(root.get("type").as(String.class), UKDataContext.NoticeType.SYSTEM.toString()));
 				list.add(cb.equal(root.get("datastatus").as(boolean.class), false));
 				
 				Predicate[] p = new Predicate[list.size()];  
@@ -63,7 +63,7 @@ public class NoticeMsgSystemController  extends Handler{
 		
 		map.addAttribute("noticeMsgList",noticeMsgList) ;
 		map.addAttribute("msg",msg) ;
-		map.addAttribute("type",UKDataContext.NoticeType.SYSTEMUPGRADE.toString()) ;
+		map.addAttribute("type",UKDataContext.NoticeType.SYSTEM.toString()) ;
 		return request(super.createAppsTempletResponse("/apps/notice/msg/index")) ;
 	}
 	

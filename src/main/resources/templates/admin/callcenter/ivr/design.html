@@ -5,11 +5,6 @@
 	<div class="col-lg-12" style="border-right:1px solid #e6e6e6;padding-right:0px;">
 		<h1 class="site-h1" style="background-color:#FFFFFF;">
 			IVR菜单设置，接入号码：${extention.extention!''}
-			<span style="float:right;">
-				<button class="layui-btn layui-btn-sm green" href="/admin/callcenter/acl/add.html?hostid=${pbxHost.id!''}" data-toggle="ajax" data-width="750" data-title="添加ACL策略">
-					添加IVR菜单
-				</button>
-			</span>
 		</h1>
 		<div class="row">
 			<div class="col-lg-12">
@@ -19,51 +14,50 @@
 	</div>	
 </div>
 <script language="javascript">
+	var temp = [
+		<#if ivrMenuList?? && ivrMenuList?size gt 0>
+       	<#list ivrMenuList as ivrMenu>
+        	{
+       		'id': "${ivrMenu.id!''}",
+   			'parentid': "<#if ivrMenu.parentid==extention.id>0<#else>${ivrMenu.parentid!''}</#if>",
+			'name': '${ivrMenu.name!''}<a href="/admin/callcenter/ivr/menu/add.html?ivrid=${ivrMenu.id!''}&hostid=${extention.hostid!''}" data-toggle="ajax" data-width="950" data-height="550" data-title="新增下级IVR节点" class="ukefu-ivr-design" title="新增下级IVR节点"><i class="layui-icon">&#xe61f;</i></a><a href="/admin/callcenter/ivr/menu/delete.html?id=${ivrMenu.id!''}&hostid=${extention.hostid!''}&extentionid=${extention.id!''}" data-toggle="load" data-target="#callCenterContent" class="ukefu-ivr-design" title="删除IVR节点"><i class="layui-icon">&#xe640;</i></a><a href="/admin/callcenter/ivr/menu/edit.html?id=${ivrMenu.id!''}&hostid=${extention.hostid!''}" data-toggle="ajax" data-width="950" data-height="550" data-title="编辑${ivrMenu.extention!''}节点" class="ukefu-ivr-design" title="编辑IVR节点"><i class="layui-icon">&#xe631;</i></a>',
+	        'title': '<#if mediaMap?? && ivrMenu.greetlong?? && mediaMap[ivrMenu.greetlong]??><div class="item">欢迎语音：${mediaMap[ivrMenu.greetlong]}</div></#if><#if mediaMap?? && ivrMenu.invalidsound?? && mediaMap[ivrMenu.invalidsound]??><div class="item">无效输入：${mediaMap[ivrMenu.invalidsound]}</div></#if><#if mediaMap?? && ivrMenu.exitsound?? && mediaMap[ivrMenu.exitsound]??><div class="item">退出语音：${mediaMap[ivrMenu.exitsound]}</div></#if><div class="item">超时次数：最大${ivrMenu.maxtimeouts!''}次</div><div class="item">超时时间：<#if ivrMenu.timeout?? && ivrMenu.timeout!=0>${ivrMenu.timeout!''}000<#else>0</#if>毫秒</div>',
+	        'children': []
+        	},
+		</#list>
+       	</#if>
+      	];
+	
+	var result = [] ;
+	function GetData(ivr,temp){
+		var v = ivr ;
+		var childIvr = GetByParentid(ivr.id,temp);
+		if(childIvr.length > 0){
+			for(var i in childIvr){
+				v.children.push(GetData(childIvr[i],temp));
+			}
+		}
+		return v ;
+	}
+	function GetByParentid(id, arry) {
+        var newArry = [];
+        for (var i in arry) {
+            if (arry[i].parentid == id)
+                newArry.push(arry[i]);
+        }
+        return newArry;
+    }
+	for(var k in temp){
+		if(temp[k].parentid=='0'){
+			this.result.push(GetData(temp[k],temp));
+		}
+	}
 	var datascource = {
-	    'name': '分机号：${extention.extention!''}',
-	    'title': '${extention.description!''}',
-	    'children': [{
-	        'name': 'DEMO IVR',
-	        'title': '欢迎语音：welcome.wav<br/>按键错误：ivr_error.wav<br/>退出语音：goodbye.wav<br/>放音重复：最大3次<br/>超时时间：2000毫秒',
-	        'children': [{
-	            'name': '按键：1',
-	            'title': '欢迎语音：subwelcome.wav<br/>按键错误：ivr_error.wav<br/>退出语音：goodbye.wav<br/>放音重复：最大3次<br/>超时时间：2000毫秒',
-	            'children':[{
-	    	        'name': '按键：1',
-	    	        'title': '转接到分机：5050（预订酒店）'
-	    	    },
-	    	    {
-	    	        'name': '按键：2',
-	    	        'title': '转接到分机：5060（预订机票）'
-	    	    }]
-	        },
-	        {
-	            'name': '按键：2',
-	            'title': '欢迎语音：order.wav<br/>按键错误：ivr_error.wav<br/>退出语音：goodbye.wav<br/>放音重复：最大3次<br/>超时时间：2000毫秒',
-	            'children': [{
-	                'name': '按键：1',
-	                'title': '转接到分机：5070（订单查询）'
-	            },
-	            {
-	                'name': '按键：2',
-	                'title': '转接到分机：5080（机票查询）'
-	            }]
-	        },
-	        {
-	            'name': '按键：3',
-	            'title': '欢迎语音：sup.wav<br/>按键错误：ivr_error.wav<br/>退出语音：goodbye.wav<br/>放音重复：最大3次<br/>超时时间：2000毫秒',
-	            'children': [{
-	                'name': '按键：1',
-	                'title': '二次输入：卡号<br/>转接到分机：6070（目的地查询）'
-	            },
-	            {
-	                'name': '按键：2',
-	                'title': '转接到分机：6080（投诉）'
-	            }]
-	        }]
-	    }]
+			'id':'${extention.id!''}',
+			'name': '${extention.extention!''}<a href="/admin/callcenter/ivr/menu/add.html?extentionid=${extention.id!''}&hostid=${extention.hostid!''}" data-toggle="ajax" data-width="950" data-height="550" data-title="新增下级IVR节点" class="ukefu-ivr-design" title="新增下级IVR节点"><i class="layui-icon">&#xe61f;</i></a><a href="/admin/callcenter/ivr/edit.html?id=${extention.id!''}&hostid=${extention.hostid!''}" data-toggle="ajax" data-width="950" data-height="550" data-title="编辑${extention.extention!''}节点" class="ukefu-ivr-design" title="编辑IVR节点"><i class="layui-icon">&#xe631;</i></a>',
+	        'title': '<#if mediaMap?? && extention.greetlong?? && mediaMap[extention.greetlong]??>欢迎语音：${mediaMap[extention.greetlong]}<br/></#if><#if mediaMap?? && extention.invalidsound?? && mediaMap[extention.invalidsound]??>无效输入：${mediaMap[extention.invalidsound]}<br/></#if><#if mediaMap?? && extention.exitsound?? && mediaMap[extention.exitsound]??>退出语音：${mediaMap[extention.exitsound]}<br/></#if>超时次数：最大${extention.maxtimeouts!''}次<br/>超时时间：<#if extention.timeout?? && extention.timeout!=0>${extention.timeout!''}000<#else>0</#if>毫秒',
+	        'children': result
 	};
-
 	$('#chart-container').orgchart({
 	    'data': datascource,
 	    'nodeContent': 'title',
@@ -75,7 +69,11 @@
 	        return true;
 	    }
 	}).children('.orgchart').on('nodedropped.orgchart',
-	function(event) {
-	    console.log('draggedNode:' + event.draggedNode.children('.title').text() + ', dragZone:' + event.dragZone.children('.title').text() + ', dropZone:' + event.dropZone.children('.title').text());
+		function(event) {
+		//拖拽功能
+	   	 console.log('draggedNode:' + event.draggedNode.children('.title').text() + ', dragZone:' + event.dragZone.children('.title').text() + ', dropZone:' + event.dropZone.children('.title').text());
+	   	 var draggedNodeId = event.draggedNode.find('.id').prevObject[0].id;
+	   	 var dropZoneId = event.dropZone.find('.id').prevObject[0].id;
+	   	 loadURL("/admin/callcenter/ivr/menu/drag.html?hostid=${extention.hostid!''}&extentionid=${extention.id!''}&draggedNodeId="+draggedNodeId+"&dropZoneId="+dropZoneId,"#callCenterContent");
 	});
 </script>

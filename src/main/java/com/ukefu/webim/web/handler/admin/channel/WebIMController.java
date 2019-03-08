@@ -97,6 +97,46 @@ public class WebIMController extends Handler{
     			tempData.setConsult_vsitorbtn_display(inviteData.getConsult_vsitorbtn_display());
     			tempData.setConsult_dialog_color(inviteData.getConsult_dialog_color());
     			
+    			
+    			tempData.setEnablecallback(inviteData.isEnablecallback());
+    			tempData.setCallbackcolor(inviteData.getCallbackcolor());
+    			tempData.setCallbackicon(inviteData.getCallbackicon());
+    			tempData.setCallbacknum(inviteData.getCallbacknum());
+    			tempData.setCallbacktxt(inviteData.getCallbacktxt());
+    			tempData.setCallbackquicktip(inviteData.getCallbackquicktip().replaceAll("'", "\""));
+    			tempData.setCallbackquicktiptitle(inviteData.getCallbackquicktiptitle());
+    			tempData.setCallbackurl(inviteData.getCallbackurl());
+    			
+    			tempData.setEnabledemo(inviteData.isEnabledemo());
+    			tempData.setDemocolor(inviteData.getDemocolor());
+    			tempData.setDemoicon(inviteData.getDemoicon());
+    			tempData.setDemotxt(inviteData.getDemotxt());
+    			tempData.setDemoquicktip(inviteData.getDemoquicktip().replaceAll("'", "\""));
+    			tempData.setDemoquicktiptitle(inviteData.getDemoquicktiptitle());
+    			tempData.setDemourl(inviteData.getDemourl());
+    			
+    			tempData.setEnablesns(inviteData.isEnablesns());
+    			tempData.setSnscolor(inviteData.getSnscolor());
+    			tempData.setSnsicon(inviteData.getSnsicon());
+    			tempData.setSnstxt(inviteData.getSnstxt());
+    			tempData.setSnstiptitle(inviteData.getSnstiptitle());
+    			tempData.setSnstip(inviteData.getSnstip().replaceAll("'", "\""));
+    			tempData.setSnsurl(inviteData.getSnsurl());
+    			
+    			
+    			tempData.setEnableothermodel(inviteData.isEnableothermodel());
+    			tempData.setOthermodelcolor(inviteData.getOthermodelcolor());
+    			tempData.setOthermodelicon(inviteData.getOthermodelicon());
+    			tempData.setOthermodeltxt(inviteData.getOthermodeltxt());
+    			tempData.setOthermodeltiptitle(inviteData.getOthermodeltiptitle());
+    			tempData.setOthermodeltip(inviteData.getOthermodeltip().replaceAll("'", "\""));
+    			tempData.setOthermodelurl(inviteData.getOthermodelurl());
+    			
+    			tempData.setEnableinvite(inviteData.isEnableinvite());
+    			tempData.setInvitetip(inviteData.getInvitetip().replaceAll("'", "\""));
+    			tempData.setInvitetiptitle(inviteData.getInvitetiptitle());
+    			tempData.setInvitetipdelay(inviteData.getInvitetipdelay());
+
     			inviteData = tempData ;
     		}
     	}else{

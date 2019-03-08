@@ -2,6 +2,7 @@ package com.ukefu.webim.util.server.handler;
 
 import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
+import java.net.URLDecoder;
 import java.util.Date;
 import java.util.List;
 
@@ -76,6 +77,12 @@ public class IMEventHandler
     	try {
     		client.set("im", im);
 			if(!StringUtils.isBlank(im.getUser())){
+				if(!StringUtils.isBlank(im.getTitle())) {
+					im.setTitle(URLDecoder.decode(im.getTitle(), "UTF-8"));
+				}
+				if(!StringUtils.isBlank(im.getUrl())) {
+					im.setUrl(URLDecoder.decode(im.getUrl(), "UTF-8"));
+				}
 				/**
 				 * 用户进入到对话连接 ， 排队用户请求 , 如果返回失败，表示当前坐席全忙，用户进入排队状态，当前提示信息 显示 当前排队的队列位置，不可进行对话，用户发送的消息作为留言处理
 				 */
@@ -173,7 +180,7 @@ public class IMEventHandler
     	/**
     	 * 过滤访客消息中的 HTML，防XSS
     	 */
-    	if(invite.isFilterscript()) {
+    	if(invite!=null && invite.isFilterscript()) {
     		Document document = Jsoup.parse(data.getMessage()) ;
     		if(document.select("script") != null) {
     			//目前只检查了 Script ，其他还有IMG的情况（IMG需要排除表情） 

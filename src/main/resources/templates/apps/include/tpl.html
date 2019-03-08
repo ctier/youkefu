@@ -10,7 +10,7 @@
 		content="width=device-width, maximum-scale=1.0, initial-scale=1.0,initial-scale=1.0,user-scalable=no" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<title><#if systemConfig?? && systemConfig.title?? && systemConfig.title != ''>${systemConfig.title}<#else>UCKeFu-全渠道客服系统</#if></title>
-	<link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico?t=1487250759056"/>
+	<link rel="shortcut icon" type="image/x-icon" href="<#if systemConfig?? && systemConfig.favlogo?? && systemConfig.favlogo != ''>/res/image.html?id=${systemConfig.favlogo?url}<#else>/images/favicon.ico?v=ukefu</#if>&t=${.now?long}"/>
 	<link rel="stylesheet" href="/js/select/css/select2.min.css"/>	
 	<link rel="stylesheet" type="text/css" href="/js/kindeditor/themes/default/default.css">
 	<link rel="stylesheet" href="/css/flexboxgrid.min.css">

@@ -25,5 +25,7 @@ public abstract interface NoticeMsgRepository extends JpaRepository<NoticeMsg,St
 	public abstract int countByTargetAndStatusAndDatastatusAndOrgi(String target , boolean status, boolean datastatus , String orgi);
 	
 	public abstract List<NoticeMsg> findByTerracetypeAndCreatetimeBefore(String terracetype  , Date createtime) ;
+
+	public abstract List<NoticeMsg> findByConfirmAndUdpatestatusOrderByVersionAsc(boolean confirm, String updatestatus);
 	
 }

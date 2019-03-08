@@ -9,7 +9,7 @@
 	content="width=device-width, maximum-scale=1.0, initial-scale=1.0,initial-scale=1.0,user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <title><#if systemConfig?? && systemConfig.title?? && systemConfig.title != ''>${systemConfig.title}<#else>UCKeFu-全渠道客服系统</#if></title>
-<link rel="shortcut icon" type="image/x-icon" href="<#if systemConfig?? && systemConfig.favlogo?? && systemConfig.favlogo != ''>/res/image.html?id=${systemConfig.favlogo?url}<#else>/images/favicon.ico</#if>?t=${.now?long}"/>
+<link rel="shortcut icon" type="image/x-icon" href="<#if systemConfig?? && systemConfig.favlogo?? && systemConfig.favlogo != ''>/res/image.html?id=${systemConfig.favlogo?url}<#else>/images/favicon.ico?v=ukefu</#if>&t=${.now?long}"/>
 <link rel="stylesheet" href="/css/flexboxgrid.min.css">
 <link rel="stylesheet" type="text/css" href="/css/darktooltip.css" />
 <link rel="stylesheet" href="css/layui.css">
@@ -34,8 +34,6 @@
 <script src="/js/UKeFu-SoftPhone.js"></script>
 </#if>
 
-<script src="/js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
-<script src="/js/ace/theme-chrome.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/weixinAudio.js"></script>
 <#if systemConfig?? && systemConfig.mapkey?? && systemConfig.mapkey!=''>
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=${systemConfig.mapkey}"></script>
@@ -166,12 +164,23 @@
 							</a>
 						</li>
 					</#if> 
+					<#if models?? && models["cloud"]?? && models["cloud"] == true>
+						<#if (user?? && user.roleAuthMap["B01"]?? || user.usertype == "0")>
+							<li class="layui-nav-item ukefu-tabadd-li">
+								<a href="javascript:void(0)" onclick="return false;" data-title="公告消息" data-href="/notice/msg/business/index.html" class="iframe_btn" data-id="notice" data-type="tabAdd">
+									<i class="kfont" style="position: relative;top:2px;">&#xe62b;</i>
+									<span class="tips_num" style="color: #fff;min-width: 16px;display: none;"></span>
+									消息
+								</a>
+							</li>
+						</#if>
+					</#if>
 					<#if (user?? && user.roleAuthMap["B01"]??   || user.usertype == "0")>
 					<li class="layui-nav-item ukefu-top-menu" style="position: relative;">
 						<div class="ukefu-last-msg" data-num="0" id="ukefu-last-msg">
 							<small class="ukefu-msg-tip bg-red" id="msgnum">0</small>
 						</div>
-						<a href="javascript:void(0)" id="agentdesktop" onclick="return false;"  data-title="坐席对话" data-href="/agent/index.html" class="iframe_btn" data-id="multiMediaDialogWin" data-type="tabAdd">
+						<a href="javascript:void(0)" id="agentdesktop" onclick="Proxy.cleanTopMsgTip(0);return false;"  data-title="坐席对话" data-href="/agent/index.html" class="iframe_btn" data-id="multiMediaDialogWin" data-type="tabAdd">
 							<i class="kfont icon-iconfontagent"	style="position: relative;"></i>
 							坐 席
 						</a>

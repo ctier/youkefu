@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -184,7 +185,7 @@ public class PbxHost implements java.io.Serializable{
 		this.recordpath = recordpath;
 	}
 	public String getIvrpath() {
-		return ivrpath;
+		return !StringUtils.isBlank(ivrpath) ? ivrpath : "internal";
 	}
 	public void setIvrpath(String ivrpath) {
 		this.ivrpath = ivrpath;

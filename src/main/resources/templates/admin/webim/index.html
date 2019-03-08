@@ -257,6 +257,480 @@
 							</div>
 			
 						</div>
+						
+						<div class="box default-box" id="consult_vsitorbtn_model_tip" style="<#if inviteData?? && inviteData.consult_vsitorbtn_model == "2">display:block;<#else>display:none;</#if>">
+							<div class="box-header">
+								<h3 class="box-title">对话入口启用的组件</h3>
+							</div>
+							<div class="box-body ukefu-im-theme">
+								<div class="row" style="margin-right:0px;">
+									<div class="col-md-8">
+										<div class="ukefu-webim-prop">
+											<div class="ukefu-webim-tl" style="clear:both;">1、显示咨询组件上的快捷提示</div>
+											<div class="box-item">
+												<div class="row">
+													<div class="col-lg-8">
+														<p>在访客入口上的咨询组件上显示快捷提示</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，会在接入的网站的咨询组件上显示快捷提示。</p>
+													</div>
+													<div class="col-lg-4" style="text-align:right;">
+														<input type="checkbox" title="启用" name="enableinvite" id="enableinvite" lay-filter="enableinvite" <#if inviteData?? && inviteData.enableinvite == true>checked="checked"</#if>>
+													</div>
+												</div>
+											</div>
+											<div class="box-item" id="enableinvite_tip" style="<#if inviteData?? && inviteData.enableinvite == false>display:none;</#if>">	
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>a、快捷提示标题（鼠标滑过触发事件）</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">在访客入口的咨询组件上提示的文字标题</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="invitetiptitle" value="${inviteData.invitetiptitle!'立即开始咨询'}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-12">
+														<p>b、快捷提示HTML代码（鼠标滑过触发事件）</p>
+														<p>
+															<div class="layui-input-block">
+														      <textarea name="invitetip" autocomplete="off" class="layui-input" style="height:60px;line-height:22px;">${inviteData.invitetip!'立即咨询专业人员客户服务解决方案'}</textarea>
+														    </div>
+														</p>
+													</div>
+												</div>
+												
+												<div class="row">
+													<div class="col-lg-8">
+														<p>c、延时显示快捷提示</p>
+													</div>
+													<div class="col-lg-4">
+														<select name="invitetipdelay">
+														  <option value="0" <#if !(inviteData??) || (inviteData?? && inviteData.invitetipdelay == 0)>selected="selected"</#if>>无延时</option>
+														  <option value="1000" <#if inviteData?? && inviteData.invitetipdelay == 1000>selected="selected"</#if>>1秒</option>
+														  <option value="2000" <#if inviteData?? && inviteData.invitetipdelay == 2000>selected="selected"</#if>>2秒</option>
+														  <option value="3000" <#if inviteData?? && inviteData.invitetipdelay == 3000>selected="selected"</#if>>3秒</option>
+														  <option value="4000" <#if inviteData?? && inviteData.invitetipdelay == 4000>selected="selected"</#if>>4秒</option>
+														  <option value="5000" <#if inviteData?? && inviteData.invitetipdelay == 5000>selected="selected"</#if>>5秒</option>
+														  <option value="10000" <#if inviteData?? && inviteData.invitetipdelay == 10000>selected="selected"</#if>>10秒</option>
+														</select>     					
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="ukefu-webim-prop">
+											<div class="ukefu-webim-tl" style="clear:both;">1、启用客服电话组件</div>
+											<div class="box-item">
+												<div class="row">
+													<div class="col-lg-8">
+														<p>在访客入口上显示“客服热线电话”入口</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，会在接入的网站上提示热线电话的入口。</p>
+													</div>
+													<div class="col-lg-4" style="text-align:right;">
+														<input type="checkbox" title="启用" name="enablecallback" id="enablecallback" lay-filter="enablecallback" <#if inviteData?? && inviteData.enablecallback == true>checked="checked"</#if>>
+													</div>
+												</div>
+											</div>
+											<div class="box-item" id="enablecallback_tip" style="<#if inviteData?? && inviteData.enablecallback == false>display:none;</#if>">	
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>a、入口热线电话提示文字</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">在访客入口的客户热线电话组件上显示的文字</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="callbacktxt" value="${inviteData.callbacktxt!'热线电话'}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>b、点击后跳转URL</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">入口组件上点击后跳转的URL</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="callbackurl" value="${inviteData.callbackurl!''}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>c、热线电话号码组件背景颜色</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">入口组件上显示的热线电话组件的背景颜色</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="box-item">
+															<input type="hidden" name="callbackcolor" id="callbackcolor" value="<#if inviteData??>${inviteData.callbackcolor!'1'}<#else>1</#if>"> 
+															<div class="item-cnt ukefu-callback-color" style="display: block;">
+																<div class="ukefu-im-item theme1 <#if !(inviteData?? && inviteData.callbackcolor??) || (inviteData?? && inviteData.callbackcolor?? && inviteData.callbackcolor == '1')>ukefu-im-checked</#if>"
+																	data-class="theme1" data-value="1">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme2 <#if inviteData?? && inviteData.callbackcolor?? && inviteData.callbackcolor == '2'>ukefu-im-checked</#if>" data-class="theme2" data-value="2">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme3 <#if inviteData?? && inviteData.callbackcolor?? && inviteData.callbackcolor == '3'>ukefu-im-checked</#if>" data-class="theme3" data-value="3">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme4 <#if inviteData?? && inviteData.callbackcolor?? && inviteData.callbackcolor == '4'>ukefu-im-checked</#if>" data-class="theme4" data-value="4">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme5 <#if inviteData?? && inviteData.callbackcolor?? && inviteData.callbackcolor == '5'>ukefu-im-checked</#if>" data-class="theme5" data-value="5">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme6 <#if inviteData?? && inviteData.callbackcolor?? && inviteData.callbackcolor == '6'>ukefu-im-checked</#if>" data-class="theme6" data-value="6">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>d、快捷提示标题（鼠标滑过触发事件）</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">在访客入口的客户热线电话组件上提示的文字标题</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="callbackquicktiptitle" value="${inviteData.callbackquicktiptitle!'拨打热线电话'}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-12">
+														<p>e、快捷提示HTML代码（鼠标滑过触发事件）</p>
+														<p>
+															<div class="layui-input-block">
+														      <textarea name="callbackquicktip" placeholder="请编辑客服电话组件快捷提示的HTML代码，例如：0757-88793907" autocomplete="off" class="layui-input" style="height:60px;line-height:22px;">${inviteData.callbackquicktip!''}</textarea>
+														    </div>
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										
+										<div class="ukefu-webim-prop">
+											<div class="ukefu-webim-tl" style="clear:both;">2、启用微信公众号组件</div>
+											<div class="box-item">
+												<div class="row">
+													<div class="col-lg-8">
+														<p>在访客入口上显示“微信公众号”入口</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，会在接入的网站上提示微信公众号的入口。</p>
+													</div>
+													<div class="col-lg-4" style="text-align:right;">
+														<input type="checkbox" title="启用" name="enablesns" id="enablesns" lay-filter="enablesns" <#if inviteData?? && inviteData.enablesns == true>checked="checked"</#if>>
+													</div>
+												</div>
+											</div>
+											<div class="box-item" id="enablesns_tip" style="<#if inviteData?? && inviteData.enablesns == false>display:none;</#if>">	
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>a、入口微信公众号提示文字</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">在访客入口的微信公众号组件上显示的文字</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="snstxt" value="${inviteData.snstxt!'微信公众号'}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>b、点击后跳转URL</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">入口微信公众号组件上点击后跳转的URL</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="snsurl" value="${inviteData.snsurl!''}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>c、微信公众号组件背景颜色</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">入口组件上显示的热线电话组件的背景颜色</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="box-item">
+															<input type="hidden" name="snscolor" id="snscolor" value="<#if inviteData??>${inviteData.snscolor!'1'}<#else>1</#if>"> 
+															<div class="item-cnt ukefu-snscolor-color" style="display: block;">
+																<div class="ukefu-im-item theme1 <#if !(inviteData?? && inviteData.snscolor??) || (inviteData?? && inviteData.snscolor?? && inviteData.snscolor == '1')>ukefu-im-checked</#if>"
+																	data-class="theme1" data-value="1">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme2 <#if inviteData?? && inviteData.snscolor?? && inviteData.snscolor == '2'>ukefu-im-checked</#if>" data-class="theme2" data-value="2">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme3 <#if inviteData?? && inviteData.snscolor?? && inviteData.snscolor == '3'>ukefu-im-checked</#if>" data-class="theme3" data-value="3">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme4 <#if inviteData?? && inviteData.snscolor?? && inviteData.snscolor == '4'>ukefu-im-checked</#if>" data-class="theme4" data-value="4">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme5 <#if inviteData?? && inviteData.snscolor?? && inviteData.snscolor == '5'>ukefu-im-checked</#if>" data-class="theme5" data-value="5">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme6 <#if inviteData?? && inviteData.snscolor?? && inviteData.snscolor == '6'>ukefu-im-checked</#if>" data-class="theme6" data-value="6">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>d、快捷提示标题（鼠标滑过触发事件）</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">在访客入口的微信公众号组件上提示的文字标题</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="snstiptitle" value="${inviteData.snstiptitle!'扫描微信公众号二维码关注'}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-12">
+														<p>e、快捷提示HTML代码（鼠标滑过触发事件）</p>
+														<p>
+															<div class="layui-input-block">
+														      <textarea name="snstip" placeholder="请编辑微信公众号组件快捷提示的HTML代码" autocomplete="off" class="layui-input" style="height:60px;line-height:22px;">${inviteData.snstip!''}</textarea>
+														    </div>
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="ukefu-webim-prop">
+											<div class="ukefu-webim-tl" style="clear:both;">3、启用预约演示组件</div>
+											<div class="box-item">
+												<div class="row">
+													<div class="col-lg-8">
+														<p>在访客入口上显示“微信公众号”入口</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，会在接入的网站上提示预约演示的入口。</p>
+													</div>
+													<div class="col-lg-4" style="text-align:right;">
+														<input type="checkbox" title="启用" name="enabledemo" id="enabledemo" lay-filter="enabledemo" <#if inviteData?? && inviteData.enabledemo == true>checked="checked"</#if>>
+													</div>
+												</div>
+											</div>
+											<div class="box-item" id="enabledemo_tip" style="<#if inviteData?? && inviteData.enabledemo == false>display:none;</#if>">	
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>a、入口预约演示提示文字</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">在访客入口的预约演示组件上显示的文字</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="demotxt" value="${inviteData.demotxt!'预约演示'}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>b、点击后跳转URL</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">入口预约演示组件上点击后跳转的URL</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="demourl" value="${inviteData.demourl!''}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>c、预约演示组件背景颜色</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">入口组件上显示的热线电话组件的背景颜色</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="box-item">
+															<input type="hidden" name="democolor" id="democolor" value="<#if inviteData??>${inviteData.democolor!'1'}<#else>1</#if>"> 
+															<div class="item-cnt ukefu-democolor-color" style="display: block;">
+																<div class="ukefu-im-item theme1 <#if !(inviteData?? && inviteData.democolor??) || (inviteData?? && inviteData.democolor?? && inviteData.democolor == '1')>ukefu-im-checked</#if>"
+																	data-class="theme1" data-value="1">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme2 <#if inviteData?? && inviteData.democolor?? && inviteData.democolor == '2'>ukefu-im-checked</#if>" data-class="theme2" data-value="2">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme3 <#if inviteData?? && inviteData.democolor?? && inviteData.democolor == '3'>ukefu-im-checked</#if>" data-class="theme3" data-value="3">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme4 <#if inviteData?? && inviteData.democolor?? && inviteData.democolor == '4'>ukefu-im-checked</#if>" data-class="theme4" data-value="4">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme5 <#if inviteData?? && inviteData.democolor?? && inviteData.democolor == '5'>ukefu-im-checked</#if>" data-class="theme5" data-value="5">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme6 <#if inviteData?? && inviteData.democolor?? && inviteData.democolor == '6'>ukefu-im-checked</#if>" data-class="theme6" data-value="6">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>d、快捷提示标题（鼠标滑过触发事件）</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">在访客入口的预约演示组件上提示的文字标题</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="demoquicktiptitle" value="${inviteData.demoquicktiptitle!'预约产品演示'}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-12">
+														<p>d、快捷提示HTML代码（鼠标滑过触发事件）</p>
+														<p>
+															<div class="layui-input-block">
+														      <textarea name="demoquicktip" placeholder="请编辑预约演示组件快捷提示的HTML代码" autocomplete="off" class="layui-input" style="height:60px;line-height:22px;">${inviteData.demoquicktip!''}</textarea>
+														    </div>
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										<div class="ukefu-webim-prop">
+											<div class="ukefu-webim-tl" style="clear:both;">4、启用其他组件</div>
+											<div class="box-item">
+												<div class="row">
+													<div class="col-lg-8">
+														<p>在访客入口上显示“其他”入口</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">开启后，会在接入的网站上提示其他的入口。</p>
+													</div>
+													<div class="col-lg-4" style="text-align:right;">
+														<input type="checkbox" title="启用" name="enableothermodel" id="enableothermodel" lay-filter="enableothermodel" <#if inviteData?? && inviteData.enableothermodel == true>checked="checked"</#if>>
+													</div>
+												</div>
+											</div>
+											<div class="box-item" id="enableothermodel_tip" style="<#if inviteData?? && inviteData.enableothermodel == false>display:none;</#if>">	
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>a、入口其他提示文字</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">在访客入口的其他组件上显示的文字</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="othermodeltxt" value="${inviteData.othermodeltxt!'其他'}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>b、点击后跳转URL</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">入口其他组件上点击后跳转的URL</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="othermodelurl" value="${inviteData.othermodelurl!''}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>c、其他组件背景颜色</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">入口组件上显示的热线电话组件的背景颜色</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="box-item">
+															<input type="hidden" name="othermodelcolor" id="othermodelcolor" value="<#if inviteData??>${inviteData.othermodelcolor!'1'}<#else>1</#if>"> 
+															<div class="item-cnt ukefu-othermodelcolor-color" style="display: block;">
+																<div class="ukefu-im-item theme1 <#if !(inviteData?? && inviteData.othermodelcolor??) || (inviteData?? && inviteData.othermodelcolor?? && inviteData.othermodelcolor == '1')>ukefu-im-checked</#if>"
+																	data-class="theme1" data-value="1">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme2 <#if inviteData?? && inviteData.othermodelcolor?? && inviteData.othermodelcolor == '2'>ukefu-im-checked</#if>" data-class="theme2" data-value="2">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme3 <#if inviteData?? && inviteData.othermodelcolor?? && inviteData.othermodelcolor == '3'>ukefu-im-checked</#if>" data-class="theme3" data-value="3">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme4 <#if inviteData?? && inviteData.othermodelcolor?? && inviteData.othermodelcolor == '4'>ukefu-im-checked</#if>" data-class="theme4" data-value="4">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme5 <#if inviteData?? && inviteData.othermodelcolor?? && inviteData.othermodelcolor == '5'>ukefu-im-checked</#if>" data-class="theme5" data-value="5">
+																	<i
+																		class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+																<div class="ukefu-im-item theme6 <#if inviteData?? && inviteData.othermodelcolor?? && inviteData.othermodelcolor == '6'>ukefu-im-checked</#if>" data-class="theme6" data-value="6">
+																	<i
+																	class="layui-icon ukefu-im-check">&#xe605;</i>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-8">
+														<p>d、快捷提示标题（鼠标滑过触发事件）</p>
+														<p style="color:#888888;font-size:13px;margin-top:10px;">在访客入口的预约演示组件上提示的文字标题</p>
+													</div>
+													<div class="col-lg-4">
+														<div class="layui-input-block">
+														    <input type="text" name="othermodeltiptitle" value="${inviteData.othermodeltiptitle!''}" autocomplete="off" class="layui-input">
+														</div>	
+													</div>
+												</div>
+												
+												<div class="row" style="margin-bottom:20px;">
+													<div class="col-lg-12">
+														<p>d、快捷提示HTML代码（鼠标滑过触发事件）</p>
+														<p>
+															<div class="layui-input-block">
+														      <textarea name="othermodeltip" placeholder="请编辑其他组件快捷提示的HTML代码" autocomplete="off" class="layui-input" style="height:60px;line-height:22px;">${inviteData.othermodeltip!''}</textarea>
+														    </div>
+														</p>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+			
+						</div>
+						
 						<div class="box default-box">
 							<div class="box-header">
 								<h3 class="box-title">对话框样式</h3>
@@ -395,6 +869,49 @@
 	layui.use('form', function(){
 		var form = layui.form;
 		form.render('select'); //刷新select选择框渲染
+		
+		form.on("checkbox(enablecallback)" , function(data){
+			if(data.elem.checked == true){
+				$('#enablecallback_tip').show();		
+			}else{
+				
+				$('#enablecallback_tip').hide();
+			}
+		});
+		
+		form.on("checkbox(enablesns)" , function(data){
+			if(data.elem.checked == true){
+				$('#enablesns_tip').show();		
+			}else{
+				
+				$('#enablesns_tip').hide();
+			}
+		});
+
+		form.on("checkbox(enabledemo)" , function(data){
+			if(data.elem.checked == true){
+				$('#enabledemo_tip').show();		
+			}else{
+				
+				$('#enabledemo_tip').hide();
+			}
+		});
+		form.on("checkbox(enableothermodel)" , function(data){
+			if(data.elem.checked == true){
+				$('#enableothermodel_tip').show();		
+			}else{
+				
+				$('#enableothermodel_tip').hide();
+			}
+		});
+		form.on("checkbox(enableinvite)" , function(data){
+			if(data.elem.checked == true){
+				$('#enableinvite_tip').show();		
+			}else{
+				
+				$('#enableinvite_tip').hide();
+			}
+		});
 	});
 	layui.use('element', function(){
 		var element = layui.element;
@@ -445,6 +962,50 @@
 											$(this).addClass('ukefu-im-checked');
 											$('#consult_vsitorbtn_color').val($(this).attr('data-value'));
 										});
+						$('.ukefu-callback-color .ukefu-im-item')
+							.click(
+									function() {
+										var theme = $(this).attr(
+												'data-class');
+										$('.ukefu-callback-color .ukefu-im-item')
+												.removeClass(
+														'ukefu-im-checked');
+										$(this).addClass('ukefu-im-checked');
+										$('#callbackcolor').val($(this).attr('data-value'));
+									});
+						$('.ukefu-snscolor-color .ukefu-im-item')
+							.click(
+									function() {
+										var theme = $(this).attr(
+												'data-class');
+										$('.ukefu-snscolor-color .ukefu-im-item')
+												.removeClass(
+														'ukefu-im-checked');
+										$(this).addClass('ukefu-im-checked');
+										$('#snscolor').val($(this).attr('data-value'));
+									});
+						$('.ukefu-democolor-color .ukefu-im-item')
+							.click(
+									function() {
+										var theme = $(this).attr(
+												'data-class');
+										$('.ukefu-democolor-color .ukefu-im-item')
+												.removeClass(
+														'ukefu-im-checked');
+										$(this).addClass('ukefu-im-checked');
+										$('#democolor').val($(this).attr('data-value'));
+									});
+						$('.ukefu-othermodelcolor-color .ukefu-im-item')
+							.click(
+									function() {
+										var theme = $(this).attr(
+												'data-class');
+										$('.ukefu-othermodelcolor-color .ukefu-im-item')
+												.removeClass(
+														'ukefu-im-checked');
+										$(this).addClass('ukefu-im-checked');
+										$('#othermodelcolor').val($(this).attr('data-value'));
+									});
 						$('.ukefu-im-point')
 								.click(
 										function() {
@@ -461,6 +1022,11 @@
 													.addClass(
 															"ukefu-point-checked");
 											$('#consult_vsitorbtn_model').val($(this).attr('data-value'));
+											if($(this).attr('data-value') == "2"){
+												$("#consult_vsitorbtn_model_tip").show();
+											}else{
+												$("#consult_vsitorbtn_model_tip").hide();
+											}
 										});
 					});
 </script>

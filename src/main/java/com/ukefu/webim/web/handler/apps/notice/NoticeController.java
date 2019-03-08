@@ -117,7 +117,7 @@ public class NoticeController extends Handler{
 			msg = "add_success" ;
 		}
 		ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/notice/business/index.html?msg="+msg)) ;
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(type)) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/system/index.html?msg="+msg)) ;
 		}
 		return view;
@@ -160,7 +160,7 @@ public class NoticeController extends Handler{
     public ModelAndView editsave(ModelMap map , HttpServletRequest request , @Valid String id ,@Valid Notice notice) {
 		String msg="edit_failure";
 		ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/notice/business/detail.html?id="+id+"&msg="+msg));
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(notice.getType())) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(notice.getType())) {
 			request(super.createRequestPageTempletResponse("redirect:/notice/system/detail.html?id="+id+"&msg="+msg));
 		}
 		if (!StringUtils.isBlank(id)) {
@@ -180,7 +180,7 @@ public class NoticeController extends Handler{
 				noticeRes.save(notic) ;
 				msg = "edit_success" ;
 				view = request(super.createRequestPageTempletResponse("redirect:/notice/business/detail.html?id="+id+"&msg="+msg));
-				if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(notic.getType())) {
+				if (UKDataContext.NoticeType.SYSTEM.toString().equals(notic.getType())) {
 					request(super.createRequestPageTempletResponse("redirect:/notice/system/detail.html?id="+id+"&msg="+msg));
 				}
 			}
@@ -193,7 +193,7 @@ public class NoticeController extends Handler{
     public ModelAndView delete(ModelMap map , HttpServletRequest request , @Valid String id ,@Valid String type) throws SQLException {
 		String msg="del_failure";
 		ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/notice/business/index.html?msg="+msg)) ;
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(type)) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/system/index.html?msg="+msg)) ;
 		}
 		if (!StringUtils.isBlank(id)) {
@@ -207,7 +207,7 @@ public class NoticeController extends Handler{
 				noticeRes.delete(notice);
 				msg="del_success";
 				view = request(super.createRequestPageTempletResponse("redirect:/notice/business/index.html?msg="+msg)) ;
-				if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(notice.getType())) {
+				if (UKDataContext.NoticeType.SYSTEM.toString().equals(notice.getType())) {
 					view = request(super.createRequestPageTempletResponse("redirect:/notice/system/index.html?msg="+msg)) ;
 				}
 			}
@@ -220,7 +220,7 @@ public class NoticeController extends Handler{
     public ModelAndView batdelete(ModelMap map , HttpServletRequest request , @Valid String[] ids ,@Valid String type) throws SQLException {
     	String msg = "bat_delete_success";
     	ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/notice/business/index.html?msg="+msg)) ;
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(type)) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/system/index.html?msg="+msg)) ;
 		}
     	if(ids!=null && ids.length>0){
@@ -239,7 +239,7 @@ public class NoticeController extends Handler{
     		msg = "bat_delete_faild";
     	}
     	view = request(super.createRequestPageTempletResponse("redirect:/notice/business/index.html?msg="+msg)) ;
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(type)) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/system/index.html?msg="+msg)) ;
 		}
 		return view;
@@ -476,7 +476,7 @@ public class NoticeController extends Handler{
 			}
 		}
 		ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/notice/business/detail.html?id="+noticeid+"&msg="+msg+"&sysmsmsg="+sysmsmsg+"&smsmsg="+smsmsg+"&mailmsg="+mailmsg));
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(type)) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/system/detail.html?id="+noticeid+"&msg="+msg+"&sysmsmsg="+sysmsmsg+"&smsmsg="+smsmsg+"&mailmsg="+mailmsg));
 		}
     	return view ;

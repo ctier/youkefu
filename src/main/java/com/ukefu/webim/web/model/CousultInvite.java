@@ -96,6 +96,49 @@ public class CousultInvite implements java.io.Serializable{
 	private int maxwordsnum ; 			//允许访客端输入的最大文本字数
 	private boolean loadhismsg ;		//是否加载历史消息
 	
+	private boolean enableinvite;		//启用邀请组件提示
+	private String invitetiptitle;		//咨询组件提示文本标题
+	private String invitetip; 			//咨询组件快速提示文本
+	private int invitetipdelay; 		//咨询组件快速提示延时显示
+	
+	private boolean enablecallback;		//启用回呼
+	private String callbackurl ;		//点击后跳转URL
+	private String callbacknum ;		//回呼号码
+	private String callbacktxt ;		//回呼提示文字
+	private String callbackquicktiptitle;//回呼快速提示文本标题
+	private String callbackquicktip; 	//回呼快速提示文本
+	private String callbackicon ;		//回呼图标
+	private String callbackcolor ;		//回呼颜色
+	
+	private boolean enabledemo;		//启用预约演示
+	private String demourl ;		//点击后跳转URL
+	private String demotxt ;		//演示提示文本
+	private String demoquicktiptitle; 	//显示快捷提示标题
+	private String demoquicktip; 	//显示快捷提示
+	private String demoicon ;		//预约演示图标
+	private String democolor ;		//预约背景颜色
+	
+	private boolean enablesns;		//启用公众号
+	private String snsurl ;		//点击后跳转URL
+	private String snstxt ;		//演示提示文本
+	private String snstiptitle; 	//显示快捷提示标题
+	private String snstip; 	//显示快捷提示
+	private String snsicon ;		//公众号图标
+	private String snsqrcode ;		//公众号二维码
+	private String snscolor ;		//公众号二维码背景
+	
+	private boolean enableothermodel;		//启用公众号
+	private String othermodelurl ;		//点击后跳转URL
+	private String othermodeltxt ;		//演示提示文本
+	private String othermodeltiptitle; 	//显示快捷提示标题
+	private String othermodeltip; 	//显示快捷提示
+	private String othermodelicon ;		//公众号图标
+	private String othermodelcolor ;		//公众号二维码背景
+	
+	
+	
+	
+	
 	private String consult_dialog_color;
 	private String consult_dialog_logo;
 	private String consult_dialog_headimg;
@@ -958,5 +1001,208 @@ public class CousultInvite implements java.io.Serializable{
 	public void setFilteragentscript(boolean filteragentscript) {
 		this.filteragentscript = filteragentscript;
 	}
-	
+	public boolean isEnablecallback() {
+		return enablecallback;
+	}
+	public void setEnablecallback(boolean enablecallback) {
+		this.enablecallback = enablecallback;
+	}
+	public String getCallbacknum() {
+		return callbacknum;
+	}
+	public void setCallbacknum(String callbacknum) {
+		this.callbacknum = callbacknum;
+	}
+	public String getCallbacktxt() {
+		return callbacktxt;
+	}
+	public void setCallbacktxt(String callbacktxt) {
+		this.callbacktxt = callbacktxt;
+	}
+	public String getCallbackquicktip() {
+		return callbackquicktip;
+	}
+	public void setCallbackquicktip(String callbackquicktip) {
+		this.callbackquicktip = callbackquicktip;
+	}
+	public String getCallbackicon() {
+		return callbackicon;
+	}
+	public void setCallbackicon(String callbackicon) {
+		this.callbackicon = callbackicon;
+	}
+	public String getCallbackcolor() {
+		return callbackcolor;
+	}
+	public void setCallbackcolor(String callbackcolor) {
+		this.callbackcolor = callbackcolor;
+	}
+	public boolean isEnabledemo() {
+		return enabledemo;
+	}
+	public void setEnabledemo(boolean enabledemo) {
+		this.enabledemo = enabledemo;
+	}
+	public String getDemourl() {
+		return demourl;
+	}
+	public void setDemourl(String demourl) {
+		this.demourl = demourl;
+	}
+	public String getDemotxt() {
+		return demotxt;
+	}
+	public void setDemotxt(String demotxt) {
+		this.demotxt = demotxt;
+	}
+	public String getDemoquicktip() {
+		return demoquicktip;
+	}
+	public void setDemoquicktip(String demoquicktip) {
+		this.demoquicktip = demoquicktip;
+	}
+	public String getDemoicon() {
+		return demoicon;
+	}
+	public void setDemoicon(String demoicon) {
+		this.demoicon = demoicon;
+	}
+	public String getDemocolor() {
+		return democolor;
+	}
+	public void setDemocolor(String democolor) {
+		this.democolor = democolor;
+	}
+	public boolean isEnablesns() {
+		return enablesns;
+	}
+	public void setEnablesns(boolean enablesns) {
+		this.enablesns = enablesns;
+	}
+	public String getSnsurl() {
+		return snsurl;
+	}
+	public void setSnsurl(String snsurl) {
+		this.snsurl = snsurl;
+	}
+	public String getSnstxt() {
+		return snstxt;
+	}
+	public void setSnstxt(String snstxt) {
+		this.snstxt = snstxt;
+	}
+	public String getSnstip() {
+		return snstip;
+	}
+	public void setSnstip(String snstip) {
+		this.snstip = snstip;
+	}
+	public String getSnsicon() {
+		return snsicon;
+	}
+	public void setSnsicon(String snsicon) {
+		this.snsicon = snsicon;
+	}
+	public String getSnsqrcode() {
+		return snsqrcode;
+	}
+	public void setSnsqrcode(String snsqrcode) {
+		this.snsqrcode = snsqrcode;
+	}
+	public String getSnscolor() {
+		return snscolor;
+	}
+	public void setSnscolor(String snscolor) {
+		this.snscolor = snscolor;
+	}
+	public boolean isEnableothermodel() {
+		return enableothermodel;
+	}
+	public void setEnableothermodel(boolean enableothermodel) {
+		this.enableothermodel = enableothermodel;
+	}
+	public String getOthermodelurl() {
+		return othermodelurl;
+	}
+	public void setOthermodelurl(String othermodelurl) {
+		this.othermodelurl = othermodelurl;
+	}
+	public String getOthermodeltxt() {
+		return othermodeltxt;
+	}
+	public void setOthermodeltxt(String othermodeltxt) {
+		this.othermodeltxt = othermodeltxt;
+	}
+	public String getOthermodeltip() {
+		return othermodeltip;
+	}
+	public void setOthermodeltip(String othermodeltip) {
+		this.othermodeltip = othermodeltip;
+	}
+	public String getOthermodelicon() {
+		return othermodelicon;
+	}
+	public void setOthermodelicon(String othermodelicon) {
+		this.othermodelicon = othermodelicon;
+	}
+	public String getOthermodelcolor() {
+		return othermodelcolor;
+	}
+	public void setOthermodelcolor(String othermodelcolor) {
+		this.othermodelcolor = othermodelcolor;
+	}
+	public String getCallbackurl() {
+		return callbackurl;
+	}
+	public void setCallbackurl(String callbackurl) {
+		this.callbackurl = callbackurl;
+	}
+	public String getCallbackquicktiptitle() {
+		return callbackquicktiptitle;
+	}
+	public void setCallbackquicktiptitle(String callbackquicktiptitle) {
+		this.callbackquicktiptitle = callbackquicktiptitle;
+	}
+	public String getDemoquicktiptitle() {
+		return demoquicktiptitle;
+	}
+	public void setDemoquicktiptitle(String demoquicktiptitle) {
+		this.demoquicktiptitle = demoquicktiptitle;
+	}
+	public String getSnstiptitle() {
+		return snstiptitle;
+	}
+	public void setSnstiptitle(String snstiptitle) {
+		this.snstiptitle = snstiptitle;
+	}
+	public String getOthermodeltiptitle() {
+		return othermodeltiptitle;
+	}
+	public void setOthermodeltiptitle(String othermodeltiptitle) {
+		this.othermodeltiptitle = othermodeltiptitle;
+	}
+	public boolean isEnableinvite() {
+		return enableinvite;
+	}
+	public void setEnableinvite(boolean enableinvite) {
+		this.enableinvite = enableinvite;
+	}
+	public String getInvitetiptitle() {
+		return invitetiptitle;
+	}
+	public void setInvitetiptitle(String invitetiptitle) {
+		this.invitetiptitle = invitetiptitle;
+	}
+	public String getInvitetip() {
+		return invitetip;
+	}
+	public void setInvitetip(String invitetip) {
+		this.invitetip = invitetip;
+	}
+	public int getInvitetipdelay() {
+		return invitetipdelay;
+	}
+	public void setInvitetipdelay(int invitetipdelay) {
+		this.invitetipdelay = invitetipdelay;
+	}
 }

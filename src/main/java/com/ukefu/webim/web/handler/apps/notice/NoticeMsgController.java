@@ -1,5 +1,6 @@
 package com.ukefu.webim.web.handler.apps.notice;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -23,11 +24,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ukefu.core.UKDataContext;
 import com.ukefu.util.Menu;
 import com.ukefu.webim.config.web.StringToDateConverter;
+import com.ukefu.webim.service.cache.CacheHelper;
 import com.ukefu.webim.service.repository.NoticeMsgRepository;
 import com.ukefu.webim.service.repository.SystemUpdateconRepository;
 import com.ukefu.webim.service.task.DownLoadFileTask;
 import com.ukefu.webim.web.handler.Handler;
 import com.ukefu.webim.web.model.NoticeMsg;
+import com.ukefu.webim.web.model.SystemConfig;
 import com.ukefu.webim.web.model.SystemUpdatecon;
 
 /**
@@ -50,15 +53,21 @@ public class NoticeMsgController  extends Handler{
 	@Value("${system.upgrade.filename}")
 	private String fileName;
 	
+	@Value("${system.upgrade.sqlname}")
+	private String sqlName;
+	
 	@Value("${system.upgrade.savepath}")
 	private String savePath;
+	
+	@Value("${system.upgrade.rollbacksqlname}")
+	private String rollbacksqlname;
 	
 	@RequestMapping("/delete")
     @Menu(type = "notice" , subtype = "noticemsg" )
     public ModelAndView delete(ModelMap map , HttpServletRequest request , @Valid String id ,@Valid String type) throws SQLException {
 		String msg = "" ;
 		ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/business/index.html?msg="+msg+"&p="+super.getP(request))) ;
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(type)) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/system/index.html?msg="+msg+"&p="+super.getP(request))) ;
 		}else if (UKDataContext.NoticeType.PLATFORM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/platform/index.html?msg="+msg+"&p="+super.getP(request))) ;
@@ -79,7 +88,7 @@ public class NoticeMsgController  extends Handler{
 			msg="delf" ;
 		}
 		view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/business/index.html?msg="+msg+"&p="+super.getP(request))) ;
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(type)) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/system/index.html?msg="+msg+"&p="+super.getP(request))) ;
 		}else if (UKDataContext.NoticeType.PLATFORM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/platform/index.html?msg="+msg+"&p="+super.getP(request))) ;
@@ -92,7 +101,7 @@ public class NoticeMsgController  extends Handler{
     public ModelAndView batdelete(ModelMap map , HttpServletRequest request , @Valid String[] ids ,@Valid String type) throws SQLException {
     	String msg = "bat_delete_success";
     	ModelAndView view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/business/index.html?msg="+msg)) ;
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(type)) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/system/index.html?msg="+msg)) ;
 		}else if (UKDataContext.NoticeType.PLATFORM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/platform/index.html?msg="+msg)) ;
@@ -116,7 +125,7 @@ public class NoticeMsgController  extends Handler{
     		msg = "bat_delete_faild";
     	}
     	view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/business/index.html?msg="+msg)) ;
-		if (UKDataContext.NoticeType.SYSTEMUPGRADE.toString().equals(type)) {
+		if (UKDataContext.NoticeType.SYSTEM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/system/index.html?msg="+msg)) ;
 		}else if (UKDataContext.NoticeType.PLATFORM.toString().equals(type)) {
 			view = request(super.createRequestPageTempletResponse("redirect:/notice/msg/platform/index.html?msg="+msg)) ;
@@ -129,6 +138,46 @@ public class NoticeMsgController  extends Handler{
     public ModelAndView upgrade(ModelMap map , HttpServletRequest request , @Valid String id) throws SQLException {
 		map.addAttribute("id",id);
 		return request(super.createRequestPageTempletResponse("/apps/notice/msg/upgrade")) ;
+    }
+	
+	@RequestMapping("/upgrade/download")
+    @Menu(type = "notice" , subtype = "noticemsg" )
+    public ModelAndView upgradedownload(ModelMap map , HttpServletRequest request , @Valid String id) throws SQLException, IOException {
+		String msg = "" ;
+		if (!StringUtils.isBlank(id)) {
+			NoticeMsg noticeMsg = noticeMsgRes.findByIdAndOrgi(id, super.getOrgi(request)) ;
+			if (noticeMsg != null && !StringUtils.isBlank(noticeMsg.getJarurl())) {
+				
+				if (!StringUtils.isBlank(fileName) && !StringUtils.isBlank(savePath)) {
+					String path = savePath + File.separator + noticeMsg.getVersion();
+					if(StringUtils.isNotBlank(noticeMsg.getJarurl())) {
+						//下载jar包
+						taskExecutor.execute(new DownLoadFileTask(noticeMsg.getId(),noticeMsg.getJarurl(), fileName, path,"jar"));
+						noticeMsg.setJarurldownload("1");
+					}else {
+						noticeMsg.setJarurldownload("3");
+					}
+					if(StringUtils.isNotBlank(noticeMsg.getSqlurl())) {
+						//下载sql更新
+						taskExecutor.execute(new DownLoadFileTask(noticeMsg.getId(),noticeMsg.getSqlurl(), sqlName, path,"sql"));
+						noticeMsg.setSqlurldownload("1");
+					}else {
+						noticeMsg.setSqlurldownload("3");
+					}
+					if(StringUtils.isNotBlank(noticeMsg.getRollbacksqlurl())) {
+						//下载sql更新
+						taskExecutor.execute(new DownLoadFileTask(noticeMsg.getId(),noticeMsg.getRollbacksqlurl(), rollbacksqlname, path,"rollbacksql"));
+						noticeMsg.setRollbacksqlurldownload("1");
+					}else {
+						noticeMsg.setRollbacksqlurldownload("3");
+					}
+					noticeMsgRes.save(noticeMsg) ;
+				}else {
+					msg = "download_failure" ;
+				}
+			}
+		}
+		return request(super.createRequestPageTempletResponse("redirect:/notice/msg/platform/detail.html?id="+id+"&msg="+msg)) ;
     }
 	
 	@RequestMapping("/upgrade/save")
@@ -147,31 +196,32 @@ public class NoticeMsgController  extends Handler{
 			NoticeMsg noticeMsg = noticeMsgRes.findByIdAndOrgi(id, super.getOrgi(request)) ;
 			if (noticeMsg != null && !StringUtils.isBlank(noticeMsg.getJarurl())) {
 				Date strtodate = new StringToDateConverter().convert(upgradedate+" "+upgradetime);
-				systemUpdatecon.setUpgradetime(strtodate);
-				systemUpdatecon.setUpdatetime(new Date());
-				systemUpdateconRes.save(systemUpdatecon) ;
-				if (!StringUtils.isBlank(fileName) && !StringUtils.isBlank(savePath)) {
-					//下载jar包
-					taskExecutor.execute(new DownLoadFileTask(noticeMsg.getJarurl(), fileName, savePath));
-					noticeMsg.setConfirm(true);
-					noticeMsgRes.save(noticeMsg) ;
-					List<NoticeMsg> noticeMsgList = noticeMsgRes.findByTerracetypeAndCreatetimeBefore(noticeMsg.getTerracetype(),noticeMsg.getCreatetime()) ;
-					List<NoticeMsg> nmMsgList = new ArrayList<NoticeMsg>() ;
-					if (noticeMsgList != null && noticeMsgList.size()>0) {
-						for(NoticeMsg nmMsg : noticeMsgList) {
-							nmMsg.setInvalidtime(new Date());
-							nmMsgList.add(nmMsg) ;
+				Date now = new Date();
+				SystemConfig systemConfig = (SystemConfig) CacheHelper.getSystemCacheBean().getCacheObject("systemConfig", UKDataContext.SYSTEM_ORGI) ;
+				if(StringUtils.isNotBlank(systemConfig.getVersion()) &&StringUtils.isNotBlank(noticeMsg.getVersion()) && systemConfig.getVersion().compareTo(noticeMsg.getVersion()) < 0) {
+					if("2".equals(noticeMsg.getJarurldownload()) && ("2".equals(noticeMsg.getSqlurldownload()) || "3".equals(noticeMsg.getSqlurldownload()))) {
+						if(strtodate.compareTo(now) > 0) {
+							systemUpdatecon.setUpgradetime(strtodate);
+							systemUpdatecon.setUpdatetime(new Date());
+							systemUpdateconRes.save(systemUpdatecon) ;
+							
+							noticeMsg.setConfirm(true);
+							noticeMsgRes.save(noticeMsg);
+						}else {
+							msg = "time_failure" ;
 						}
-					}
-					if (nmMsgList != null && nmMsgList.size()>0) {
-						noticeMsgRes.save(nmMsgList) ;
+					}else {
+						msg = "update_failure" ;
 					}
 				}else {
-					msg = "download_failure" ;
+					msg = "version_failure" ;
 				}
+				
+					
+				
 			}
 		}
-		return request(super.createRequestPageTempletResponse("redirect:/notice/msg/platform/detail.html?id="+id+"&msg"+msg)) ;
+		return request(super.createRequestPageTempletResponse("redirect:/notice/msg/platform/detail.html?id="+id+"&msg="+msg)) ;
     }
 	
 	@RequestMapping("/count")

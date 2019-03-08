@@ -102,6 +102,11 @@
 			<dd <#if subtype?? && subtype == 'config'>class="layui-this"</#if>>
 				<a href="/admin/config/index.html">系统设置</a>
 			</dd>
+			<#if models?? && models["cloud"]?? && models["cloud"] == true>
+			<dd <#if subtype?? && subtype == 'updatecon'>class="layui-this"</#if>>
+				<a href="/admin/config/update/index.html">升级设置</a>
+			</dd>
+			</#if>
 			<dd <#if subtype?? && subtype == 'sysdic'>class="layui-this"</#if>>
 				<a href="/admin/sysdic/index.html">字典管理</a>
 			</dd>

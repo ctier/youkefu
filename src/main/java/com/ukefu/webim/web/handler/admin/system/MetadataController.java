@@ -398,14 +398,14 @@ public class MetadataController extends Handler{
     	table.setTableproperty(new ArrayList<TableProperties>()); 
     	if(metaData!=null){
 	    	for(UKColumnMetadata colum : metaData.getColumnMetadatas()){
-	    		TableProperties tablePorperties = new TableProperties(colum.getName().toLowerCase() , colum.getTypeName() , colum.getColumnSize() , metaData.getName().toLowerCase()) ;
+	    		TableProperties tablePorperties = new TableProperties(colum.getName() , colum.getTypeName() , colum.getColumnSize() , metaData.getName()) ;
 				tablePorperties.setOrgi(table.getOrgi()) ;
 				
 				tablePorperties.setDatatypecode(0);
 				tablePorperties.setLength(colum.getColumnSize());
 				tablePorperties.setDatatypename(getDataTypeName(colum.getTypeName()));
-				tablePorperties.setName(colum.getTitle().toLowerCase());
-				if(tablePorperties.getFieldname().equals("create_time") || tablePorperties.getFieldname().equals("createtime") || tablePorperties.getFieldname().equals("update_time")){
+				tablePorperties.setName(colum.getTitle());
+				if(tablePorperties.getFieldname().toLowerCase().equals("create_time") || tablePorperties.getFieldname().toLowerCase().equals("createtime") || tablePorperties.getFieldname().toLowerCase().equals("update_time")){
 					tablePorperties.setDatatypename(getDataTypeName("datetime"));
 				}
 				if(colum.getName().startsWith("field")){
@@ -415,7 +415,7 @@ public class MetadataController extends Handler{
 				}
 				table.getTableproperty().add(tablePorperties) ;
 			}
-	    	table.setTablename(table.getTablename().toLowerCase());//转小写
+	    	table.setTablename(table.getTablename());//转小写
     	}
     	return table ;
     }

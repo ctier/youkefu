@@ -22,7 +22,7 @@
 	</li>
 	<#if curagentuser.title?? && curagentuser.url??>
 	<li>
-	    进入页面：<a href="${curagentuser.url!''}" target="_blank"><#if curagentuser.title?length gt 15>${curagentuser.title[0..15]}<#else>${curagentuser.title}</#if></a>
+	    进入页面：<a href="${(curagentuser.url!'')?no_esc}" target="_blank"><#if curagentuser.title?length gt 15>${curagentuser.title[0..15]}<#else>${curagentuser.title}</#if></a>
 	</li>
 	</#if>
 	<li>

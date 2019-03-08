@@ -121,6 +121,8 @@ public class CallCenterRouterController extends Handler{
 				routeItemRes.delete(tempList);
 			}
 			RouterRules oldRouter = routerRulesRes.findByIdAndOrgi(router.getId(), super.getOrgi(request)) ;
+			oldRouter.setRoutercontent(router.getRoutercontent());
+			routerRulesRes.save(oldRouter);
 			if(!StringUtils.isBlank(router.getRoutercontent())){
 				Pattern r = Pattern.compile("(\"[\\S\\s]*?\")");
 				Matcher m = r.matcher(router.getRoutercontent());
@@ -128,58 +130,60 @@ public class CallCenterRouterController extends Handler{
 				while (m.find()) {
 					String text = m.group() ;
 					if(!StringUtils.isBlank(text)) {
-						m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(text.replaceAll("&", "amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")));
+						m.appendReplacement(sb, java.util.regex.Matcher.quoteReplacement(text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")));
 					}
 				}
 				m.appendTail(sb);
-				
-				oldRouter.setRoutercontent(router.getRoutercontent());
-				routerRulesRes.save(oldRouter);
+				router.setRoutercontent(sb.toString());
 			}
-			SAXReader reader = new SAXReader();
-			Document document = reader.read(new ByteArrayInputStream(("<?xml version=\"1.0\" encoding=\"utf-8\"?>"+router.getRoutercontent()).getBytes())) ;
-			Element faultStore = document.getRootElement();
-			Iterator<?> iterator = faultStore.elementIterator() ;
-			List<RouteItem> routeItemList = new ArrayList<RouteItem>();
-			int cindex = 0 ;
-			while (iterator.hasNext()) {
-				Element fault = (Element) iterator.next();
-				if(!StringUtils.isBlank(fault.getName()) && fault.getName().equalsIgnoreCase("condition")) {
-					RouteItem item = null ;
-					if(!StringUtils.isBlank(fault.attributeValue("field"))) {
-						item = new RouteItem("condition" , fault.attributeValue("field") , fault.attributeValue("expression") , fault.attributeValue("break"));
-					}else {
-						item = new RouteItem("condition" , fault.attributeValue("field") , fault.attributeValue("expression") , fault.attributeValue("break"));
-					}
-					routeItemList.add(item);
-					item.setHostid(router.getHostid());
-					item.setRouteid(router.getId());
-					item.setUpdatetime(new Date());
-					item.setCreater(super.getUser(request).getId());
-					item.setOrgi(super.getOrgi(request));
-					item.setSortindex(cindex++);
-					Iterator<?> actionIterator = fault.elementIterator() ;
-					if(actionIterator.hasNext()) {
-						item.setChild(true);
-						int inx = 0 ;
-						while(actionIterator.hasNext()) {
-							Element action = (Element) actionIterator.next();
-							RouteItem actionItem = new  RouteItem("action" , action.attributeValue("application") , action.attributeValue("data"));
-							actionItem.setParentid(item.getId());
-							actionItem.setHostid(router.getHostid());
-							actionItem.setSortindex(inx++);
-							actionItem.setRouteid(router.getId());
-							actionItem.setUpdatetime(new Date());
-							actionItem.setCreater(super.getUser(request).getId());
-							actionItem.setOrgi(super.getOrgi(request));
-							
-							routeItemList.add(actionItem) ;
+			try {
+				SAXReader reader = new SAXReader();
+				Document document = reader.read(new ByteArrayInputStream(("<?xml version=\"1.0\" encoding=\"utf-8\"?>"+router.getRoutercontent()).getBytes())) ;
+				Element faultStore = document.getRootElement();
+				Iterator<?> iterator = faultStore.elementIterator() ;
+				List<RouteItem> routeItemList = new ArrayList<RouteItem>();
+				int cindex = 0 ;
+				while (iterator.hasNext()) {
+					Element fault = (Element) iterator.next();
+					if(!StringUtils.isBlank(fault.getName()) && fault.getName().equalsIgnoreCase("condition")) {
+						RouteItem item = null ;
+						if(!StringUtils.isBlank(fault.attributeValue("field"))) {
+							item = new RouteItem("condition" , fault.attributeValue("field") , fault.attributeValue("expression") , fault.attributeValue("break"));
+						}else {
+							item = new RouteItem("condition" , fault.attributeValue("field") , fault.attributeValue("expression") , fault.attributeValue("break"));
+						}
+						routeItemList.add(item);
+						item.setHostid(router.getHostid());
+						item.setRouteid(router.getId());
+						item.setUpdatetime(new Date());
+						item.setCreater(super.getUser(request).getId());
+						item.setOrgi(super.getOrgi(request));
+						item.setSortindex(cindex++);
+						Iterator<?> actionIterator = fault.elementIterator() ;
+						if(actionIterator.hasNext()) {
+							item.setChild(true);
+							int inx = 0 ;
+							while(actionIterator.hasNext()) {
+								Element action = (Element) actionIterator.next();
+								RouteItem actionItem = new  RouteItem("action" , action.attributeValue("application") , action.attributeValue("data"));
+								actionItem.setParentid(item.getId());
+								actionItem.setHostid(router.getHostid());
+								actionItem.setSortindex(inx++);
+								actionItem.setRouteid(router.getId());
+								actionItem.setUpdatetime(new Date());
+								actionItem.setCreater(super.getUser(request).getId());
+								actionItem.setOrgi(super.getOrgi(request));
+								
+								routeItemList.add(actionItem) ;
+							}
 						}
 					}
+					if(routeItemList.size() > 0) {
+						routeItemRes.save(routeItemList) ;
+					}
 				}
-				if(routeItemList.size() > 0) {
-					routeItemRes.save(routeItemList) ;
-				}
+			}catch(Exception ex) {
+				ex.printStackTrace();
 			}
 		}
 		return request(super.createRequestPageTempletResponse("redirect:/admin/callcenter/router/design.html?id="+router.getId()+"&hostid="+router.getHostid()));

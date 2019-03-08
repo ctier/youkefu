@@ -173,17 +173,13 @@
 								</div>
 								
 								<div class="ukefu-webim-prop">
-									<div class="ukefu-webim-tl" style="clear:both;">7、重启或停止对话服务</div>
+									<div class="ukefu-webim-tl" style="clear:both;">7、对话服务和系统集群状态</div>
 									<div class="box-item">
 										<div class="row">
 											<div class="col-lg-8">
 												<p>Netty SocketIO服务，服务端口：${webimport} , 状态：<#if imServerStatus?? && imServerStatus == true><small class="ukefu-label theme4">服务中</small><#else><small class="ukefu-label theme4" style="background-color:#FF5722;">已停止</small></#if></p>
 												<p style="color:#888888;font-size:13px;margin-top:10px;">建议通过界面停止或启动对话服务，避免出现端口被占用的问题</p>
-											</div>
-											<div class="col-lg-4">
-												<#if imServerStatus?? && imServerStatus == true>
-												<a href="/admin/config/stopimserver.html" data-toggle="tip" <#if secret?? && secret.enable == true>data-confirm="请输入二次安全验证密码"</#if> title="停止对话服务后不能从Web界面再次启动，请确认是否退出？" class="layui-btn layui-btn-sm layui-btn-danger">停止对话服务</a>
-												</#if>
+												<p style="color:#888888;font-size:13px;margin-top:10px;">当前服务器在集群中的信息：${cluster!''}</p>
 											</div>
 										</div>
 									</div>

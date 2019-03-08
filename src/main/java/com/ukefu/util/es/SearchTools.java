@@ -478,6 +478,7 @@ public class SearchTools {
 								list.add(cb.like(root.get("discaller").as(String.class), "%" + formFilterItem.getValue() + "%")) ;
 							}else {
 								Number number = null ;
+								String field = changField(formFilterItem.getField());
 								if(!StringUtils.isBlank(formFilterItem.getValue()) && formFilterItem.getValue().matches("[+-.]{0,1}[\\d.]{1,}")) {
 									number = NumberFormat.getInstance().parse(formFilterItem.getValue()) ;
 								}
@@ -487,51 +488,51 @@ public class SearchTools {
 								switch(formFilterItem.getCond()) {
 									case "01" : 
 										if("AND".equals(formFilterItem.getComp())) {
-											list.add(cb.gt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+											list.add(cb.gt(root.get(field).as(Number.class), number)) ;
 										}else if("OR".equals(formFilterItem.getComp())) {
-											inlist.add(cb.gt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+											inlist.add(cb.gt(root.get(field).as(Number.class), number)) ;
 										}
 										break ;
 									case "02" : 
 										if("AND".equals(formFilterItem.getComp())) {
-											list.add(cb.ge(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+											list.add(cb.ge(root.get(field).as(Number.class), number)) ;
 										}else if("OR".equals(formFilterItem.getComp())) {
-											inlist.add(cb.ge(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+											inlist.add(cb.ge(root.get(field).as(Number.class), number)) ;
 										}
 										break ;
 									case "03" : 
 										if("AND".equals(formFilterItem.getComp())) {
-											list.add(cb.lt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+											list.add(cb.lt(root.get(field).as(Number.class), number)) ;
 										}else if("OR".equals(formFilterItem.getComp())) {
-											inlist.add(cb.lt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+											inlist.add(cb.lt(root.get(field).as(Number.class), number)) ;
 										}
 										break ;
 									case "04" : 
 										if("AND".equals(formFilterItem.getComp())) {
-											list.add(cb.le(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+											list.add(cb.le(root.get(field).as(Number.class), number)) ;
 										}else if("OR".equals(formFilterItem.getComp())) {
-											inlist.add(cb.le(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+											inlist.add(cb.le(root.get(field).as(Number.class), number)) ;
 										}
 										break ;
 									case "05" : 
 										if("AND".equals(formFilterItem.getComp())) {
-											list.add(cb.equal(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+											list.add(cb.equal(root.get(field).as(String.class), formFilterItem.getValue())) ;
 										}else if("OR".equals(formFilterItem.getComp())) {
-											inlist.add(cb.equal(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+											inlist.add(cb.equal(root.get(field).as(String.class), formFilterItem.getValue())) ;
 										}
 										break ;
 									case "06" : 
 										if("AND".equals(formFilterItem.getComp())) {
-											list.add(cb.notEqual(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+											list.add(cb.notEqual(root.get(field).as(String.class), formFilterItem.getValue())) ;
 										}else if("OR".equals(formFilterItem.getComp())) {
-											inlist.add(cb.notEqual(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+											inlist.add(cb.notEqual(root.get(field).as(String.class), formFilterItem.getValue())) ;
 										}
 										break ;
 									case "07" : 
 										if("AND".equals(formFilterItem.getComp())) {
-											list.add(cb.like(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+											list.add(cb.like(root.get(field).as(String.class), formFilterItem.getValue())) ;
 										}else if("OR".equals(formFilterItem.getComp())) {
-											inlist.add(cb.like(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+											inlist.add(cb.like(root.get(field).as(String.class), formFilterItem.getValue())) ;
 										}
 										break ;
 									default :
@@ -585,27 +586,28 @@ public class SearchTools {
 				if(formFilterItem.getField().equals("q")) {
 					tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).defaultOperator(Operator.AND) ;
 				}else {
+					String field = changField(formFilterItem.getField());
 					switch(formFilterItem.getCond()) {
 					case "01" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(false) ;
+						tempQueryBuilder = rangeQuery(field).from(formFilterItem.getValue()).includeLower(false) ;
 						break ;
 					case "02" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).from(formFilterItem.getValue()).includeLower(true) ;
+						tempQueryBuilder = rangeQuery(field).from(formFilterItem.getValue()).includeLower(true) ;
 						break ;
 					case "03" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(false) ;
+						tempQueryBuilder = rangeQuery(field).to(formFilterItem.getValue()).includeUpper(false) ;
 						break ;
 					case "04" : 
-						tempQueryBuilder = rangeQuery(formFilterItem.getField()).to(formFilterItem.getValue()).includeUpper(true) ;
+						tempQueryBuilder = rangeQuery(field).to(formFilterItem.getValue()).includeUpper(true) ;
 						break ;
 					case "05" : 
-						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
+						tempQueryBuilder = termQuery(field , formFilterItem.getValue()) ;
 						break ;
 					case "06" : 
-						tempQueryBuilder = termQuery(formFilterItem.getField() , formFilterItem.getValue()) ;
+						tempQueryBuilder = termQuery(field , formFilterItem.getValue()) ;
 						break ;
 					case "07" : 
-						tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).field(formFilterItem.getField()).defaultOperator(Operator.AND) ;
+						tempQueryBuilder = new QueryStringQueryBuilder(formFilterItem.getValue()).field(field).defaultOperator(Operator.AND) ;
 						break ;
 					default :
 						break ;
@@ -658,6 +660,7 @@ public class SearchTools {
 								list.add(cb.like(root.get("agentusername").as(String.class), "%" + formFilterItem.getValue() + "%")) ;
 							}else {
 								Number number = null ;
+								String field = changField(formFilterItem.getField());
 								if(!StringUtils.isBlank(formFilterItem.getValue()) && formFilterItem.getValue().matches("[+-.]{0,1}[\\d.]{1,}")) {
 									number = NumberFormat.getInstance().parse(formFilterItem.getValue()) ;
 								}
@@ -667,51 +670,51 @@ public class SearchTools {
 								switch(formFilterItem.getCond()) {
 								case "01" : 
 									if("AND".equals(formFilterItem.getComp())) {
-										list.add(cb.gt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										list.add(cb.gt(root.get(field).as(Number.class), number)) ;
 									}else if("OR".equals(formFilterItem.getComp())) {
-										inlist.add(cb.gt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										inlist.add(cb.gt(root.get(field).as(Number.class), number)) ;
 									}
 									break ;
 								case "02" : 
 									if("AND".equals(formFilterItem.getComp())) {
-										list.add(cb.ge(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										list.add(cb.ge(root.get(field).as(Number.class), number)) ;
 									}else if("OR".equals(formFilterItem.getComp())) {
-										inlist.add(cb.ge(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										inlist.add(cb.ge(root.get(field).as(Number.class), number)) ;
 									}
 									break ;
 								case "03" : 
 									if("AND".equals(formFilterItem.getComp())) {
-										list.add(cb.lt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										list.add(cb.lt(root.get(field).as(Number.class), number)) ;
 									}else if("OR".equals(formFilterItem.getComp())) {
-										inlist.add(cb.lt(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										inlist.add(cb.lt(root.get(field).as(Number.class), number)) ;
 									}
 									break ;
 								case "04" : 
 									if("AND".equals(formFilterItem.getComp())) {
-										list.add(cb.le(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										list.add(cb.le(root.get(field).as(Number.class), number)) ;
 									}else if("OR".equals(formFilterItem.getComp())) {
-										inlist.add(cb.le(root.get(formFilterItem.getField()).as(Number.class), number)) ;
+										inlist.add(cb.le(root.get((field)).as(Number.class), number)) ;
 									}
 									break ;
 								case "05" : 
 									if("AND".equals(formFilterItem.getComp())) {
-										list.add(cb.equal(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										list.add(cb.equal(root.get(field).as(String.class), formFilterItem.getValue())) ;
 									}else if("OR".equals(formFilterItem.getComp())) {
-										inlist.add(cb.equal(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										inlist.add(cb.equal(root.get(field).as(String.class), formFilterItem.getValue())) ;
 									}
 									break ;
 								case "06" : 
 									if("AND".equals(formFilterItem.getComp())) {
-										list.add(cb.notEqual(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										list.add(cb.notEqual(root.get(field).as(String.class), formFilterItem.getValue())) ;
 									}else if("OR".equals(formFilterItem.getComp())) {
-										inlist.add(cb.notEqual(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										inlist.add(cb.notEqual(root.get(field).as(String.class), formFilterItem.getValue())) ;
 									}
 									break ;
 								case "07" : 
 									if("AND".equals(formFilterItem.getComp())) {
-										list.add(cb.like(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										list.add(cb.like(root.get(field).as(String.class), formFilterItem.getValue())) ;
 									}else if("OR".equals(formFilterItem.getComp())) {
-										inlist.add(cb.like(root.get(formFilterItem.getField()).as(String.class), formFilterItem.getValue())) ;
+										inlist.add(cb.like(root.get(field).as(String.class), formFilterItem.getValue())) ;
 									}
 									break ;
 								default :
@@ -802,5 +805,9 @@ public class SearchTools {
 	public static PageImpl<UKDataBean> aggregationBatchData(BoolQueryBuilder queryBuilder , boolean loadRef , int p, int ps,String aggField){
 		ESDataExchangeImpl esDataExchange = UKDataContext.getContext().getBean(ESDataExchangeImpl.class);
 		return esDataExchange.findAllPageAggResultBatchData(queryBuilder ,   new PageRequest(p, ps , Sort.Direction.ASC, "createtime") , loadRef , null ,aggField) ;
+	}
+	
+	public static String changField(String field) {
+		return field.toLowerCase();
 	}
 }

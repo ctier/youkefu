@@ -1109,27 +1109,31 @@ public class OnlineUserUtils {
 		String param = "" ;
 		SessionConfig sessionConfig = ServiceQuene.initSessionConfig(orgi) ;
 		try {
-			if(!StringUtils.isBlank(sessionConfig.getOqrsearchurl())) {
-				Template templet = UKTools.getTemplate(sessionConfig.getOqrsearchinput()) ;
-				Map<String,Object> values = new HashMap<String,Object>();
-				values.put("q", q) ;
-				values.put("appid", appid) ;
-				values.put("user", user) ;
-				param = UKTools.getTemplet(templet.getTemplettext(), values) ;
-			}
-			String result = HttpClientUtil.doPost(sessionConfig.getOqrsearchurl(), param)  , text = null;
-			if(!StringUtils.isBlank(result) && !StringUtils.isBlank(sessionConfig.getOqrsearchoutput()) && !result.equals("error")) {
-				Template templet = UKTools.getTemplate(sessionConfig.getOqrsearchoutput()) ;
-				@SuppressWarnings("unchecked")
-				Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
-				Map<String,Object> values = new HashMap<String,Object>();
-				values.put("q", q) ;
-				values.put("user", user) ;
-				values.put("data", jsonData) ;
-				text = UKTools.getTemplet(templet.getTemplettext(), values) ;
-			}
-			if(!StringUtils.isBlank(text)){
-				otherMessageItemList = objectMapper.readValue(text, UKTools.getCollectionType(ArrayList.class, OtherMessageItem.class)) ;
+			if(sessionConfig.isOtherquickplay()) {
+				if(!StringUtils.isBlank(sessionConfig.getOqrsearchurl())) {
+					Template templet = UKTools.getTemplate(sessionConfig.getOqrsearchinput()) ;
+					Map<String,Object> values = new HashMap<String,Object>();
+					values.put("q", q) ;
+					values.put("appid", appid) ;
+					values.put("user", user) ;
+					param = UKTools.getTemplet(templet.getTemplettext(), values) ;
+				}
+				String result = HttpClientUtil.doPost(sessionConfig.getOqrsearchurl(), param)  , text = null;
+				if(!StringUtils.isBlank(result) && !StringUtils.isBlank(sessionConfig.getOqrsearchoutput()) && !result.equals("error")) {
+					Template templet = UKTools.getTemplate(sessionConfig.getOqrsearchoutput()) ;
+					@SuppressWarnings("unchecked")
+					Map<String,Object> jsonData = objectMapper.readValue(result, Map.class) ;
+					Map<String,Object> values = new HashMap<String,Object>();
+					values.put("q", q) ;
+					values.put("user", user) ;
+					values.put("data", jsonData) ;
+					text = UKTools.getTemplet(templet.getTemplettext(), values) ;
+				}
+				if(!StringUtils.isBlank(text)){
+					otherMessageItemList = objectMapper.readValue(text, UKTools.getCollectionType(ArrayList.class, OtherMessageItem.class)) ;
+				}
+			}else {
+				
 			}
 		}catch(Exception ex) {
 			ex.printStackTrace();

@@ -132,6 +132,7 @@ public class CallCenterExtentionController extends Handler{
 		
 		extno.setSiptrunk(src.getSiptrunk());
 		extno.setEnablewebrtc(src.isEnablewebrtc());
+		extno.setAutoanswer(src.getAutoanswer());
 		int count = extentionRes.countByExtentionAndHostidAndOrgi(extno.getExtention() , hostid, orgi) ;
 		if(count == 0){	
 			extentionRes.save(extno) ;
@@ -171,6 +172,8 @@ public class CallCenterExtentionController extends Handler{
 				
 				ext.setSiptrunk(extention.getSiptrunk());
 				ext.setEnablewebrtc(extention.isEnablewebrtc());
+				
+				ext.setAutoanswer(extention.getAutoanswer());
 				
 				ext.setUpdatetime(new Date());
 				extentionRes.save(ext) ;

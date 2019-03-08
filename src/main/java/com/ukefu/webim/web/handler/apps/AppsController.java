@@ -61,6 +61,13 @@ public class AppsController extends Handler{
 	@RequestMapping({"/apps/content"})
 	@Menu(type="apps", subtype="content")
 	public ModelAndView content(ModelMap map , HttpServletRequest request,@Valid String msg){
+		this.desktop(map, request, msg) ;
+		return request(super.createAppsTempletResponse("/apps/desktop/index"));
+	}
+	
+	@RequestMapping({"/apps/desktop"})
+	@Menu(type="apps", subtype="content")
+	public ModelAndView desktop(ModelMap map , HttpServletRequest request,@Valid String msg){
 		
 		Page<OnlineUser> onlineUserList = this.onlineUserRes.findByOrgiAndStatus(super.getOrgi(request), UKDataContext.OnlineUserOperatorStatus.ONLINE.toString(), new PageRequest(super.getP(request), super.getPs(request), Sort.Direction.DESC, new String[] { "createtime" })) ;
 		List<String> ids = new ArrayList<String>();
@@ -86,7 +93,7 @@ public class AppsController extends Handler{
 		map.put("msg", msg);
 		aggValues(map, request);
 		
-		return request(super.createAppsTempletResponse("/apps/desktop/index"));
+		return request(super.createRequestPageTempletResponse("/apps/desktop/content"));
 	}
 	
 	private void aggValues(ModelMap map , HttpServletRequest request){

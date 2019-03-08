@@ -153,17 +153,43 @@ public class CallCenterUtils {
 	 */
 	public static SipTrunk siptrunk(String name ,String orgi, SipTrunkRepository sipTrunkRes){
 		SipTrunk sipTrunk = null;
-		List<SipTrunk> sipTrunkList = sipTrunkRes.findByNameAndOrgi(name,orgi) ;
-		if(sipTrunkList.size() > 0){
-			sipTrunk = sipTrunkList.get(0) ;
-		}else {
-			sipTrunkList = sipTrunkRes.findByDefaultsipAndOrgi(true,orgi) ;
-			if(sipTrunkList.size() > 0) {
+		if((sipTrunk = (SipTrunk) CacheHelper.getSystemCacheBean().getCacheObject(name, orgi)) == null) {
+			List<SipTrunk> sipTrunkList = sipTrunkRes.findByNameAndOrgi(name,orgi) ;
+			if(sipTrunkList.size() > 0){
 				sipTrunk = sipTrunkList.get(0) ;
+			}else {
+				sipTrunkList = sipTrunkRes.findByDefaultsipAndOrgi(true,orgi) ;
+				if(sipTrunkList.size() > 0) {
+					sipTrunk = sipTrunkList.get(0) ;
+				}
+			}
+			if(sipTrunk != null) {
+				CacheHelper.getSystemCacheBean().put(sipTrunk.getId() ,sipTrunk , sipTrunk.getOrgi()) ;
 			}
 		}
-		if(sipTrunk != null) {
-			CacheHelper.getSystemCacheBean().put(sipTrunk.getId() ,sipTrunk , sipTrunk.getOrgi()) ;
+		return sipTrunk;
+	}
+	
+	/**
+	 * 
+	 * @param user
+	 * @param orgi
+	 * @param id
+	 * @param service
+	 * @return
+	 * @throws Exception
+	 */
+	public static SipTrunk siptrunk(String name ,String orgi){
+		SipTrunk sipTrunk = null;
+		SipTrunkRepository sipTrunkRes = UKDataContext.getContext().getBean(SipTrunkRepository.class) ;
+		if((sipTrunk = (SipTrunk) CacheHelper.getSystemCacheBean().getCacheObject(name, orgi)) == null) {
+			List<SipTrunk> sipTrunkList = sipTrunkRes.findByNameAndOrgi(name,orgi) ;
+			if(sipTrunkList.size() > 0){
+				sipTrunk = sipTrunkList.get(0) ;
+			}
+			if(sipTrunk != null) {
+				CacheHelper.getSystemCacheBean().put(sipTrunk.getId() ,sipTrunk , sipTrunk.getOrgi()) ;
+			}
 		}
 		return sipTrunk;
 	}

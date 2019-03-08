@@ -29,6 +29,8 @@ public class MobileNumberUtils {
 						address = new MobileAddress(group[0], group[1], group[2], group[3],group[4]) ;
 					}else if(group.length == 4){
 						address = new MobileAddress(group[0], group[1], group[2], group[2],group[3]) ;
+					}else if(group.length == 8){
+						address = new MobileAddress(group[0], group[1], group[2], group[2],group[3]) ;
 					}
 					if(address!=null){
 						if(mobileAddressMap.get(address.getCode()) == null){

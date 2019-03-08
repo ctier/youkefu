@@ -13,5 +13,8 @@ public interface RouteItemRepository extends JpaRepository<RouteItem, String> {
 	
 	public List<RouteItem> findByRouteidAndOrgi(String routeid , String orgi , Sort sort);
 	public List<RouteItem> findByRouteidAndHostidAndOrgi(String routeid,String hostid, String orgi , Sort sort);
+	
+	public void deleteByHostidAndOrgi(String hostid, String orgi);
+	
 	public int countByNameAndOrgi(String name, String orgi);
 }

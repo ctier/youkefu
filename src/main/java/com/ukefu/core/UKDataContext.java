@@ -27,6 +27,8 @@ public class UKDataContext {
 	public static final String UKEFU_SYSTEM_ADPOS_DIC = "com.dic.adv.type" ;
 	public static final String UKEFU_SYSTEM_COMMENT_DIC = "com.dic.webim.comment" ;
 	public static final String UKEFU_SYSTEM_COMMENT_ITEM_DIC = "com.dic.webim.comment.item" ;
+	public static final String UKEFU_SYSTEM_BUTTON_DIC = "com.dic.button" ;
+	public static final String UKEFU_SYSTEM_HREF_DIC = "com.dic.href" ;
 	
 	public static final String UKEFU_SYSTEM_DIS_AI = "ownerai" ;
 	public static final String UKEFU_SYSTEM_DIS_FORECAST = "ownerforecast" ;
@@ -1005,7 +1007,184 @@ public class UKDataContext {
 	 *
 	 */
 	public enum NoticeType{
-		BUSINESS,SYSTEMUPGRADE,PLATFORM;
+		BUSINESS,SYSTEM,PLATFORM;
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
+	
+	public enum CrmViewType{
+		LIST("list","列表"),//列表
+		ADD("add","新增"),//新增
+		EDIT("edit","修改"),//修改
+		DETAIL("detail","详情"),//详情
+		BUTTON("button","按钮"),//按钮
+		HREF("href","链接"),//链接
+		RELATE("relate","关联");//关联
+		private String value ;
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		private String key;
+
+		public String getKey() {
+			return key;
+		}
+
+		public void setKey(String key) {
+			this.key = key;
+		}
+
+		CrmViewType(String  key, String value){
+			this.value = value ;
+			this.key = key;
+		}
+
+		public static String getValueByKey(String key) {
+			CrmViewType[] ViewType = values();
+			for (UKDataContext.CrmViewType viewType : ViewType) {
+				if (viewType.getKey().equals(key)) {
+					return viewType.getValue();
+				}
+			}
+			return null;
+		}
+
+		public static Map getMap() {
+			CrmViewType[] ViewType = values();
+			Map<String,String> map = new HashMap<>();
+			for (UKDataContext.CrmViewType viewType : ViewType) {
+				map.put(viewType.key,viewType.value);
+			}
+			return map;
+		}
+	}
+	
+	public enum CrmDataModelType{
+		PRODUCT("product","产品"),//产品
+		MENU("menu","菜单"),//菜单
+		SKIP("skip","跳转");//跳转
+		private String value ;
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		private String key;
+
+		public String getKey() {
+			return key;
+		}
+
+		public void setKey(String key) {
+			this.key = key;
+		}
+
+		CrmDataModelType(String  key, String value){
+			this.value = value ;
+			this.key = key;
+		}
+
+		public static String getValueByKey(String key) {
+			CrmDataModelType[] types = values();
+			for (UKDataContext.CrmDataModelType type : types) {
+				if (type.getKey().equals(key)) {
+					return type.getValue();
+				}
+			}
+			return null;
+		}
+
+		public static Map getMap() {
+			CrmDataModelType[] types = values();
+			Map<String,String> map = new HashMap<>();
+			for (UKDataContext.CrmDataModelType type : types) {
+				map.put(type.key,type.value);
+			}
+			return map;
+		}
+	}
+	
+	public enum CrmButtonActiontypeType{
+		TOPRIGHT("0","右上方"),//右上方
+		CHECKED("1","数据选中"),//数据选中
+		TABLETOP("2","列表上方"),//列表上方
+		TABLEROW("3","列表行"),//列表行
+		TABLECOL("4","列表列"),//列表列
+		TABLEOPERATION("5","列表操作");//列表操作
+		private String value ;
+
+		public String getValue() {
+			return value;
+		}
+
+		public void setValue(String value) {
+			this.value = value;
+		}
+
+		private String key;
+
+		public String getKey() {
+			return key;
+		}
+
+		public void setKey(String key) {
+			this.key = key;
+		}
+
+		CrmButtonActiontypeType(String  key, String value){
+			this.value = value ;
+			this.key = key;
+		}
+
+		public static String getValueByKey(String key) {
+			CrmButtonActiontypeType[] types = values();
+			for (UKDataContext.CrmButtonActiontypeType type : types) {
+				if (type.getKey().equals(key)) {
+					return type.getValue();
+				}
+			}
+			return null;
+		}
+
+		public static Map getMap() {
+			CrmButtonActiontypeType[] types = values();
+			Map<String,String> map = new HashMap<>();
+			for (UKDataContext.CrmButtonActiontypeType type : types) {
+				map.put(type.key,type.value);
+			}
+			return map;
+		}
+	}
+	
+	public enum IvrMenuType{
+		MENUEXIT,//转外线
+		MENUSUB,//转子菜单
+		MENUEXECAPP,//转内线
+		MENUPLAYSOUND,//播放语音文件或文本
+		MENUBACK,//转上级
+		MENUTOP;//转根目录
+		
+		public String toString(){
+			return super.toString().toLowerCase() ;
+		}
+	}
+	
+	public enum AutoAnswer{
+		NONE,//禁用
+		ALL,//全部
+		QUEUE;//队列
+		
 		public String toString(){
 			return super.toString().toLowerCase() ;
 		}

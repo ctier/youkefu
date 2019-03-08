@@ -106,7 +106,8 @@ public class SystemConfig implements java.io.Serializable{
 	private boolean enablevoice;	//启用语音功能
 	private boolean enabledis ;		//启用集群（分布式/HA）功能
 	
-	
+	private String version ;		//当前版本
+	private String appid;//客户端id
 	@Id
 	@Column(length = 32)
 	@GeneratedValue(generator = "system-uuid")
@@ -530,5 +531,19 @@ public class SystemConfig implements java.io.Serializable{
 	public void setIconstr(String iconstr) {
 		this.iconstr = iconstr;
 	}
+	public String getVersion() {
+		return version;
+	}
+	public void setVersion(String version) {
+		this.version = version;
+	}
+	public String getAppid() {
+		return appid;
+	}
+	public void setAppid(String appid) {
+		this.appid = appid;
+	}
+	
+	
 
 }

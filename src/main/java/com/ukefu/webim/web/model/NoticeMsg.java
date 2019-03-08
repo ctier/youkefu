@@ -44,7 +44,16 @@ public class NoticeMsg implements java.io.Serializable{
 	
 	private String jarurl ;//下载jar包地址
 	
+	private String sqlurl ;//更新脚本地址
+	private String rollbacksqlurl ;//回滚脚本地址
+	private String version;//版本号
+	
+	private String jarurldownload;//jar 是否下载 0未 1下载中 2下载成功 3 不存在
+	private String sqlurldownload;//sql是否下载 0未 1下载中 2下载成功 3 不存在
+	private String rollbacksqlurldownload;//sql是否下载 0未 1下载中 2下载成功 3 不存在
 	private boolean confirm ;//是否确认升级
+	
+	private String udpatestatus;//更新状态 0未更新 1已执行更新
 	
 	private Date invalidtime;//失效时间
 	
@@ -166,6 +175,50 @@ public class NoticeMsg implements java.io.Serializable{
 	public void setInvalidtime(Date invalidtime) {
 		this.invalidtime = invalidtime;
 	}
+	public String getSqlurl() {
+		return sqlurl;
+	}
+	public void setSqlurl(String sqlurl) {
+		this.sqlurl = sqlurl;
+	}
+	public String getVersion() {
+		return version;
+	}
+	public void setVersion(String version) {
+		this.version = version;
+	}
+	public String getJarurldownload() {
+		return jarurldownload;
+	}
+	public void setJarurldownload(String jarurldownload) {
+		this.jarurldownload = jarurldownload;
+	}
+	public String getSqlurldownload() {
+		return sqlurldownload;
+	}
+	public void setSqlurldownload(String sqlurldownload) {
+		this.sqlurldownload = sqlurldownload;
+	}
+	public String getUdpatestatus() {
+		return udpatestatus;
+	}
+	public void setUdpatestatus(String udpatestatus) {
+		this.udpatestatus = udpatestatus;
+	}
+	public String getRollbacksqlurl() {
+		return rollbacksqlurl;
+	}
+	public void setRollbacksqlurl(String rollbacksqlurl) {
+		this.rollbacksqlurl = rollbacksqlurl;
+	}
+	public String getRollbacksqlurldownload() {
+		return rollbacksqlurldownload;
+	}
+	public void setRollbacksqlurldownload(String rollbacksqlurldownload) {
+		this.rollbacksqlurldownload = rollbacksqlurldownload;
+	}
+
+	
 	
 
 }
